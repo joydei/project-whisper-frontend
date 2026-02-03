@@ -1,27 +1,27 @@
 .loginPage {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #000000 0%, #333333 100%);
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--color-white);
+  margin: 0;
   padding: 2rem;
+  box-sizing: border-box;
 }
 
 .container {
   width: 100%;
-  max-width: 600px;
+  max-width: 1200px;
 }
 
 .loginCard {
-  background-color: var(--color-white);
-  border-radius: 16px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-  padding: 3rem;
+  width: 100%;
 }
 
 .header {
   text-align: center;
-  margin-bottom: 2.5rem;
+  margin-bottom: 3rem;
 }
 
 .logo {
@@ -37,30 +37,30 @@
 }
 
 .roleSelector {
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
 }
 
 .sectionTitle {
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   font-weight: 600;
   color: var(--color-black);
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
   text-align: center;
 }
 
 .rolesGrid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-  margin-bottom: 2rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  margin-bottom: 3rem;
 }
 
 .roleCard {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-  padding: 1.5rem 1rem;
+  gap: 0.75rem;
+  padding: 2.5rem 1.5rem;
   background-color: var(--color-gray-light);
   border: 3px solid transparent;
   border-radius: 12px;
@@ -72,6 +72,7 @@
 .roleCard:hover {
   background-color: #e0e0e0;
   transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .roleCard.active {
@@ -86,27 +87,28 @@
 }
 
 .roleIcon {
-  font-size: 2.5rem;
+  font-size: 3.5rem;
   margin-bottom: 0.5rem;
 }
 
 .roleLabel {
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: 600;
   color: var(--color-black);
   margin-bottom: 0.25rem;
 }
 
 .roleDescription {
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   color: var(--color-gray-medium);
-  line-height: 1.3;
+  line-height: 1.4;
 }
 
 .loginForm {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem 3rem;
+  margin-top: 2rem;
 }
 
 .formGroup {
@@ -116,29 +118,34 @@
 }
 
 .label {
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 600;
   color: var(--color-black);
+  text-align: center;
 }
 
 .input {
-  padding: 0.875rem 1rem;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
+  padding: 1rem;
+  border: 2px solid var(--color-black);
+  border-radius: 30px;
   font-size: 1rem;
   font-family: 'Poppins', sans-serif;
   transition: all 0.3s ease;
+  text-align: center;
 }
 
 .input:focus {
   outline: none;
   border-color: var(--color-black);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
 }
 
 .formFooter {
+  grid-column: 1 / -1;
   display: flex;
   justify-content: flex-end;
-  margin-top: -0.5rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 .forgotPassword {
@@ -150,19 +157,22 @@
 
 .forgotPassword:hover {
   color: var(--color-black);
+  text-decoration: underline;
 }
 
 .loginBtn {
-  padding: 1rem;
+  grid-column: 1 / -1;
+  padding: 1rem 2rem;
   background-color: var(--color-black);
   color: var(--color-white);
   border: none;
-  border-radius: 8px;
+  border-radius: 30px;
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin-top: 1rem;
+  width: 50%;
+  margin: 0 auto;
 }
 
 .loginBtn:hover {
@@ -172,6 +182,7 @@
 }
 
 .signupPrompt {
+  grid-column: 1 / -1;
   text-align: center;
   margin-top: 2rem;
   padding-top: 2rem;
@@ -184,27 +195,75 @@
 }
 
 .signupLink {
-  color: var(--color-black);
+  color: royalblue;
   font-weight: 600;
-  text-decoration: none;
+  text-decoration: underline;
   transition: opacity 0.3s ease;
+  margin-left: 0.5rem;
 }
 
 .signupLink:hover {
   opacity: 0.7;
 }
 
-/* Responsive */
+@media (max-width: 1024px) {
+  .rolesGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
 @media (max-width: 768px) {
-  .loginCard {
-    padding: 2rem;
+  .loginPage {
+    padding: 1rem;
   }
 
-  .rolesGrid {
-    grid-template-columns: 1fr;
+  .header {
+    margin-bottom: 2rem;
   }
 
   .logo {
     font-size: 2.5rem;
   }
+
+  .roleSelector {
+    margin-bottom: 2rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .rolesGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .roleCard {
+    padding: 1.5rem 1rem;
+  }
+
+  .roleIcon {
+    font-size: 2.5rem;
+  }
+
+  .roleLabel {
+    font-size: 1rem;
+  }
+
+  .roleDescription {
+    font-size: 0.75rem;
+  }
+
+  .loginForm {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .loginBtn {
+    width: 70%;
+  }
 }
+
+

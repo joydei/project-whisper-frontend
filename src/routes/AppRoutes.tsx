@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
+import BaseLayout from '../layouts/BaseLayout';
 import UserLayout from '../layouts/UserLayout';
 import MunicipalityLayout from '../layouts/MunicipalityLayout';
 import AdminLayout from '../layouts/AdminLayout';
@@ -25,7 +26,9 @@ const AppRoutes = () => {
   return (
     <Routes>
       {/* Public Routes */}
-      <Route path="/login" element={<Login />} />
+      <Route path="/" element={<BaseLayout />}>
+        <Route path="login" element={<Login />} />
+      </Route>
 
       {/* User Routes */}
       <Route path="/" element={<UserLayout />}>
