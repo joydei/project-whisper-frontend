@@ -1,0 +1,171 @@
+.municipalityLayout {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--color-gray-light);
+}
+
+.sidebar {
+  width: 260px;
+  background-color: var(--color-black);
+  color: var(--color-white);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  height: 100vh;
+  left: 0;
+  top: 0;
+}
+
+.logo {
+  padding: 2rem 1.5rem;
+  border-bottom: 1px solid #333;
+}
+
+.logo h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.role {
+  font-size: 0.85rem;
+  color: var(--color-gray-medium);
+  font-weight: 400;
+}
+
+.nav {
+  flex: 1;
+  padding: 1rem 0;
+  overflow-y: auto;
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  color: var(--color-white);
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.navLink:hover {
+  background-color: #1a1a1a;
+}
+
+.navLink.active {
+  background-color: #1a1a1a;
+  border-left: 3px solid var(--color-white);
+}
+
+.icon {
+  font-size: 1.2rem;
+}
+
+.sidebarFooter {
+  padding: 1.5rem;
+  border-top: 1px solid #333;
+}
+
+.logoutBtn {
+  width: 100%;
+  background-color: transparent;
+  color: var(--color-white);
+  border: 2px solid var(--color-white);
+  padding: 0.8rem;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.logoutBtn:hover {
+  background-color: var(--color-white);
+  color: var(--color-black);
+}
+
+.mainWrapper {
+  flex: 1;
+  margin-left: 260px;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background-color: var(--color-white);
+  padding: 1.5rem 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.headerContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pageTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-black);
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.userName {
+  font-weight: 500;
+  color: var(--color-black);
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--color-black);
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+.main {
+  flex: 1;
+  padding: 2rem;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 70px;
+  }
+
+  .mainWrapper {
+    margin-left: 70px;
+  }
+
+  .logo h2,
+  .role,
+  .navLink span:not(.icon) {
+    display: none;
+  }
+
+  .navLink {
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .sidebarFooter {
+    padding: 1rem;
+  }
+
+  .logoutBtn {
+    padding: 0.6rem;
+    font-size: 0.8rem;
+  }
+}
