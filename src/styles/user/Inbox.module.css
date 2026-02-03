@@ -1,0 +1,184 @@
+.inboxPage {
+  min-height: calc(100vh - 8rem);
+  background-color: var(--color-gray-light);
+  padding: 2rem;
+  padding-top: 3rem;
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.pageTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-black);
+  margin-bottom: 0.5rem;
+}
+
+.pageSubtitle {
+  font-size: 1rem;
+  color: var(--color-gray-medium);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.toolbar {
+  background-color: var(--color-white);
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.filters {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.filterBtn {
+  padding: 0.6rem 1.2rem;
+  background-color: transparent;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filterBtn:hover {
+  border-color: var(--color-black);
+}
+
+.filterBtn.active {
+  background-color: var(--color-black);
+  color: var(--color-white);
+  border-color: var(--color-black);
+}
+
+.markAllBtn {
+  padding: 0.6rem 1.2rem;
+  background-color: transparent;
+  color: var(--color-gray-dark);
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.markAllBtn:hover {
+  color: var(--color-black);
+}
+
+.messageList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.messageCard {
+  background-color: var(--color-white);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.messageCard:hover {
+  transform: translateX(5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.messageCard.unread {
+  background-color: #f0f8ff;
+  border-left: 4px solid #1976d2;
+}
+
+.messageIcon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.messageContent {
+  flex: 1;
+}
+
+.messageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.sender {
+  font-weight: 600;
+  color: var(--color-black);
+  font-size: 0.95rem;
+}
+
+.date {
+  font-size: 0.85rem;
+  color: var(--color-gray-medium);
+}
+
+.subject {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-black);
+  margin-bottom: 0.5rem;
+}
+
+.preview {
+  font-size: 0.95rem;
+  color: var(--color-gray-dark);
+  line-height: 1.5;
+}
+
+.unreadBadge {
+  width: 10px;
+  height: 10px;
+  background-color: #1976d2;
+  border-radius: 50%;
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .inboxPage {
+    padding: 1rem;
+  }
+
+  .toolbar {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+
+  .filters {
+    justify-content: center;
+  }
+
+  .markAllBtn {
+    text-align: center;
+  }
+
+  .messageCard {
+    flex-direction: column;
+  }
+
+  .messageIcon {
+    align-self: center;
+  }
+}

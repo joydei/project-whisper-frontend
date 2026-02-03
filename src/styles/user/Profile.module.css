@@ -1,0 +1,284 @@
+.profilePage {
+  min-height: calc(100vh - 8rem);
+  background-color: var(--color-gray-light);
+  padding: 2rem;
+  padding-top: 3rem;
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.pageTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-black);
+  margin-bottom: 0.5rem;
+}
+
+.pageSubtitle {
+  font-size: 1rem;
+  color: var(--color-gray-medium);
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.profileCard {
+  background-color: var(--color-white);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.profileHeader {
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  border-bottom: 1px solid var(--color-gray-light);
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: var(--color-black);
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.userInfo {
+  flex: 1;
+}
+
+.userName {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-black);
+  margin-bottom: 0.25rem;
+}
+
+.userEmail {
+  font-size: 1rem;
+  color: var(--color-gray-medium);
+}
+
+.editBtn {
+  padding: 0.75rem 1.5rem;
+  background-color: var(--color-black);
+  color: var(--color-white);
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.editBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.stats {
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  border-bottom: 1px solid var(--color-gray-light);
+}
+
+.statItem {
+  text-align: center;
+}
+
+.statValue {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-black);
+  margin-bottom: 0.5rem;
+}
+
+.statLabel {
+  font-size: 0.9rem;
+  color: var(--color-gray-medium);
+}
+
+.section {
+  padding: 2rem;
+  border-bottom: 1px solid var(--color-gray-light);
+}
+
+.sectionTitle {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--color-black);
+  margin-bottom: 1.5rem;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.infoItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.infoLabel {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-gray-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.infoValue {
+  font-size: 1rem;
+  color: var(--color-black);
+}
+
+.preferences {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.preferenceItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.preferenceTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-black);
+  margin-bottom: 0.25rem;
+}
+
+.preferenceDesc {
+  font-size: 0.9rem;
+  color: var(--color-gray-medium);
+}
+
+/* Toggle Switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 26px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+.switch input:checked + .slider {
+  background-color: var(--color-black);
+}
+
+.switch input:checked + .slider:before {
+  transform: translateX(24px);
+}
+
+.actions {
+  padding: 2rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.changePasswordBtn,
+.logoutBtn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.changePasswordBtn {
+  background-color: transparent;
+  color: var(--color-black);
+  border: 2px solid var(--color-black);
+}
+
+.changePasswordBtn:hover {
+  background-color: var(--color-black);
+  color: var(--color-white);
+}
+
+.logoutBtn {
+  background-color: #d32f2f;
+  color: var(--color-white);
+  border: 2px solid #d32f2f;
+}
+
+.logoutBtn:hover {
+  background-color: #b71c1c;
+  border-color: #b71c1c;
+}
+
+@media (max-width: 768px) {
+  .profilePage {
+    padding: 1rem;
+  }
+
+  .profileHeader {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
+  }
+
+  .infoGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .changePasswordBtn,
+  .logoutBtn {
+    width: 100%;
+  }
+}

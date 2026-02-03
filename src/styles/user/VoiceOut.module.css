@@ -51,6 +51,58 @@
   color: var(--color-black);
 }
 
+/* Report Type Selection */
+.reportTypeSelection {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.typeBtn {
+  padding: 1.5rem;
+  background-color: var(--color-gray-light);
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  text-align: left;
+}
+
+.typeBtn:hover {
+  border-color: var(--color-black);
+  background-color: #f9f9f9;
+}
+
+.typeBtn.active {
+  background-color: var(--color-black);
+  color: var(--color-white);
+  border-color: var(--color-black);
+}
+
+.typeBtnIcon {
+  font-size: 2rem;
+}
+
+.typeBtn h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.typeBtn p {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+.typeBtn.active h4,
+.typeBtn.active p {
+  color: var(--color-white);
+}
+
 .form {
   display: flex;
   flex-direction: column;
@@ -113,6 +165,11 @@
 .radioLabel span {
   font-size: 0.95rem;
   color: var(--color-gray-dark);
+}
+
+.emergency {
+  color: #d32f2f !important;
+  font-weight: 600 !important;
 }
 
 .fileInput {
@@ -236,6 +293,10 @@
 @media (max-width: 968px) {
   .content .container {
     grid-template-columns: 1fr;
+
+  .reportTypeSelection {
+    grid-template-columns: 1fr;
+  }
   }
 
   .sidebar {

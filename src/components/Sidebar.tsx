@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import styles from '../styles/components/Sidebar.module.css';
 
 interface SidebarProps {
-  role: 'municipality' | 'admin';
+  role: 'municipality' | 'admin' | 'civil';
 }
 
 const Sidebar = ({ role }: SidebarProps) => {
@@ -23,13 +23,24 @@ const Sidebar = ({ role }: SidebarProps) => {
     { path: '/admin/settings', icon: '⚙️', label: 'Settings' },
   ];
 
-  const links = role === 'municipality' ? municipalityLinks : adminLinks;
+  const civilLinks = [
+    { path: '/civil/dashboard', icon: '📊', label: 'Dashboard' },
+    { path: '/civil/police', icon: '🚓', label: 'Police' },
+    { path: '/civil/fire', icon: '🚒', label: 'Fire Service' },
+    { path: '/civil/ambulance', icon: '🚑', label: 'Ambulance' },
+    { path: '/civil/disaster', icon: '⚠️', label: 'Disaster Management' },
+    { path: '/civil/settings', icon: '⚙️', label: 'Settings' },
+  ];
+
+  const links = role === 'municipality' ? municipalityLinks : role === 'admin' ? adminLinks : civilLinks;
 
   return (
     <aside className={styles.sidebar}>
       <div className={styles.logo}>
         <h2>Aircho</h2>
-        <span className={styles.role}>{role === 'municipality' ? 'Municipality' : 'Admin'}</span>
+        <span className={styles.role}>
+          {role === 'municipality' ? 'Municipality' : role === 'admin' ? 'Admin' : 'Civil Services'}
+        </span>
       </div>
       <nav className={styles.nav}>
         {links.map((link) => (

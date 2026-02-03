@@ -1,0 +1,21 @@
+.civilLayout {
+  width: 100%;
+  padding-top: 2.125rem;
+  min-height: 100vh;
+}
+
+.mainWrapper {
+  margin-left: 250px;
+  min-height: calc(100vh - 2.125rem);
+  background-color: var(--color-gray-light);
+}
+
+.main {
+  padding: 0;
+}
+
+@media (max-width: 768px) {
+  .mainWrapper {
+    margin-left: 0;
+  }
+}

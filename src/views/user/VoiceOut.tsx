@@ -1,32 +1,72 @@
+import { useState } from 'react';
 import styles from '../../styles/user/VoiceOut.module.css';
 
 const VoiceOut = () => {
+  const [reportType, setReportType] = useState<'municipality' | 'civil'>('municipality');
+
   return (
     <div className={styles.voiceOutPage}>
       <section className={styles.header}>
         <div className={styles.container}>
           <h1 className={styles.pageTitle}>Voice Out</h1>
-          <p className={styles.pageSubtitle}>Share your concerns and suggestions with your municipality</p>
+          <p className={styles.pageSubtitle}>Share your concerns and make your voice heard</p>
         </div>
       </section>
 
       <section className={styles.content}>
         <div className={styles.container}>
           <div className={styles.formCard}>
-            <h2 className={styles.formTitle}>Submit Your Feedback</h2>
+            <h2 className={styles.formTitle}>Submit Your Report</h2>
             
+            {/* Report Type Selection */}
+            <div className={styles.reportTypeSelection}>
+              <button 
+                className={`${styles.typeBtn} ${reportType === 'municipality' ? styles.active : ''}`}
+                onClick={() => setReportType('municipality')}
+              >
+                <span className={styles.typeBtnIcon}>🏛️</span>
+                <div>
+                  <h4>Municipality</h4>
+                  <p>Infrastructure, sanitation, utilities</p>
+                </div>
+              </button>
+              <button 
+                className={`${styles.typeBtn} ${reportType === 'civil' ? styles.active : ''}`}
+                onClick={() => setReportType('civil')}
+              >
+                <span className={styles.typeBtnIcon}>🚨</span>
+                <div>
+                  <h4>Civil Services</h4>
+                  <p>Police, fire service, ambulance</p>
+                </div>
+              </button>
+            </div>
+
             <form className={styles.form}>
-              <div className={styles.formGroup}>
-                <label htmlFor="category" className={styles.label}>Category</label>
-                <select id="category" className={styles.select}>
-                  <option value="">Select a category</option>
-                  <option value="infrastructure">Infrastructure</option>
-                  <option value="sanitation">Sanitation</option>
-                  <option value="safety">Safety</option>
-                  <option value="utilities">Utilities</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
+              {reportType === 'municipality' ? (
+                <div className={styles.formGroup}>
+                  <label htmlFor="category" className={styles.label}>Category</label>
+                  <select id="category" className={styles.select}>
+                    <option value="">Select a category</option>
+                    <option value="infrastructure">Infrastructure</option>
+                    <option value="sanitation">Sanitation</option>
+                    <option value="safety">Safety</option>
+                    <option value="utilities">Utilities</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+              ) : (
+                <div className={styles.formGroup}>
+                  <label htmlFor="civilService" className={styles.label}>Service Type</label>
+                  <select id="civilService" className={styles.select}>
+                    <option value="">Select a service</option>
+                    <option value="police">🚓 Police</option>
+                    <option value="fire">🚒 Fire Service</option>
+                    <option value="ambulance">🚑 Ambulance Service</option>
+                    <option value="disaster">⚠️ Disaster Management</option>
+                  </select>
+                </div>
+              )}
 
               <div className={styles.formGroup}>
                 <label htmlFor="location" className={styles.label}>Location</label>
@@ -73,6 +113,12 @@ const VoiceOut = () => {
                     <input type="radio" name="priority" value="high" />
                     <span>High</span>
                   </label>
+                  {reportType === 'civil' && (
+                    <label className={styles.radioLabel}>
+                      <input type="radio" name="priority" value="emergency" />
+                      <span className={styles.emergency}>Emergency</span>
+                    </label>
+                  )}
                 </div>
               </div>
 
@@ -89,7 +135,7 @@ const VoiceOut = () => {
 
               <div className={styles.formActions}>
                 <button type="button" className={styles.cancelBtn}>Cancel</button>
-                <button type="submit" className={styles.submitBtn}>Submit Feedback</button>
+                <button type="submit" className={styles.submitBtn}>Submit Report</button>
               </div>
             </form>
           </div>
@@ -98,10 +144,11 @@ const VoiceOut = () => {
             <div className={styles.infoCard}>
               <h3 className={styles.infoTitle}>📢 How It Works</h3>
               <ul className={styles.infoList}>
-                <li>Select the appropriate category for your concern</li>
+                <li>Choose between Municipality or Civil Services</li>
+                <li>Select the appropriate category</li>
                 <li>Provide detailed information and location</li>
                 <li>Attach any relevant photos or documents</li>
-                <li>Submit and track your feedback status</li>
+                <li>Submit and track your report status</li>
               </ul>
             </div>
 

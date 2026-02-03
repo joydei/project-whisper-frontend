@@ -1,0 +1,317 @@
+.dashboard {
+  min-height: 100vh;
+  background-color: var(--color-gray-light);
+  padding: 2rem;
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.pageTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-black);
+  margin-bottom: 0.5rem;
+}
+
+.pageSubtitle {
+  font-size: 1rem;
+  color: var(--color-gray-medium);
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Stats Grid */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.statCard {
+  background-color: var(--color-white);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.statCard:hover {
+  transform: translateY(-5px);
+}
+
+.statIcon {
+  font-size: 2.5rem;
+}
+
+.statContent {
+  flex: 1;
+}
+
+.statValue {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-black);
+  margin-bottom: 0.25rem;
+}
+
+.statLabel {
+  font-size: 0.9rem;
+  color: var(--color-gray-medium);
+}
+
+.statCard.emergency {
+  border-left: 4px solid #d32f2f;
+}
+
+.statCard.inProgress {
+  border-left: 4px solid #ff9800;
+}
+
+.statCard.resolved {
+  border-left: 4px solid #4caf50;
+}
+
+/* Services Grid */
+.servicesGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.serviceCard {
+  background-color: var(--color-white);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.serviceCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.serviceIcon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.serviceTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-black);
+  margin-bottom: 1rem;
+}
+
+.serviceStats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.emergencyCount {
+  font-size: 0.9rem;
+  color: #d32f2f;
+  font-weight: 600;
+}
+
+.totalCount {
+  font-size: 0.9rem;
+  color: var(--color-gray-medium);
+}
+
+.serviceCard.police {
+  border-top: 4px solid #1976d2;
+}
+
+.serviceCard.fire {
+  border-top: 4px solid #d32f2f;
+}
+
+.serviceCard.ambulance {
+  border-top: 4px solid #388e3c;
+}
+
+.serviceCard.disaster {
+  border-top: 4px solid #f57c00;
+}
+
+/* Recent Reports */
+.recentReports {
+  background-color: var(--color-white);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+}
+
+.sectionTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-black);
+  margin-bottom: 1.5rem;
+}
+
+.reportsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.reportItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.reportItem:hover {
+  background-color: var(--color-gray-light);
+  border-color: var(--color-black);
+}
+
+.reportItem.urgent {
+  background-color: #ffebee;
+  border-color: #d32f2f;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+.reportIcon {
+  font-size: 1.8rem;
+}
+
+.reportContent {
+  flex: 1;
+}
+
+.reportTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-black);
+  margin-bottom: 0.25rem;
+}
+
+.reportLocation {
+  font-size: 0.85rem;
+  color: var(--color-gray-medium);
+}
+
+.reportTime {
+  font-size: 0.85rem;
+  color: var(--color-gray-medium);
+  margin-right: 1rem;
+}
+
+.badge {
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.badgeEmergency {
+  background-color: #d32f2f;
+  color: var(--color-white);
+}
+
+.badgeNormal {
+  background-color: #e0e0e0;
+  color: var(--color-gray-dark);
+}
+
+/* Quick Actions */
+.quickActions {
+  background-color: var(--color-white);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.actionsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.actionBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  background-color: var(--color-gray-light);
+  border: 2px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.actionBtn:hover {
+  background-color: var(--color-black);
+  color: var(--color-white);
+  border-color: var(--color-black);
+}
+
+.actionIcon {
+  font-size: 2rem;
+}
+
+.actionLabel {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .statsGrid,
+  .servicesGrid,
+  .actionsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard {
+    padding: 1rem;
+  }
+
+  .statsGrid,
+  .servicesGrid,
+  .actionsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .reportItem {
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    width: 100%;
+    text-align: center;
+  }
+}

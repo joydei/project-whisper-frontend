@@ -42,6 +42,9 @@
   transition: opacity 0.3s ease;
   position: relative;
   text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .navLink:hover {
@@ -57,6 +60,10 @@
   height: 2px;
   background-color: var(--color-white);
   transition: width 0.3s ease;
+}
+
+.icon {
+  font-size: 1.1rem;
 }
 
 .navLink:hover::after {
