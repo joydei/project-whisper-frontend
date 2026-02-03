@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import TopBar from '../components/Topbar';
 import Sidebar from '../components/Sidebar';
-import styles from './MunicipalityLayout.module.css';
+import styles from '../styles/layouts/MunicipalityLayout.module.css';
 
 const MunicipalityLayout = () => {
   return (

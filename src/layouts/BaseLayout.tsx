@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-import styles from './BaseLayout.module.css';
+import styles from '../styles/layouts/BaseLayout.module.css';
 
 const BaseLayout = () => {
   return (
