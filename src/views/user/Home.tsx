@@ -12,6 +12,8 @@ import ShareIcon from '../../assets/icons/share.svg?react';
 import RetweetIcon from '../../assets/icons/arrows-retweet.svg?react';
 import XIcon from '../../assets/icons/cross-circle.svg?react';
 import CheckCircleIcon from '../../assets/icons/check-circle.svg?react';
+import ShieldTrustIcon from '../../assets/icons/shield-trust.svg?react';
+import MenuDotsIcon from '../../assets/icons/menu-dots.svg?react';
 import BuildingIcon from '../../assets/icons/building.svg?react';
 import PoliceIcon from '../../assets/icons/user-police.svg?react';
 import FireIcon from '../../assets/icons/fire-station.svg?react';
@@ -46,6 +48,13 @@ const Home = () => {
   const [expandedPosts, setExpandedPosts] = useState<Set<number>>(new Set());
   const [dynamicComments, setDynamicComments] = useState<{[key: number]: any[]}>({});
   const [showTipModal, setShowTipModal] = useState(false);
+  const [deletedComments, setDeletedComments] = useState<Set<number>>(new Set());
+  const [openMenuCommentId, setOpenMenuCommentId] = useState<number | null>(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [commentToDelete, setCommentToDelete] = useState<{id: number; hasReplies: boolean} | null>(null);
+  const [openMenuReplyId, setOpenMenuReplyId] = useState<number | null>(null);
+  const [showDeleteSuccessModal, setShowDeleteSuccessModal] = useState(false);
+  const [replyToDelete, setReplyToDelete] = useState<{id: number; commentId: number} | null>(null);
   
   const currentPosts = activeTab === 'municipality' ? municipalityPosts : ghanaPosts;
 
@@ -107,6 +116,110 @@ const Home = () => {
       
       setNewComment('');
       setCommentAnonymous(false);
+    }
+  };
+
+  const handleDeleteComment = (comment: any, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setOpenMenuCommentId(null);
+    const hasReplies = comment.replies && comment.replies.length > 0;
+    setCommentToDelete({ id: comment.id, hasReplies });
+    setShowDeleteModal(true);
+  };
+
+  const confirmDeleteComment = () => {
+    if (commentToDelete) {
+      if (commentToDelete.hasReplies) {
+        // If has replies, mark as deleted (show "This comment is not available")
+        setDeletedComments(prev => {
+          const newSet = new Set(prev);
+          newSet.add(commentToDelete.id);
+          return newSet;
+        });
+      } else {
+        // If no replies, remove completely from dynamicComments
+        if (selectedPost) {
+          setDynamicComments(prev => ({
+            ...prev,
+            [selectedPost.id]: (prev[selectedPost.id] || []).filter(c => c.id !== commentToDelete.id)
+          }));
+        }
+      }
+      setShowDeleteModal(false);
+      setCommentToDelete(null);
+      setShowDeleteSuccessModal(true);
+    }
+  };
+
+  const handleDeleteReply = (reply: any, comment: any, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setOpenMenuReplyId(null);
+    setReplyToDelete({ id: reply.id, commentId: comment.id });
+    setShowDeleteModal(true);
+  };
+
+  const confirmDeleteReply = () => {
+    if (replyToDelete && selectedPost) {
+      setDynamicComments(prev => {
+        const originalComments = selectedPost.commentsData || [];
+        const prevDynamic = prev[selectedPost.id] || [];
+        
+        // Create a map of dynamic comments
+        const dynamicMap = new Map(prevDynamic.map(c => [c.id, c]));
+        
+        // Merge to get current state
+        const allComments = originalComments.map(oc => 
+          dynamicMap.has(oc.id) ? dynamicMap.get(oc.id)! : oc
+        ).concat(
+          prevDynamic.filter(dc => !originalComments.some(oc => oc.id === dc.id))
+        );
+        
+        const targetComment = allComments.find(c => c.id === replyToDelete.commentId);
+        
+        if (targetComment) {
+          const updatedReplies = (targetComment.replies || []).filter((r: any) => r.id !== replyToDelete.id);
+          
+          // Check if comment was deleted and has no remaining replies
+          if (deletedComments.has(replyToDelete.commentId) && updatedReplies.length === 0) {
+            // Remove the comment completely
+            setDeletedComments(prev => {
+              const newSet = new Set(prev);
+              newSet.delete(replyToDelete.commentId);
+              return newSet;
+            });
+            
+            return {
+              ...prev,
+              [selectedPost.id]: prevDynamic.filter(c => c.id !== replyToDelete.commentId)
+            };
+          }
+          
+          const updatedComment = {
+            ...targetComment,
+            replies: updatedReplies
+          };
+          
+          let updatedDynamic = [...prevDynamic];
+          const dynamicIndex = updatedDynamic.findIndex(c => c.id === replyToDelete.commentId);
+          
+          if (dynamicIndex !== -1) {
+            updatedDynamic[dynamicIndex] = updatedComment;
+          } else {
+            updatedDynamic.push(updatedComment);
+          }
+          
+          return {
+            ...prev,
+            [selectedPost.id]: updatedDynamic
+          };
+        }
+        
+        return prev;
+      });
+      
+      setShowDeleteModal(false);
+      setReplyToDelete(null);
+      setShowDeleteSuccessModal(true);
     }
   };
 
@@ -389,7 +502,7 @@ const Home = () => {
                         <div className={styles.authorName}>
                           {post.author.name}
                           {post.author.verified && (
-                            <CheckCircleIcon className={styles.verifiedBadge} />
+                            <ShieldTrustIcon className={styles.verifiedBadge} />
                           )}
                         </div>
                         {post.author.role && (
@@ -513,7 +626,7 @@ const Home = () => {
                     <div className={styles.authorName}>
                       {selectedPost.author.name}
                       {selectedPost.author.verified && (
-                        <CheckCircleIcon className={styles.verifiedBadge} />
+                        <ShieldTrustIcon className={styles.verifiedBadge} />
                       )}
                     </div>
                     {selectedPost.author.role && (
@@ -596,15 +709,52 @@ const Home = () => {
                         </div>
                         <div className={styles.commentContent}>
                           <div className={styles.commentAuthor}>
-                            {comment.anonymous ? 'Anonymous' : comment.author}
-                            {!comment.anonymous && comment.username && (
-                              <span style={{color: '#888', fontWeight: 400}}> @{comment.username}</span>
+                            {deletedComments.has(comment.id) ? (
+                              <span style={{color: '#888', fontStyle: 'italic'}}>Deleted User</span>
+                            ) : (
+                              <>
+                                {comment.anonymous ? 'Anonymous' : comment.author}
+                                {!comment.anonymous && comment.username && (
+                                  <span style={{color: '#888', fontWeight: 400}}> @{comment.username}</span>
+                                )}
+                              </>
                             )}
                             <span className={styles.commentTime}>{comment.time}</span>
+                            {!deletedComments.has(comment.id) && comment.author === 'Joy Dei' && (
+                              <div className={styles.commentMenuWrapper}>
+                                <button
+                                  className={styles.commentMenuBtn}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setOpenMenuCommentId(openMenuCommentId === comment.id ? null : comment.id);
+                                  }}
+                                  title="Options"
+                                >
+                                  <MenuDotsIcon className={styles.menuDotsIcon} />
+                                </button>
+                                {openMenuCommentId === comment.id && (
+                                  <div className={styles.commentDropdown}>
+                                    <button
+                                      className={styles.dropdownItem}
+                                      onClick={(e) => handleDeleteComment(comment, e)}
+                                    >
+                                      Delete Comment
+                                    </button>
+                                  </div>
+                                )}
+                              </div>
+                            )}
                           </div>
-                          <p className={styles.commentText}>{comment.content}</p>
+                          <p className={styles.commentText}>
+                            {deletedComments.has(comment.id) ? (
+                              <span style={{color: '#888', fontStyle: 'italic'}}>This comment is not available</span>
+                            ) : (
+                              comment.content
+                            )}
+                          </p>
                           
                           {/* Comment Actions */}
+                          {!deletedComments.has(comment.id) && (
                           <div className={styles.commentActions}>
                             <button 
                               className={`${styles.commentActionBtn} ${likedComments.has(comment.id) ? styles.liked : ''}`}
@@ -638,6 +788,7 @@ const Home = () => {
                               <span>Reply</span>
                             </button>
                           </div>
+                          )}
 
                           {/* Replies */}
                           {comment.replies && comment.replies.length > 0 && (
@@ -654,6 +805,30 @@ const Home = () => {
                                         <span style={{color: '#888', fontWeight: 400}}> @{reply.username}</span>
                                       )}
                                       <span className={styles.commentTime}>{reply.time}</span>
+                                      {reply.author === 'Joy Dei' && (
+                                        <div className={styles.commentMenuWrapper}>
+                                          <button
+                                            className={styles.commentMenuBtn}
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              setOpenMenuReplyId(openMenuReplyId === reply.id ? null : reply.id);
+                                            }}
+                                            title="Options"
+                                          >
+                                            <MenuDotsIcon className={styles.menuDotsIcon} />
+                                          </button>
+                                          {openMenuReplyId === reply.id && (
+                                            <div className={styles.commentDropdown}>
+                                              <button
+                                                className={styles.dropdownItem}
+                                                onClick={(e) => handleDeleteReply(reply, comment, e)}
+                                              >
+                                                Delete Reply
+                                              </button>
+                                            </div>
+                                          )}
+                                        </div>
+                                      )}
                                     </div>
                                     <p className={styles.commentText}>{renderTextWithMentions(reply.content)}</p>
                                     
@@ -800,6 +975,55 @@ const Home = () => {
             <button 
               className={styles.tipModalBtn}
               onClick={() => setShowTipModal(false)}
+            >
+              Done
+            </button>
+          </div>
+        </div>
+      )}
+      
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div className={styles.modalOverlay} onClick={() => setShowDeleteModal(false)}>
+          <div className={styles.tipModalContent} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.tipModalIconWrapper}>
+              <XIcon className={styles.tipModalIcon} style={{color: '#dc2626'}} />
+            </div>
+            <h2 className={styles.tipModalTitle}>{replyToDelete ? 'Delete Reply' : 'Delete Comment'}</h2>
+            <p className={styles.tipModalMessage}>Are you sure you want to delete this {replyToDelete ? 'reply' : 'comment'}?</p>
+            <div className={styles.deleteModalActions}>
+              <button 
+                className={styles.deleteCancelBtn}
+                onClick={() => {
+                  setShowDeleteModal(false);
+                  setCommentToDelete(null);
+                  setReplyToDelete(null);
+                }}
+              >
+                Cancel
+              </button>
+              <button 
+                className={styles.deleteConfirmBtn}
+                onClick={replyToDelete ? confirmDeleteReply : confirmDeleteComment}
+              >
+                Yes, Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Delete Success Modal */}
+      {showDeleteSuccessModal && (
+        <div className={styles.modalOverlay} onClick={() => setShowDeleteSuccessModal(false)}>
+          <div className={styles.tipModalContent} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.tipModalIconWrapper}>
+              <CheckCircleIcon className={styles.tipModalIcon} style={{color: '#059669'}} />
+            </div>
+            <h2 className={styles.tipModalTitle}>Message Deleted Successfully</h2>
+            <button 
+              className={styles.tipModalBtn}
+              onClick={() => setShowDeleteSuccessModal(false)}
             >
               Done
             </button>

@@ -54,6 +54,70 @@
   opacity: 0.6;
 }
 
+.right li.languageSelector:hover {
+  opacity: 1;
+}
+
+.languageSelector {
+  position: relative;
+}
+
+.languageButton {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  user-select: none;
+  transition: opacity 0.3s;
+}
+
+.languageButton:hover {
+  opacity: 0.6;
+}
+
+.languageDropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 150px;
+  z-index: 1200;
+  overflow: hidden;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.languageOption {
+  padding: 0.625rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.15s;
+  color: #444;
+  font-size: 0.8125rem;
+}
+
+.languageOption:hover {
+  background-color: #f5f5f5;
+}
+
+.languageOption.selected {
+  background-color: var(--color-black);
+  color: white;
+  font-weight: 600;
+}
+
 @media (max-width: 768px) {
   .topbar {
     justify-content: flex-start;
