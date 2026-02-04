@@ -1,63 +1,171 @@
+/* Fibonacci Typography Scale - Base: 0.8125rem (13px) */
+/* 0.8125rem, 1rem, 1.3125rem, 2.125rem, 3.4375rem */
+
 .notificationsPage {
-  min-height: calc(100vh - 8rem);
+  min-height: 100vh;
   background-color: var(--color-gray-light);
-  padding: 2rem;
-  padding-top: 3rem;
 }
 
+/* Header Section */
 .header {
-  margin-bottom: 2rem;
+  background-color: var(--color-black);
+  color: var(--color-white);
+  padding: 3.4375rem 2rem 2.125rem;
+}
+
+.container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.headerContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
 }
 
 .pageTitle {
-  font-size: 2rem;
+  font-size: 2.125rem;
   font-weight: 700;
-  color: var(--color-black);
-  margin-bottom: 0.5rem;
+  margin: 0 0 0.5rem 0;
 }
 
 .pageSubtitle {
   font-size: 1rem;
   color: var(--color-gray-medium);
+  margin: 0;
 }
 
-.container {
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-.toolbar {
-  background-color: var(--color-white);
-  padding: 1rem 1.5rem;
-  border-radius: 12px;
-  margin-bottom: 1.5rem;
+.headerStats {
   display: flex;
-  justify-content: space-between;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  gap: 1rem;
+  align-items: center;
 }
 
-.markAllBtn,
-.clearBtn {
-  padding: 0.6rem 1.2rem;
-  background-color: transparent;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
+.statBadge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #f5f5f5;
+  border-radius: 2px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-black);
 }
 
-.markAllBtn:hover {
-  border-color: var(--color-black);
+.unreadBadge {
   background-color: var(--color-black);
   color: var(--color-white);
 }
 
-.clearBtn:hover {
-  border-color: #d32f2f;
-  color: #d32f2f;
+.statIcon {
+  width: 1rem;
+  height: 1rem;
+  fill: currentColor;
 }
 
+/* Content Section */
+.content {
+  padding: 2rem 0 4rem;
+}
+
+/* Toolbar */
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background-color: var(--color-white);
+  padding: 1.5rem;
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.filters {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.filterBtn {
+  padding: 0.5rem 1rem;
+  background-color: transparent;
+  border: 1px solid #e0e0e0;
+  border-radius: 2px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--color-gray-dark);
+}
+
+.filterBtn:hover {
+  background-color: #f5f5f5;
+  border-color: var(--color-black);
+}
+
+.filterBtn.active {
+  background-color: var(--color-black);
+  color: var(--color-white);
+  border-color: var(--color-black);
+}
+
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.markAllBtn,
+.clearBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: transparent;
+  border: 1px solid #e0e0e0;
+  border-radius: 2px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--color-black);
+}
+
+.markAllBtn:hover {
+  background-color: var(--color-black);
+  color: var(--color-white);
+  border-color: var(--color-black);
+}
+
+.markAllBtn:hover .actionIcon {
+  filter: brightness(0) invert(1);
+}
+
+.clearBtn:hover {
+  background-color: #FF0000;
+  color: var(--color-white);
+  border-color: #FF0000;
+}
+
+.clearBtn:hover .clearIcon {
+  filter: brightness(0) invert(1);
+}
+
+.actionIcon,
+.clearIcon {
+  width: 1rem;
+  height: 1rem;
+  fill: currentColor;
+}
+
+/* Notification List */
 .notificationList {
   display: flex;
   flex-direction: column;
@@ -67,82 +175,349 @@
 .notificationCard {
   background-color: var(--color-white);
   padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   display: flex;
+  align-items: center;
   gap: 1rem;
-  align-items: flex-start;
   cursor: pointer;
-  transition: all 0.3s ease;
-  border-left: 4px solid transparent;
+  transition: all 0.2s ease;
+  position: relative;
 }
 
 .notificationCard:hover {
-  transform: translateX(5px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
 }
 
-.notificationCard.success {
-  border-left-color: #4caf50;
+.notificationCard.unread {
+  background-color: var(--color-black);
+  color: var(--color-white);
 }
 
-.notificationCard.info {
-  border-left-color: #2196f3;
+.notificationCard.unread .notificationText {
+  color: var(--color-white);
 }
 
-.notificationCard.warning {
-  border-left-color: #ff9800;
+.notificationCard.unread .actor,
+.notificationCard.unread .action,
+.notificationCard.unread .target {
+  color: var(--color-white);
+}
+
+.notificationCard.unread .time {
+  color: #b0b0b0;
+}
+
+.notificationIconWrapper {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 2px;
+  background-color: var(--color-black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.notificationCard.unread .notificationIconWrapper {
+  background-color: var(--color-white);
 }
 
 .notificationIcon {
-  font-size: 2rem;
-  flex-shrink: 0;
+  width: 1.3125rem;
+  height: 1.3125rem;
+  fill: var(--color-white);
+}
+
+.notificationCard.unread .notificationIcon {
+  fill: var(--color-black);
 }
 
 .notificationContent {
   flex: 1;
+  min-width: 0;
 }
 
-.title {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--color-black);
-  margin-bottom: 0.5rem;
-}
-
-.message {
-  font-size: 0.95rem;
-  color: var(--color-gray-dark);
+.notificationText {
+  font-size: 1rem;
   line-height: 1.5;
-  margin-bottom: 0.5rem;
+  color: var(--color-black);
+  margin: 0 0 0.5rem 0;
+  word-break: break-word;
 }
 
-.time {
-  font-size: 0.85rem;
+.actor {
+  font-weight: 700;
+  color: var(--color-black);
+}
+
+.action {
+  font-weight: 400;
+  color: var(--color-gray-dark);
+}
+
+.target {
+  font-style: italic;
   color: var(--color-gray-medium);
 }
 
+.time {
+  font-size: 0.8125rem;
+  color: var(--color-gray-medium);
+  display: block;
+}
+
+.unreadIndicator {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background-color: var(--color-white);
+  flex-shrink: 0;
+}
+
+/* Empty State */
+.emptyState {
+  text-align: center;
+  padding: 4rem 2rem;
+  background-color: var(--color-white);
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.emptyIcon {
+  width: 4rem;
+  height: 4rem;
+  fill: #e0e0e0;
+  margin: 0 auto 1.5rem;
+}
+
+.emptyTitle {
+  font-size: 1.3125rem;
+  font-weight: 700;
+  color: var(--color-black);
+  margin: 0 0 0.5rem 0;
+}
+
+.emptyText {
+  font-size: 1rem;
+  color: var(--color-gray-medium);
+  margin: 0;
+}
+
+/* Modal Styles */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.modalContent {
+  background-color: var(--color-white);
+  padding: 2.5rem;
+  border-radius: 2px;
+  max-width: 450px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.modalIconWrapper {
+  width: 4rem;
+  height: 4rem;
+  margin: 0 auto 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: #f5f5f5;
+}
+
+.modalIcon {
+  width: 2.5rem;
+  height: 2.5rem;
+  fill: #059669;
+  animation: scaleIn 0.4s ease;
+}
+
+.modalIconWarning {
+  width: 2.5rem;
+  height: 2.5rem;
+  fill: #FF0000;
+  animation: shake 0.5s ease;
+}
+
+@keyframes scaleIn {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-5px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(5px);
+  }
+}
+
+.modalTitle {
+  font-size: 1.3125rem;
+  font-weight: 700;
+  color: var(--color-black);
+  margin: 0 0 0.75rem 0;
+}
+
+.modalMessage {
+  font-size: 1rem;
+  color: var(--color-gray-medium);
+  margin: 0 0 2rem 0;
+  line-height: 1.5;
+}
+
+.modalActions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.modalCancelBtn,
+.modalDeleteBtn {
+  padding: 0.75rem 2rem;
+  border: none;
+  border-radius: 2px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.modalCancelBtn {
+  background-color: #f5f5f5;
+  color: var(--color-black);
+}
+
+.modalCancelBtn:hover {
+  background-color: #e0e0e0;
+}
+
+.modalDeleteBtn {
+  background-color: var(--color-black);
+  color: var(--color-white);
+}
+
+.modalDeleteBtn:hover {
+  background-color: #FF0000;
+}
+
+/* Scroll Lock */
+body:has(.modalOverlay) {
+  overflow: hidden;
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
-  .notificationsPage {
-    padding: 1rem;
+  .container {
+    padding: 0 1rem;
+  }
+
+  .header {
+    padding: 2rem 0 1.5rem;
+  }
+
+  .headerContent {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .pageTitle {
+    font-size: 1.3125rem;
+  }
+
+  .pageSubtitle {
+    font-size: 0.8125rem;
+  }
+
+  .headerStats {
+    width: 100%;
+    justify-content: space-between;
   }
 
   .toolbar {
     flex-direction: column;
-    gap: 0.75rem;
+    align-items: stretch;
+    padding: 1rem;
+  }
+
+  .filters {
+    width: 100%;
+  }
+
+  .filterBtn {
+    flex: 1;
+  }
+
+  .actions {
+    width: 100%;
+    flex-direction: column;
   }
 
   .markAllBtn,
   .clearBtn {
     width: 100%;
+    justify-content: center;
   }
 
   .notificationCard {
-    flex-direction: column;
-    text-align: center;
+    padding: 1rem;
+  }
+
+  .notificationIconWrapper {
+    width: 2rem;
+    height: 2rem;
   }
 
   .notificationIcon {
-    align-self: center;
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .notificationText {
+    font-size: 0.8125rem;
+  }
+
+  .time {
+    font-size: 0.75rem;
+  }
+
+  .modalContent {
+    padding: 2rem 1.5rem;
+  }
+
+  .modalActions {
+    flex-direction: column;
+  }
+
+  .modalCancelBtn,
+  .modalDeleteBtn {
+    width: 100%;
   }
 }
