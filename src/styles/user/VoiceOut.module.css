@@ -756,6 +756,11 @@
   z-index: 1000;
   padding: 1rem;
   backdrop-filter: blur(4px);
+  overflow-y: auto;
+}
+
+body:has(.modalOverlay) {
+  overflow: hidden;
 }
 
 .modalContent {

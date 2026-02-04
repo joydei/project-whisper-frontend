@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import styles from '../styles/components/Navbar.module.css';
 
 // Import SVG icons
@@ -18,26 +18,26 @@ const Navbar = () => {
           </Link>
         </div>
         <nav className={styles.nav}>
-          <Link to="/" className={styles.navLink}>
+          <NavLink to="/" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`} end>
             <HomeIcon className={styles.icon} />
             Home
-          </Link>
-          <Link to="/voice-out" className={styles.navLink}>
+          </NavLink>
+          <NavLink to="/voice-out" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}>
             <MegaphoneIcon className={styles.icon} />
             Voice Out
-          </Link>
-          <Link to="/inbox" className={styles.navLink}>
+          </NavLink>
+          <NavLink to="/inbox" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}>
             <InboxIcon className={styles.icon} />
             Inbox
-          </Link>
-          <Link to="/notifications" className={styles.navLink}>
+          </NavLink>
+          <NavLink to="/notifications" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}>
             <BellIcon className={styles.icon} />
             Notifications
-          </Link>
-          <Link to="/profile" className={styles.navLink}>
+          </NavLink>
+          <NavLink to="/profile" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}>
             <UserIcon className={styles.icon} />
             Profile
-          </Link>
+          </NavLink>
         </nav>
         <div className={styles.authButtons}>
           <Link to="/login">
