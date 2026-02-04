@@ -7,6 +7,7 @@ import MegaphoneIcon from '../assets/icons/megaphone-sound-waves.svg?react';
 import InboxIcon from '../assets/icons/inbox-full.svg?react';
 import BellIcon from '../assets/icons/bell.svg?react';
 import UserIcon from '../assets/icons/circle-user.svg?react';
+import SearchIcon from '../assets/icons/search.svg?react';
 
 const Navbar = () => {
   return (
@@ -16,6 +17,14 @@ const Navbar = () => {
           <Link to="/">
             <h1>Aircho</h1>
           </Link>
+        </div>
+        <div className={styles.searchBar}>
+          <SearchIcon className={styles.searchIcon} />
+          <input 
+            type="text" 
+            placeholder="Search for updates, reports, or topics..." 
+            className={styles.searchInput}
+          />
         </div>
         <nav className={styles.nav}>
           <NavLink to="/" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`} end>
