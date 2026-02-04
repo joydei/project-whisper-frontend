@@ -45,6 +45,7 @@ const Profile = () => {
   const [profilePicture, setProfilePicture] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     fullName: 'Joy Dei',
+    username: 'joy_dei',
     email: 'joy.dei@example.com',
     phone: '+233 24 123 4567',
     municipality: 'Accra Metropolitan',
@@ -228,7 +229,7 @@ const Profile = () => {
                       />
                     </div>
                     <h2 className={styles.userName}>{formData.fullName}</h2>
-                    <p className={styles.userEmail}>{formData.email}</p>
+                    <p className={styles.userEmail}>@{formData.username}</p>
                     <p className={styles.memberSince}>
                       <CalendarIcon className={styles.inlineIcon} />
                       Member since January 2026
@@ -342,8 +343,13 @@ const Profile = () => {
                               <span className={styles.infoValue}>{formData.fullName}</span>
                             </div>
                           </div>
-                          <div className={styles.infoItem}>
-                            <EnvelopeIcon className={styles.infoIcon} />
+                          <div className={styles.infoItem}>                            <UserIcon className={styles.infoIcon} />
+                            <div className={styles.infoContent}>
+                              <span className={styles.infoLabel}>Username</span>
+                              <span className={styles.infoValue}>@{formData.username}</span>
+                            </div>
+                          </div>
+                          <div className={styles.infoItem}>                            <EnvelopeIcon className={styles.infoIcon} />
                             <div className={styles.infoContent}>
                               <span className={styles.infoLabel}>Email</span>
                               <span className={styles.infoValue}>{formData.email}</span>
@@ -386,6 +392,16 @@ const Profile = () => {
                               type="text"
                               name="fullName"
                               value={formData.fullName}
+                              onChange={handleInputChange}
+                              className={styles.formInput}
+                            />
+                          </div>
+                          <div className={styles.formGroup}>
+                            <label className={styles.formLabel}>Username</label>
+                            <input
+                              type="text"
+                              name="username"
+                              value={formData.username}
                               onChange={handleInputChange}
                               className={styles.formInput}
                             />

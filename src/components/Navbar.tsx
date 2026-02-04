@@ -52,7 +52,6 @@ const Navbar = () => {
           <Link to="/login">
             <button className={styles.loginBtn}>Login</button>
           </Link>
-          <button className={styles.signupBtn}>Sign Up</button>
         </div>
       </div>
     </header>
