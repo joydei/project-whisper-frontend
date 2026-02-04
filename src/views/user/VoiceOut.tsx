@@ -1,10 +1,10 @@
 import { useState, type FormEvent } from 'react';
+import { Fade, Slide } from 'react-awesome-reveal';
 import styles from '../../styles/user/VoiceOut.module.css';
 
 // Import SVG icons
 import SirenIcon from '../../assets/icons/siren-on.svg?react';
 import MegaphoneIcon from '../../assets/icons/megaphone-sound-waves.svg?react';
-import ShieldIcon from '../../assets/icons/shield-check.svg?react';
 import MarkerIcon from '../../assets/icons/marker.svg?react';
 import ClipFileIcon from '../../assets/icons/clip-file.svg?react';
 import DescriptionIcon from '../../assets/icons/description-alt.svg?react';
@@ -12,6 +12,9 @@ import BooksIcon from '../../assets/icons/books.svg?react';
 import GovernmentIcon from '../../assets/icons/government-flag.svg?react';
 import LightbulbIcon from '../../assets/icons/lightbulb-on.svg?react';
 import PriorityIcon from '../../assets/icons/priority-arrows.svg?react';
+import PendingIcon from '../../assets/icons/pending.svg?react';
+import CheckCircleIcon from '../../assets/icons/check-circle.svg?react';
+import CallIcon from '../../assets/icons/phone-call.svg?react';
 
 interface FormData {
   category: string;
@@ -36,7 +39,51 @@ const VoiceOut = () => {
   });
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showHowItWorks, setShowHowItWorks] = useState(() => {
+    return localStorage.getItem('hideHowItWorks') !== 'true';
+  });
+  const [showTips, setShowTips] = useState(() => {
+    return localStorage.getItem('hideTips') !== 'true';
+  });
+  const [animatedStats, setAnimatedStats] = useState({ total: 0, resolved: 0, inProgress: 0 });
+
+  // Counting animation for stats
+  useState(() => {
+    const targetStats = { total: 12, resolved: 8, inProgress: 4 };
+    const duration = 1000; // 1 second
+    const steps = 30;
+    const stepDuration = duration / steps;
+    
+    let currentStep = 0;
+    const interval = setInterval(() => {
+      currentStep++;
+      const progress = currentStep / steps;
+      
+      setAnimatedStats({
+        total: Math.round(targetStats.total * progress),
+        resolved: Math.round(targetStats.resolved * progress),
+        inProgress: Math.round(targetStats.inProgress * progress)
+      });
+      
+      if (currentStep >= steps) {
+        clearInterval(interval);
+        setAnimatedStats(targetStats);
+      }
+    }, stepDuration);
+    
+    return () => clearInterval(interval);
+  });
+
+  const handleDismissTips = () => {
+    setShowTips(false);
+    localStorage.setItem('hideTips', 'true');
+  };
+
+  const handleDismissHowItWorks = () => {
+    setShowHowItWorks(false);
+    localStorage.setItem('hideHowItWorks', 'true');
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
@@ -119,7 +166,7 @@ const VoiceOut = () => {
         ...formData
       });
       
-      setSubmitSuccess(true);
+      setShowSuccessModal(true);
       
       // Reset form after success
       setTimeout(() => {
@@ -132,8 +179,7 @@ const VoiceOut = () => {
           anonymous: false,
           attachments: []
         });
-        setSubmitSuccess(false);
-      }, 3000);
+      }, 500);
       
     } catch (error) {
       console.error('Error submitting report:', error);
@@ -141,6 +187,10 @@ const VoiceOut = () => {
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleCloseModal = () => {
+    setShowSuccessModal(false);
   };
 
   const handleCancel = () => {
@@ -175,7 +225,32 @@ const VoiceOut = () => {
 
       <section className={styles.content}>
         <div className={styles.container}>
-          <div className={styles.formCard}>
+          <div className={styles.mainContent}>
+            <Fade delay={200} duration={1200} triggerOnce>
+            <div className={styles.statsCard}>
+              <div className={styles.statsHeader}>
+                <PendingIcon className={styles.statsIcon} />
+                <h3 className={styles.statsTitle}>Your Activity</h3>
+              </div>
+              <div className={styles.statsGrid}>
+                <div className={styles.stat}>
+                  <span className={styles.statNumber}>{animatedStats.total}</span>
+                  <span className={styles.statLabel}>Total</span>
+                </div>
+                <div className={styles.stat}>
+                  <span className={styles.statNumber}>{animatedStats.resolved}</span>
+                  <span className={styles.statLabel}>Resolved</span>
+                </div>
+                <div className={styles.stat}>
+                  <span className={styles.statNumber}>{animatedStats.inProgress}</span>
+                  <span className={styles.statLabel}>In Progress</span>
+                </div>
+              </div>
+            </div>
+            </Fade>
+
+            <Slide direction="left" duration={1000} triggerOnce>
+            <div className={styles.formCard}>
             <h2 className={styles.formTitle}>Submit Your Report</h2>
             
             {/* Report Type Selection */}
@@ -203,13 +278,6 @@ const VoiceOut = () => {
                 </div>
               </button>
             </div>
-
-            {submitSuccess && (
-              <div className={styles.successMessage}>
-                <ShieldIcon className={styles.successIcon} />
-                <p>Your report has been submitted successfully! We'll notify you once it's reviewed.</p>
-              </div>
-            )}
 
             <form className={styles.form} onSubmit={handleSubmit}>
               {reportType === 'municipality' ? (
@@ -367,7 +435,12 @@ const VoiceOut = () => {
                 {reportType === 'civil' && formData.priority === 'emergency' && (
                   <div className={styles.emergencyAlert}>
                     <SirenIcon className={styles.emergencyIcon} />
-                    <p>For life-threatening emergencies, please call emergency services directly.</p>
+                    <div className={styles.emergencyContent}>
+                      <p>For life-threatening emergencies, please call emergency services directly.</p>
+                      <a href="tel:191" className={styles.emergencyCallBtn}>
+                        <CallIcon /><span> Call 191</span>
+                      </a>
+                    </div>
                   </div>
                 )}
               </div>
@@ -443,55 +516,84 @@ const VoiceOut = () => {
               </div>
             </form>
           </div>
-
-          <div className={styles.sidebar}>
-            <div className={styles.infoCard}>
-              <h3 className={styles.infoTitle}>
-                <MegaphoneIcon className={styles.infoIcon} />
-                How It Works
-              </h3>
-              <ul className={styles.infoList}>
-                <li>Choose between Municipality or Civil Services</li>
-                <li>Select the appropriate category</li>
-                <li>Provide detailed information and location</li>
-                <li>Attach any relevant photos or documents</li>
-                <li>Submit and track your report status</li>
-                <li>Receive updates via notifications</li>
-              </ul>
-            </div>
-
-            <div className={styles.tipCard}>
-              <h3 className={styles.tipTitle}>
-                <LightbulbIcon className={styles.tipIcon} />
-                Tips for Better Reports
-              </h3>
-              <ul className={styles.infoList}>
-                <li>Be specific about the location</li>
-                <li>Include clear photos if possible</li>
-                <li>Describe the issue in detail</li>
-                <li>Set appropriate priority level</li>
-                <li>Check for duplicate reports</li>
-              </ul>
-            </div>
-
-            <div className={styles.statsCard}>
-              <h3 className={styles.statsTitle}>Your Activity</h3>
-              <div className={styles.stat}>
-                <span className={styles.statNumber}>12</span>
-                <span className={styles.statLabel}>Total Submissions</span>
-              </div>
-              <div className={styles.stat}>
-                <span className={styles.statNumber}>8</span>
-                <span className={styles.statLabel}>Resolved</span>
-              </div>
-              <div className={styles.stat}>
-                <span className={styles.statNumber}>4</span>
-                <span className={styles.statLabel}>In Progress</span>
-              </div>
-            </div>
+          </Slide>
           </div>
+
+          <Slide direction="right" duration={1000} triggerOnce>
+          <div className={styles.sidebar}>
+            {showHowItWorks && (
+              <div className={styles.infoCard}>
+                <div className={styles.cardHeader}>
+                  <h3 className={styles.infoTitle}>
+                    <MegaphoneIcon className={styles.infoIcon} />
+                    How It Works
+                  </h3>
+                  <button 
+                    className={styles.dismissBtn}
+                    onClick={handleDismissHowItWorks}
+                  >
+                    Ok, got it
+                  </button>
+                </div>
+                <ul className={styles.infoList}>
+                  <li>Choose between Municipality or Civil Services</li>
+                  <li>Select the appropriate category</li>
+                  <li>Provide detailed information and location</li>
+                  <li>Attach any relevant photos or documents</li>
+                  <li>Submit and track your report status</li>
+                  <li>Receive updates via notifications</li>
+                </ul>
+              </div>
+            )}
+
+            {showTips && (
+              <div className={styles.tipCard}>
+                <div className={styles.cardHeader}>
+                  <h3 className={styles.tipTitle}>
+                    <LightbulbIcon className={styles.tipIcon} />
+                    Tips
+                  </h3>
+                  <button 
+                    className={styles.dismissBtn}
+                    onClick={handleDismissTips}
+                  >
+                    Don't show again
+                  </button>
+                </div>
+                <ul className={styles.infoList}>
+                  <li>Be specific about the location</li>
+                  <li>Include clear photos if possible</li>
+                  <li>Describe the issue in detail</li>
+                  <li>Set appropriate priority level</li>
+                  <li>Check for duplicate reports</li>
+                </ul>
+              </div>
+            )}
+          </div>
+          </Slide>
         </div>
       </section>
+
+      {/* Success Modal */}
+      {showSuccessModal && (
+        <div className={styles.modalOverlay} onClick={handleCloseModal}>
+          <Fade duration={400} triggerOnce>
+            <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+              <div className={styles.modalIconWrapper}>
+                <CheckCircleIcon className={styles.modalIcon} />
+              </div>
+              <h2 className={styles.modalTitle}>Report Submitted Successfully!</h2>
+              <p className={styles.modalMessage}>
+                Thank you for your submission. We've received your report and will review it shortly. 
+                You'll receive a notification once it has been processed.
+              </p>
+              <button className={styles.modalButton} onClick={handleCloseModal}>
+                Close
+              </button>
+            </div>
+          </Fade>
+        </div>
+      )}
     </div>
   );
 };
