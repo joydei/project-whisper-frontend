@@ -411,6 +411,114 @@
   display: block;
 }
 
+/* Poll Styles */
+.pollContainer {
+  margin-top: 1rem;
+  border: 2px solid var(--color-black);
+  border-radius: 2px;
+  padding: 1.5rem;
+  background-color: var(--color-black);
+}
+
+.pollQuestion {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-white);
+  margin: 0 0 1rem 0;
+}
+
+.pollOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.pollOption {
+  position: relative;
+  background-color: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+  padding: 0.8125rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  overflow: hidden;
+}
+
+.pollOption:hover {
+  border-color: var(--color-white);
+  transform: translateX(2px);
+}
+
+.pollOption.voted {
+  border-color: var(--color-white);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.pollOptionContent {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pollOptionText {
+  font-size: 0.8125rem;
+  color: var(--color-white);
+  font-weight: 500;
+}
+
+.pollOptionPercentage {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-white);
+}
+
+.pollOptionBar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.1);
+  transition: width 0.3s ease;
+  z-index: 1;
+}
+
+.pollOption.voted .pollOptionBar {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.pollFooter {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.pollTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background-color: var(--color-black);
+  color: var(--color-white);
+  padding: 0.25rem 0.5rem;
+  border-radius: 2px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+}
+
+.pollTagIcon {
+  width: 14px;
+  height: 14px;
+  filter: brightness(0) invert(1);
+}
+
 /* Post Footer */
 .postFooter {
   padding: 1rem;

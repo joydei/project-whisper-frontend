@@ -30,6 +30,20 @@ export interface Post {
     company: string;
     cta: string;
   };
+  replyRestriction?: 'everyone' | 'followers' | 'municipality';
+  scope?: 'municipality' | 'ghana';
+  poll?: {
+    question: string;
+    options: Array<{
+      text: string;
+      votes: number;
+      percentage: number;
+    }>;
+    totalVotes: number;
+    duration: '1day' | '3days' | '1week' | 'unlimited';
+    endsAt?: string;
+    userVoted?: number;
+  };
 }
 
 export interface Comment {
@@ -507,6 +521,124 @@ export const ghanaPosts: Post[] = [
     comments: 145,
     shares: 89,
     reposts: 56,
+    commentsData: []
+  },
+  {
+    id: 17,
+    type: 'user',
+    author: {
+      name: 'Ama Osei',
+      username: 'ama_osei',
+      avatar: 'AO',
+      verified: false
+    },
+    content: 'What do you think is the most important issue facing our community right now?',
+    time: '4 hours ago',
+    likes: 234,
+    comments: 67,
+    shares: 12,
+    reposts: 5,
+    poll: {
+      question: 'What do you think is the most important issue facing our community right now?',
+      options: [
+        { text: 'Road Infrastructure', votes: 145, percentage: 42 },
+        { text: 'Water Supply', votes: 98, percentage: 28 },
+        { text: 'Waste Management', votes: 67, percentage: 19 },
+        { text: 'Street Lighting', votes: 38, percentage: 11 }
+      ],
+      totalVotes: 348,
+      duration: '3days',
+      endsAt: new Date(Date.now() + 2 * 86400000).toISOString()
+    },
+    commentsData: []
+  },
+  {
+    id: 18,
+    type: 'municipality',
+    author: {
+      name: 'Kumasi Metropolitan Assembly',
+      verified: true,
+      role: 'Municipality',
+      icon: 'government'
+    },
+    content: 'We want your input! Help us decide which park should receive renovation funding this year.',
+    image: defaultImage,
+    time: '6 hours ago',
+    likes: 456,
+    comments: 89,
+    shares: 34,
+    reposts: 12,
+    poll: {
+      question: 'Which park should we renovate first?',
+      options: [
+        { text: 'Central Park', votes: 234, percentage: 38 },
+        { text: 'Heritage Gardens', votes: 189, percentage: 31 },
+        { text: 'Children\'s Playground', votes: 123, percentage: 20 },
+        { text: 'Sports Complex', votes: 67, percentage: 11 }
+      ],
+      totalVotes: 613,
+      duration: '1week',
+      endsAt: new Date(Date.now() + 5 * 86400000).toISOString()
+    },
+    commentsData: []
+  },
+  {
+    id: 19,
+    type: 'user',
+    author: {
+      name: 'Kofi Mensah',
+      username: 'kofi_mensah',
+      avatar: 'KM',
+      verified: false
+    },
+    content: 'Quick poll for my neighbors: When should we have our community clean-up day?',
+    time: '8 hours ago',
+    likes: 89,
+    comments: 23,
+    shares: 5,
+    reposts: 2,
+    location: 'Osu, Accra',
+    poll: {
+      question: 'When should we have our community clean-up day?',
+      options: [
+        { text: 'This Saturday Morning', votes: 45, percentage: 50 },
+        { text: 'Sunday Afternoon', votes: 28, percentage: 31 },
+        { text: 'Next Saturday', votes: 17, percentage: 19 }
+      ],
+      totalVotes: 90,
+      duration: '1day',
+      endsAt: new Date(Date.now() + 12 * 3600000).toISOString()
+    },
+    commentsData: []
+  },
+  {
+    id: 20,
+    type: 'user',
+    author: {
+      name: 'Abena Kwarteng',
+      username: 'abena_k',
+      avatar: 'AK',
+      verified: true
+    },
+    content: 'What type of local business would you most like to see in our area? Share your thoughts!',
+    image: defaultImage,
+    time: '10 hours ago',
+    likes: 167,
+    comments: 45,
+    shares: 18,
+    reposts: 7,
+    location: 'Tema',
+    poll: {
+      question: 'What type of local business would you most like to see in our area?',
+      options: [
+        { text: 'Coffee Shop/Cafe', votes: 78, percentage: 35 },
+        { text: 'Grocery Store', votes: 67, percentage: 30 },
+        { text: 'Fitness Center', votes: 45, percentage: 20 },
+        { text: 'Book Store', votes: 34, percentage: 15 }
+      ],
+      totalVotes: 224,
+      duration: 'unlimited'
+    },
     commentsData: []
   }
 ];

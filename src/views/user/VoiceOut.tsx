@@ -1,5 +1,6 @@
-import { useState, type FormEvent } from 'react';
+import { useState, useRef, type FormEvent } from 'react';
 import { Fade, Slide } from 'react-awesome-reveal';
+import { usePosts } from '../../context/PostsContext';
 import styles from '../../styles/user/VoiceOut.module.css';
 
 // Import SVG icons
@@ -15,6 +16,11 @@ import PriorityIcon from '../../assets/icons/priority-arrows.svg?react';
 import PendingIcon from '../../assets/icons/pending.svg?react';
 import CheckCircleIcon from '../../assets/icons/check-circle.svg?react';
 import CallIcon from '../../assets/icons/phone-call.svg?react';
+import ScrollDocumentIcon from '../../assets/icons/scroll-document-story.svg?react';
+import XIcon from '../../assets/icons/cross-circle.svg?react';
+import GhanaDarkIcon from '../../assets/icons/ghana-dark.svg?react';
+import CameraIcon from '../../assets/icons/camera.svg?react';
+import PollHIcon from '../../assets/icons/poll-h.svg?react';
 
 interface FormData {
   category: string;
@@ -27,6 +33,8 @@ interface FormData {
 }
 
 const VoiceOut = () => {
+  const { addPost } = usePosts();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [reportType, setReportType] = useState<'municipality' | 'civil'>('municipality');
   const [formData, setFormData] = useState<FormData>({
     category: '',
@@ -47,6 +55,25 @@ const VoiceOut = () => {
     return localStorage.getItem('hideTips') !== 'true';
   });
   const [animatedStats, setAnimatedStats] = useState({ total: 0, resolved: 0, inProgress: 0 });
+  
+  // Post creation states
+  const [showPostModal, setShowPostModal] = useState(false);
+  const [postScope, setPostScope] = useState<'municipality' | 'ghana' | ''>('municipality');
+  const [postContent, setPostContent] = useState('');
+  const [postHideLocation, setPostHideLocation] = useState(false);
+  const [postImages, setPostImages] = useState<File[]>([]);
+  const [postAnonymous, setPostAnonymous] = useState(false);
+  const [showPostSuccessModal, setShowPostSuccessModal] = useState(false);
+  const [postErrors, setPostErrors] = useState<{[key: string]: string}>({});
+  const [replyRestriction, setReplyRestriction] = useState<'everyone' | 'followers' | 'municipality'>('everyone');
+  const [showPoll, setShowPoll] = useState(false);
+  const [pollQuestion, setPollQuestion] = useState('');
+  const [pollOptions, setPollOptions] = useState(['', '']);
+  const [pollDuration, setPollDuration] = useState<'1day' | '3days' | '1week' | 'unlimited'>('1day');
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+
+  // Common emojis for quick access
+  const commonEmojis = ['😊', '👍', '❤️', '🙏', '👏', '🎉', '🔥', '💯', '😂', '😍', '🤔', '😢', '😡', '💪', '🌟', '✨'];
 
   // Counting animation for stats
   useState(() => {
@@ -214,6 +241,183 @@ const VoiceOut = () => {
     setErrors({});
   };
 
+  const handleCreatePost = () => {
+    setShowPostModal(true);
+  };
+
+  const handleClosePostModal = () => {
+    if (postContent.trim()) {
+      if (window.confirm('Are you sure you want to cancel? Your post content will be lost.')) {
+        resetPostForm();
+      }
+    } else {
+      resetPostForm();
+    }
+  };
+
+  const resetPostForm = () => {
+    setShowPostModal(false);
+    setPostScope('municipality');
+    setPostContent('');
+    setPostHideLocation(false);
+    setPostImages([]);
+    setPostAnonymous(false);
+    setPostErrors({});
+    setReplyRestriction('everyone');
+    setShowPoll(false);
+    setPollQuestion('');
+    setPollOptions(['', '']);
+    setPollDuration('1day');
+    setShowEmojiPicker(false);
+  };
+
+  const handlePostImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    
+    const validFiles = files.filter(file => {
+      if (file.size > maxSize) {
+        setPostErrors(prev => ({ ...prev, images: `${file.name} exceeds 5MB limit` }));
+        return false;
+      }
+      if (!file.type.startsWith('image/')) {
+        setPostErrors(prev => ({ ...prev, images: `${file.name} is not an image file` }));
+        return false;
+      }
+      return true;
+    });
+    
+    setPostImages(prev => [...prev, ...validFiles].slice(0, 4)); // Max 4 images
+    setPostErrors(prev => ({ ...prev, images: '' }));
+  };
+
+  const removePostImage = (index: number) => {
+    setPostImages(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleEmojiClick = (emoji: string) => {
+    setPostContent(prev => prev + emoji);
+    setShowEmojiPicker(false);
+  };
+
+  const addPollOption = () => {
+    if (pollOptions.length < 4) {
+      setPollOptions([...pollOptions, '']);
+    }
+  };
+
+  const removePollOption = (index: number) => {
+    if (pollOptions.length > 2) {
+      setPollOptions(pollOptions.filter((_, i) => i !== index));
+    }
+  };
+
+  const updatePollOption = (index: number, value: string) => {
+    const newOptions = [...pollOptions];
+    newOptions[index] = value;
+    setPollOptions(newOptions);
+  };
+
+  const getCharCountClass = () => {
+    const length = postContent.length;
+    if (length > 1000) return styles.error;
+    if (length > 900) return styles.warning;
+    return '';
+  };
+
+  const handleSubmitPost = async () => {
+    if (!postScope) {
+      setPostErrors({ scope: 'Please select where to share your post' });
+      return;
+    }
+
+    if (!postContent.trim() && !showPoll) {
+      setPostErrors({ content: 'Please write something for your post or create a poll' });
+      return;
+    }
+
+    if (showPoll) {
+      if (!pollQuestion.trim()) {
+        setPostErrors({ poll: 'Please enter a poll question' });
+        return;
+      }
+      const filledOptions = pollOptions.filter(opt => opt.trim());
+      if (filledOptions.length < 2) {
+        setPostErrors({ poll: 'Please provide at least 2 poll options' });
+        return;
+      }
+    }
+
+    if (postContent.length > 1000) {
+      setPostErrors({ content: 'Post cannot exceed 1000 characters' });
+      return;
+    }
+
+    setIsSubmitting(true);
+    
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // Create the post object
+      const newPost: any = {
+        type: 'user' as const,
+        author: {
+          name: postAnonymous ? 'Anonymous' : 'Current User',
+          username: postAnonymous ? undefined : 'current_user',
+          avatar: postAnonymous ? undefined : 'CU',
+          verified: false
+        },
+        content: postContent,
+        location: postHideLocation ? undefined : 'Your Location',
+        image: postImages.length > 0 ? URL.createObjectURL(postImages[0]) : undefined,
+        replyRestriction,
+        scope: postScope
+      };
+
+      if (showPoll) {
+        newPost.poll = {
+          question: pollQuestion,
+          options: pollOptions.filter(opt => opt.trim()).map(opt => ({
+            text: opt,
+            votes: 0,
+            percentage: 0
+          })),
+          totalVotes: 0,
+          duration: pollDuration,
+          endsAt: pollDuration === 'unlimited' ? undefined : new Date(
+            Date.now() + 
+            (pollDuration === '1day' ? 86400000 : 
+             pollDuration === '3days' ? 259200000 : 
+             pollDuration === '1week' ? 604800000 : 0)
+          ).toISOString()
+        };
+      }
+
+      // Add post to context
+      addPost(newPost);
+      
+      console.log('Submitting post:', {
+        scope: postScope,
+        content: postContent,
+        hideLocation: postHideLocation,
+        images: postImages,
+        anonymous: postAnonymous,
+        replyRestriction,
+        poll: showPoll ? { question: pollQuestion, options: pollOptions, duration: pollDuration } : null
+      });
+      
+      resetPostForm();
+      setShowPostSuccessModal(true);
+      
+    } catch (error) {
+      console.error('Error submitting post:', error);
+      setPostErrors({ submit: 'Failed to submit post. Please try again.' });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className={styles.voiceOutPage}>
       <section className={styles.header}>
@@ -246,6 +450,18 @@ const VoiceOut = () => {
                   <span className={styles.statLabel}>In Progress</span>
                 </div>
               </div>
+            </div>
+            </Fade>
+
+            <Fade delay={300} duration={1000} triggerOnce>
+            <div className={styles.createPostSection}>
+              <button className={styles.createPostBtn} onClick={handleCreatePost}>
+                <ScrollDocumentIcon className={styles.createPostIcon} />
+                <div className={styles.createPostText}>
+                  <h3>Create a Post</h3>
+                  <p>Share updates, stories, or information with your community</p>
+                </div>
+              </button>
             </div>
             </Fade>
 
@@ -589,6 +805,324 @@ const VoiceOut = () => {
               </p>
               <button className={styles.modalButton} onClick={handleCloseModal}>
                 Close
+              </button>
+            </div>
+          </Fade>
+        </div>
+      )}
+
+      {/* Post Creation Modal */}
+      {showPostModal && (
+        <div className={styles.modalOverlay} onClick={handleClosePostModal}>
+          <Fade duration={400} triggerOnce>
+            <div className={styles.postModalContent} onClick={(e) => e.stopPropagation()}>
+              <button className={styles.modalCloseBtn} onClick={handleClosePostModal}>
+                <XIcon className={styles.closeIcon} />
+              </button>
+
+              <div className={styles.postStep}>
+                <div className={styles.postStepHeader}>
+                  <h2 className={styles.postModalTitle}>Create a Post</h2>
+                  <p className={styles.postModalSubtitle}>Who can see this post?</p>
+                </div>
+                
+                {/* Scope Selection */}
+                <div className={styles.postFormGroup}>
+                  {postErrors.scope && (
+                    <span className={styles.errorText}>{postErrors.scope}</span>
+                  )}
+                  
+                  <div className={styles.postScopeSelection}>
+                    <button
+                      type="button"
+                      className={`${styles.scopeBtn} ${postScope === 'municipality' ? styles.active : ''}`}
+                      onClick={() => {
+                        setPostScope('municipality');
+                        setPostErrors({});
+                      }}
+                    >
+                      <GovernmentIcon className={styles.scopeBtnIcon} />
+                      <div>
+                        <h4>Your Municipality</h4>
+                      </div>
+                    </button>
+                    <button
+                      type="button"
+                      className={`${styles.scopeBtn} ${postScope === 'ghana' ? styles.active : ''}`}
+                      onClick={() => {
+                        setPostScope('ghana');
+                        setPostErrors({});
+                      }}
+                    >
+                      <GhanaDarkIcon className={styles.scopeBtnIcon} />
+                      <div>
+                        <h4>Across Ghana</h4>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className={styles.postFormGroup}>
+                  <textarea
+                    className={styles.postTextarea}
+                    placeholder="What's on your mind?"
+                    value={postContent}
+                    onChange={(e) => {
+                      setPostContent(e.target.value);
+                      setPostErrors({});
+                    }}
+                    maxLength={1000}
+                    disabled={!postScope}
+                  />
+                  {postErrors.content && (
+                    <span className={styles.errorText}>{postErrors.content}</span>
+                  )}
+                  <div className={styles.charCounter}>
+                    <div className={`${styles.charCount} ${getCharCountClass()}`}>
+                      {postContent.length}/1000
+                    </div>
+                  </div>
+                </div>
+
+                {/* Image Preview */}
+                {postImages.length > 0 && (
+                  <div className={styles.postImagePreview}>
+                    {postImages.map((file, index) => (
+                      <div key={index} className={styles.postImageItem}>
+                        <img 
+                          src={URL.createObjectURL(file)} 
+                          alt={`Preview ${index + 1}`}
+                          className={styles.postImageThumb}
+                        />
+                        <button
+                          type="button"
+                          className={styles.removeImageBtn}
+                          onClick={() => removePostImage(index)}
+                          title="Remove image"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Poll Section */}
+                {showPoll && (
+                  <div className={styles.pollSection}>
+                    <div className={styles.pollHeader}>
+                      <h4 className={styles.pollTitle}>Create a Poll</h4>
+                      <button
+                        type="button"
+                        className={styles.removePollBtn}
+                        onClick={() => setShowPoll(false)}
+                      >
+                        ×
+                      </button>
+                    </div>
+                    
+                    <input
+                      type="text"
+                      className={styles.pollInput}
+                      placeholder="Ask a question..."
+                      value={pollQuestion}
+                      onChange={(e) => setPollQuestion(e.target.value)}
+                    />
+                    
+                    <div className={styles.pollOptions}>
+                      {pollOptions.map((option, index) => (
+                        <div key={index} className={styles.pollOptionRow}>
+                          <input
+                            type="text"
+                            className={styles.pollOptionInput}
+                            placeholder={`Option ${index + 1}`}
+                            value={option}
+                            onChange={(e) => updatePollOption(index, e.target.value)}
+                          />
+                          {pollOptions.length > 2 && (
+                            <button
+                              type="button"
+                              className={styles.removeOptionBtn}
+                              onClick={() => removePollOption(index)}
+                            >
+                              ×
+                            </button>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                    
+                    {pollOptions.length < 4 && (
+                      <button
+                        type="button"
+                        className={styles.addOptionBtn}
+                        onClick={addPollOption}
+                      >
+                        + Add Option
+                      </button>
+                    )}
+                    
+                    <div className={styles.pollDuration}>
+                      <label className={styles.pollLabel}>Poll Duration:</label>
+                      <select
+                        className={styles.pollSelect}
+                        value={pollDuration}
+                        onChange={(e) => setPollDuration(e.target.value as any)}
+                      >
+                        <option value="1day">1 Day</option>
+                        <option value="3days">3 Days</option>
+                        <option value="1week">1 Week</option>
+                        <option value="unlimited">No Time Limit</option>
+                      </select>
+                    </div>
+                    
+                    {postErrors.poll && (
+                      <span className={styles.errorText}>{postErrors.poll}</span>
+                    )}
+                  </div>
+                )}
+
+                {postErrors.submit && (
+                  <div className={styles.errorText} style={{ marginTop: '1rem' }}>
+                    {postErrors.submit}
+                  </div>
+                )}
+              </div>
+
+              {/* Black Bottom Controls */}
+              <div className={styles.postControls}>
+                <div className={styles.postControlsLeft}>
+                  {/* Image Upload */}
+                  <input
+                    id="postFileInput"
+                    type="file"
+                    className={styles.postFileInput}
+                    multiple
+                    accept="image/*"
+                    onChange={handlePostImageChange}
+                    disabled={!postScope || postImages.length >= 4}
+                    ref={fileInputRef}
+                  />
+                  <label 
+                    htmlFor="postFileInput" 
+                    className={`${styles.controlBtn} ${(!postScope || postImages.length >= 4) ? styles.disabled : ''}`}
+                    title="Add images"
+                  >
+                    <CameraIcon className={styles.controlIcon} />
+                  </label>
+                  
+                  {/* Poll Button */}
+                  <button
+                    type="button"
+                    className={`${styles.controlBtn} ${!postScope || showPoll ? styles.disabled : ''}`}
+                    onClick={() => setShowPoll(true)}
+                    disabled={!postScope || showPoll}
+                    title="Create poll"
+                  >
+                    <PollHIcon className={styles.controlIcon} />
+                  </button>
+                  
+                  {/* Emoji Picker */}
+                  <div className={styles.emojiPickerWrapper}>
+                    <button
+                      type="button"
+                      className={`${styles.controlBtn} ${!postScope ? styles.disabled : ''}`}
+                      onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                      disabled={!postScope}
+                      title="Add emoji"
+                    >
+                      <span className={styles.emojiIcon}>😊</span>
+                    </button>
+                    
+                    {showEmojiPicker && (
+                      <div className={styles.emojiPickerPopup}>
+                        {commonEmojis.map((emoji, index) => (
+                          <button
+                            key={index}
+                            type="button"
+                            className={styles.emojiItem}
+                            onClick={() => handleEmojiClick(emoji)}
+                          >
+                            {emoji}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  
+                  <div className={styles.controlDivider}></div>
+                  
+                  {/* Hide Location Toggle */}
+                  <button
+                    type="button"
+                    className={`${styles.controlToggle} ${postHideLocation ? styles.active : ''}`}
+                    onClick={() => setPostHideLocation(!postHideLocation)}
+                    disabled={!postScope}
+                    title={postHideLocation ? "Location hidden" : "Location visible"}
+                  >
+                    <MarkerIcon className={styles.controlIcon} />
+                    {postHideLocation && <span className={styles.toggleSlash}>/</span>}
+                  </button>
+                  
+                  {/* Anonymous Toggle */}
+                  <button
+                    type="button"
+                    className={`${styles.controlToggle} ${postAnonymous ? styles.active : ''}`}
+                    onClick={() => setPostAnonymous(!postAnonymous)}
+                    title={postAnonymous ? "Anonymous" : "Public"}
+                  >
+                    <GovernmentIcon className={styles.controlIcon} />
+                    {postAnonymous && <span className={styles.toggleSlash}>/</span>}
+                  </button>
+                </div>
+                
+                <div className={styles.postControlsRight}>
+                  {/* Reply Restriction */}
+                  <div className={styles.replyRestrictionWrapper}>
+                    <label className={styles.replyLabel}>Who can reply:</label>
+                    <select
+                      className={styles.replySelect}
+                      value={replyRestriction}
+                      onChange={(e) => setReplyRestriction(e.target.value as any)}
+                      disabled={!postScope}
+                    >
+                      <option value="everyone">Everyone</option>
+                      <option value="followers">Followers only</option>
+                      <option value="municipality">Municipality only</option>
+                    </select>
+                  </div>
+                  
+                  {/* Submit Button */}
+                  <button 
+                    className={styles.postSubmitBtn} 
+                    onClick={handleSubmitPost}
+                    disabled={isSubmitting || !postContent.trim() && !showPoll}
+                  >
+                    {isSubmitting ? 'Posting...' : 'Post'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </Fade>
+        </div>
+      )}
+
+      {/* Post Success Modal */}
+      {showPostSuccessModal && (
+        <div className={styles.modalOverlay} onClick={() => setShowPostSuccessModal(false)}>
+          <Fade duration={400} triggerOnce>
+            <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+              <div className={styles.modalIconWrapper}>
+                <CheckCircleIcon className={styles.modalIcon} />
+              </div>
+              <h2 className={styles.modalTitle}>Post Shared Successfully!</h2>
+              <p className={styles.modalMessage}>
+                Your post has been shared with {postScope === 'municipality' ? 'your municipality' : 'everyone across Ghana'}. 
+                Others can now see and interact with your post.
+              </p>
+              <button className={styles.modalButton} onClick={() => setShowPostSuccessModal(false)}>
+                Done
               </button>
             </div>
           </Fade>

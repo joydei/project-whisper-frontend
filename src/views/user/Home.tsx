@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Fade } from 'react-awesome-reveal';
+import { usePosts } from '../../context/PostsContext';
 import styles from '../../styles/user/Home.module.css';
 import type { Post } from '../../data/postsData';
 import { municipalityPosts, ghanaPosts } from '../../data/postsData';
@@ -27,8 +28,10 @@ import RaindropsIcon from '../../assets/icons/raindrops.svg?react';
 import PendingIcon from '../../assets/icons/pending.svg?react';
 import ClockIcon from '../../assets/icons/clock-three.svg?react';
 import SirenIcon from '../../assets/icons/siren-on.svg?react';
+import PollHIcon from '../../assets/icons/poll-h.svg?react';
 
 const Home = () => {
+  const { userPosts } = usePosts();
   const [activeTab, setActiveTab] = useState<'municipality' | 'ghana'>('municipality');
   const [likedPosts, setLikedPosts] = useState<Set<number>>(new Set());
   const [repostedPosts, setRepostedPosts] = useState<Set<number>>(new Set());
@@ -56,7 +59,9 @@ const Home = () => {
   const [showDeleteSuccessModal, setShowDeleteSuccessModal] = useState(false);
   const [replyToDelete, setReplyToDelete] = useState<{id: number; commentId: number} | null>(null);
   
-  const currentPosts = activeTab === 'municipality' ? municipalityPosts : ghanaPosts;
+  // Combine user posts with static posts and sort by time (newest first)
+  const staticPosts = activeTab === 'municipality' ? municipalityPosts : ghanaPosts;
+  const currentPosts = [...userPosts, ...staticPosts];
 
   const handleLike = (postId: number) => {
     setLikedPosts(prev => {
@@ -534,6 +539,7 @@ const Home = () => {
                   <div className={styles.postContent}>
                     <p className={`${styles.postText} ${shouldTruncate(post.content) && !expandedPosts.has(post.id) ? styles.postTextTruncated : ''}`}>
                       {post.content}
+                      {post.poll && <span className={styles.pollTag}><PollHIcon className={styles.pollTagIcon} /> Poll</span>}
                     </p>
                     {shouldTruncate(post.content) && (
                       <button 
@@ -552,6 +558,46 @@ const Home = () => {
                     {post.image && (
                       <div className={styles.postImageWrapper}>
                         <img src={post.image} alt="Post content" className={styles.postImage} />
+                      </div>
+                    )}
+                    
+                    {post.poll && (
+                      <div className={styles.pollContainer}>
+                        <h4 className={styles.pollQuestion}>{post.poll.question}</h4>
+                        <div className={styles.pollOptions}>
+                          {post.poll.options.map((option, index) => (
+                            <button
+                              key={index}
+                              className={`${styles.pollOption} ${post.poll?.userVoted === index ? styles.voted : ''}`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                // Handle vote logic here
+                              }}
+                            >
+                              <div className={styles.pollOptionContent}>
+                                <span className={styles.pollOptionText}>{option.text}</span>
+                                {post.poll && post.poll.totalVotes > 0 && (
+                                  <span className={styles.pollOptionPercentage}>{option.percentage}%</span>
+                                )}
+                              </div>
+                              {post.poll && post.poll.totalVotes > 0 && (
+                                <div 
+                                  className={styles.pollOptionBar} 
+                                  style={{ width: `${option.percentage}%` }}
+                                />
+                              )}
+                            </button>
+                          ))}
+                        </div>
+                        <div className={styles.pollFooter}>
+                          <span>{post.poll.totalVotes} {post.poll.totalVotes === 1 ? 'vote' : 'votes'}</span>
+                          {post.poll.endsAt && (
+                            <span>• Ends {new Date(post.poll.endsAt).toLocaleDateString()}</span>
+                          )}
+                          {post.poll.duration === 'unlimited' && (
+                            <span>• No time limit</span>
+                          )}
+                        </div>
                       </div>
                     )}
                   </div>
@@ -638,7 +684,10 @@ const Home = () => {
               </div>
               
               <div className={styles.postContent}>
-                <p className={styles.postText}>{selectedPost.content}</p>
+                <p className={styles.postText}>
+                  {selectedPost.content}
+                  {selectedPost.poll && <span className={styles.pollTag}><PollHIcon className={styles.pollTagIcon} /> Poll</span>}
+                </p>
                 {selectedPost.location && (
                   <span className={styles.postLocation}>
                     <MarkerIcon className={styles.locationIcon} />
@@ -648,6 +697,45 @@ const Home = () => {
                 {selectedPost.image && (
                   <div className={styles.postImageWrapper}>
                     <img src={selectedPost.image} alt="Post content" className={styles.postImage} />
+                  </div>
+                )}
+                
+                {selectedPost.poll && (
+                  <div className={styles.pollContainer}>
+                    <h4 className={styles.pollQuestion}>{selectedPost.poll.question}</h4>
+                    <div className={styles.pollOptions}>
+                      {selectedPost.poll.options.map((option, index) => (
+                        <button
+                          key={index}
+                          className={`${styles.pollOption} ${selectedPost.poll?.userVoted === index ? styles.voted : ''}`}
+                          onClick={() => {
+                            // Handle vote logic here
+                          }}
+                        >
+                          <div className={styles.pollOptionContent}>
+                            <span className={styles.pollOptionText}>{option.text}</span>
+                            {selectedPost.poll!.totalVotes > 0 && (
+                              <span className={styles.pollOptionPercentage}>{option.percentage}%</span>
+                            )}
+                          </div>
+                          {selectedPost.poll!.totalVotes > 0 && (
+                            <div 
+                              className={styles.pollOptionBar} 
+                              style={{ width: `${option.percentage}%` }}
+                            />
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                    <div className={styles.pollFooter}>
+                      <span>{selectedPost.poll.totalVotes} {selectedPost.poll.totalVotes === 1 ? 'vote' : 'votes'}</span>
+                      {selectedPost.poll.endsAt && (
+                        <span>• Ends {new Date(selectedPost.poll.endsAt).toLocaleDateString()}</span>
+                      )}
+                      {selectedPost.poll.duration === 'unlimited' && (
+                        <span>• No time limit</span>
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
