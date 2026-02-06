@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { Fade, Zoom } from 'react-awesome-reveal';
 import { useUser } from '../../context/UserContext';
+import { usePosts } from '../../context/PostsContext';
 import { useHeaderFade } from '../../hooks/useHeaderFade';
 import styles from '../../styles/user/Profile.module.css';
+import homeStyles from '../../styles/user/Home.module.css';
 
 // Import SVG icons
 import UserIcon from '../../assets/icons/circle-user.svg?react';
@@ -13,10 +15,9 @@ import CheckCircleIcon from '../../assets/icons/check-circle.svg?react';
 import ClockIcon from '../../assets/icons/clock-three.svg?react';
 import ClockPendingIcon from '../../assets/icons/pending.svg?react';
 import UsersIcon from '../../assets/icons/users.svg?react';
-import FollowIcon from '../../assets/icons/follow.svg?react';
 import HeartIcon from '../../assets/icons/heart.svg?react';
+import HeartFilledIcon from '../../assets/icons/heart-filled.svg?react';
 import CommentIcon from '../../assets/icons/comment-dots.svg?react';
-import EyeIcon from '../../assets/icons/eye.svg?react';
 import LocationIcon from '../../assets/icons/marker.svg?react';
 import PhoneIcon from '../../assets/icons/phone-call.svg?react';
 import EnvelopeIcon from '../../assets/icons/envelope.svg?react';
@@ -29,14 +30,30 @@ import ShieldIcon from '../../assets/icons/shield-check.svg?react';
 import GlobeIcon from '../../assets/icons/globe.svg?react';
 import XmarkIcon from '../../assets/icons/cross-circle.svg?react';
 import SaveIcon from '../../assets/icons/disk.svg?react';
+import ShareIcon from '../../assets/icons/share.svg?react';
+import RetweetIcon from '../../assets/icons/arrows-retweet.svg?react';
+import MarkerIcon from '../../assets/icons/marker.svg?react';
+import PollHIcon from '../../assets/icons/poll-h.svg?react';
 
 const Profile = () => {
   const { currentUser } = useUser();
+  const { userPosts } = usePosts();
   const headerOpacity = useHeaderFade();
   const [isEditing, setIsEditing] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-  const [activeTab, setActiveTab] = useState<'overview' | 'activity' | 'settings'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'posts' | 'settings'>('overview');
+  const [likedPosts, setLikedPosts] = useState<Set<number>>(new Set());
+  const [repostedPosts, setRepostedPosts] = useState<Set<number>>(new Set());
+  const [expandedPosts, setExpandedPosts] = useState<Set<number>>(new Set());
+
+  // Filter user's own posts
+  const myPosts = userPosts.filter(post => 
+    !post.anonymous && post.author.name === currentUser.name
+  );
+
+  // Calculate total likes from user's posts
+  const totalLikes = myPosts.reduce((sum, post) => sum + post.likes, 0);
 
   const getInitials = (name: string) => {
     const names = name.trim().split(' ');
@@ -77,58 +94,14 @@ const Profile = () => {
   });
 
   const stats = {
-    reportsSubmitted: 23,
+    reportsSubmitted: myPosts.length,
     resolved: 15,
     inProgress: 6,
     pending: 2,
     followers: 142,
-    likes: 387,
+    likes: totalLikes,
     comments: 94,
-    views: 1248,
   };
-
-  const recentActivity = [
-    {
-      id: 1,
-      type: 'report',
-      action: 'Submitted a new report',
-      title: 'Street Lighting Issues on Oxford Street',
-      time: '2 hours ago',
-      status: 'pending',
-    },
-    {
-      id: 2,
-      type: 'resolved',
-      action: 'Report was resolved',
-      title: 'Road Damage on Independence Avenue',
-      time: '1 day ago',
-      status: 'resolved',
-    },
-    {
-      id: 3,
-      type: 'comment',
-      action: 'Commented on a report',
-      title: 'Sanitation Concerns in Market Area',
-      time: '2 days ago',
-      status: null,
-    },
-    {
-      id: 4,
-      type: 'like',
-      action: 'Received 12 likes on your report',
-      title: 'Traffic Management Issues',
-      time: '3 days ago',
-      status: null,
-    },
-    {
-      id: 5,
-      type: 'follow',
-      action: 'Gained 5 new followers',
-      title: null,
-      time: '4 days ago',
-      status: null,
-    },
-  ];
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -169,6 +142,49 @@ const Profile = () => {
     }
   };
 
+  const handleLike = (postId: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setLikedPosts(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(postId)) {
+        newSet.delete(postId);
+      } else {
+        newSet.add(postId);
+      }
+      return newSet;
+    });
+  };
+
+  const handleRepost = (postId: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setRepostedPosts(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(postId)) {
+        newSet.delete(postId);
+      } else {
+        newSet.add(postId);
+      }
+      return newSet;
+    });
+  };
+
+  const toggleExpanded = (postId: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setExpandedPosts(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(postId)) {
+        newSet.delete(postId);
+      } else {
+        newSet.add(postId);
+      }
+      return newSet;
+    });
+  };
+
+  const shouldTruncate = (content: string) => {
+    return content.length > 300;
+  };
+
   const handleSave = () => {
     // Save logic here
     setIsEditing(false);
@@ -177,17 +193,6 @@ const Profile = () => {
   const handleCancel = () => {
     // Reset to original values
     setIsEditing(false);
-  };
-
-  const getActivityIcon = (type: string) => {
-    switch (type) {
-      case 'report': return MegaphoneIcon;
-      case 'resolved': return CheckCircleIcon;
-      case 'comment': return CommentIcon;
-      case 'like': return HeartIcon;
-      case 'follow': return FollowIcon;
-      default: return ClockIcon;
-    }
   };
 
   return (
@@ -257,9 +262,9 @@ const Profile = () => {
                       <span className={styles.statLabel}>Likes</span>
                     </div>
                     <div className={styles.statCard}>
-                      <EyeIcon className={styles.statIcon} />
-                      <span className={styles.statValue}>{stats.views}</span>
-                      <span className={styles.statLabel}>Views</span>
+                      <CommentIcon className={styles.statIcon} />
+                      <span className={styles.statValue}>{stats.comments}</span>
+                      <span className={styles.statLabel}>Comments</span>
                     </div>
                   </div>
 
@@ -296,11 +301,11 @@ const Profile = () => {
                     Overview
                   </button>
                   <button
-                    className={`${styles.tab} ${activeTab === 'activity' ? styles.activeTab : ''}`}
-                    onClick={() => setActiveTab('activity')}
+                    className={`${styles.tab} ${activeTab === 'posts' ? styles.activeTab : ''}`}
+                    onClick={() => setActiveTab('posts')}
                   >
-                    <ClockIcon className={styles.tabIcon} />
-                    Activity
+                    <MegaphoneIcon className={styles.tabIcon} />
+                    Your Posts
                   </button>
                   <button
                     className={`${styles.tab} ${activeTab === 'settings' ? styles.activeTab : ''}`}
@@ -487,36 +492,131 @@ const Profile = () => {
                 </Zoom>
               )}
 
-              {/* Activity Tab */}
-              {activeTab === 'activity' && (
+              {/* Your Posts Tab */}
+              {activeTab === 'posts' && (
                 <Zoom duration={600} triggerOnce>
                   <div className={styles.tabContent}>
                     <div className={styles.section}>
-                      <h3 className={styles.sectionTitle}>Recent Activity</h3>
-                      <div className={styles.activityList}>
-                        {recentActivity.map((activity) => {
-                          const IconComponent = getActivityIcon(activity.type);
-                          return (
-                            <div key={activity.id} className={styles.activityItem}>
-                              <div className={styles.activityIconWrapper}>
-                                <IconComponent className={styles.activityIcon} />
-                              </div>
-                              <div className={styles.activityContent}>
-                                <p className={styles.activityAction}>{activity.action}</p>
-                                {activity.title && (
-                                  <p className={styles.activityTitle}>{activity.title}</p>
-                                )}
-                                <span className={styles.activityTime}>{activity.time}</span>
-                              </div>
-                              {activity.status && (
-                                <span className={`${styles.activityStatus} ${styles[activity.status]}`}>
-                                  {activity.status}
-                                </span>
-                              )}
-                            </div>
-                          );
-                        })}
-                      </div>
+                      <h3 className={styles.sectionTitle}>
+                        <MegaphoneIcon className={styles.sectionIcon} />
+                        Your Posts ({myPosts.length})
+                      </h3>
+                      {myPosts.length > 0 ? (
+                        <div className={homeStyles.feedContainer}>
+                          {myPosts.map((post) => (
+                            <Fade key={post.id} duration={600} triggerOnce>
+                              <article className={homeStyles.postCard}>
+                                {/* Post Header */}
+                                <div className={homeStyles.postHeader}>
+                                  <div className={homeStyles.authorInfo}>
+                                    <div className={homeStyles.userAvatar}>{post.author.avatar}</div>
+                                    <div className={homeStyles.authorDetails}>
+                                      <div className={homeStyles.authorName}>
+                                        {post.author.name}
+                                      </div>
+                                      {post.author.role && (
+                                        <span className={homeStyles.authorRole}>{post.author.role}</span>
+                                      )}
+                                      <span className={homeStyles.postTime}>{post.time}</span>
+                                    </div>
+                                  </div>
+                                  <div className={homeStyles.headerRight}>
+                                    {post.category && (
+                                      <span className={homeStyles.postCategory}>{post.category}</span>
+                                    )}
+                                  </div>
+                                </div>
+
+                                {/* Post Content */}
+                                <div className={homeStyles.postContent}>
+                                  <p className={`${homeStyles.postText} ${shouldTruncate(post.content) && !expandedPosts.has(post.id) ? homeStyles.postTextTruncated : ''}`}>
+                                    {post.content}
+                                  </p>
+                                  {shouldTruncate(post.content) && (
+                                    <button 
+                                      className={homeStyles.readMoreBtn}
+                                      onClick={(e) => toggleExpanded(post.id, e)}
+                                    >
+                                      {expandedPosts.has(post.id) ? 'Read less' : 'Read more'}
+                                    </button>
+                                  )}
+                                  <div className={homeStyles.postMetaRow}>
+                                    {post.location && (
+                                      <span className={homeStyles.postLocation}>
+                                        <MarkerIcon className={homeStyles.locationIcon} />
+                                        {post.location}
+                                      </span>
+                                    )}
+                                    {post.poll && (
+                                      <span className={homeStyles.pollTag}>
+                                        <PollHIcon className={homeStyles.pollTagIcon} />
+                                        Poll
+                                      </span>
+                                    )}
+                                  </div>
+                                  {post.image && (
+                                    <div className={homeStyles.postImageWrapper}>
+                                      <img 
+                                        src={post.image} 
+                                        alt="Post content" 
+                                        className={homeStyles.postImage}
+                                      />
+                                    </div>
+                                  )}
+                                  {post.images && post.images.length > 0 && (
+                                    <div className={`${homeStyles.postImageWrapper} ${homeStyles[`imageGrid${post.images.length}`]}`}>
+                                      {post.images.map((img, idx) => (
+                                        <img 
+                                          key={idx} 
+                                          src={img} 
+                                          alt={`Post content ${idx + 1}`} 
+                                          className={homeStyles.postImage}
+                                        />
+                                      ))}
+                                    </div>
+                                  )}
+                                </div>
+
+                                {/* Post Footer */}
+                                <div className={homeStyles.postFooter}>
+                                  <div className={homeStyles.postActions}>
+                                    <button 
+                                      className={`${homeStyles.actionBtn} ${likedPosts.has(post.id) ? homeStyles.liked : ''}`}
+                                      onClick={(e) => handleLike(post.id, e)}
+                                    >
+                                      {likedPosts.has(post.id) ? (
+                                        <HeartIcon className={homeStyles.actionIcon} />
+                                      ) : (
+                                        <HeartFilledIcon className={homeStyles.actionIcon} />
+                                      )}
+                                      <span>{post.likes + (likedPosts.has(post.id) ? 1 : 0)}</span>
+                                    </button>
+                                    <button className={homeStyles.actionBtn}>
+                                      <CommentIcon className={homeStyles.actionIcon} />
+                                      <span>{post.commentsData?.length || 0}</span>
+                                    </button>
+                                    <button 
+                                      className={`${homeStyles.actionBtn} ${repostedPosts.has(post.id) ? homeStyles.reposted : ''}`}
+                                      onClick={(e) => handleRepost(post.id, e)}
+                                    >
+                                      <RetweetIcon className={homeStyles.actionIcon} />
+                                      <span>{post.reposts + (repostedPosts.has(post.id) ? 1 : 0)}</span>
+                                    </button>
+                                    <button className={homeStyles.actionBtn} onClick={(e) => e.stopPropagation()}>
+                                      <ShareIcon className={homeStyles.actionIcon} />
+                                      <span>{post.shares}</span>
+                                    </button>
+                                  </div>
+                                </div>
+                              </article>
+                            </Fade>
+                          ))}
+                        </div>
+                      ) : (
+                        <p style={{ textAlign: 'center', color: 'var(--color-gray-medium)', padding: '2rem' }}>
+                          You haven't created any posts yet.
+                        </p>
+                      )}
                     </div>
                   </div>
                 </Zoom>
