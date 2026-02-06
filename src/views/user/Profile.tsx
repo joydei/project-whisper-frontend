@@ -3,8 +3,9 @@ import { Fade, Zoom } from 'react-awesome-reveal';
 import { useUser } from '../../context/UserContext';
 import { usePosts } from '../../context/PostsContext';
 import { useHeaderFade } from '../../hooks/useHeaderFade';
+import PostFeed from '../../components/PostFeed';
 import styles from '../../styles/user/Profile.module.css';
-import homeStyles from '../../styles/user/Home.module.css';
+import { municipalityPosts, ghanaPosts } from '../../data/postsData';
 
 // Import SVG icons
 import UserIcon from '../../assets/icons/circle-user.svg?react';
@@ -16,7 +17,6 @@ import ClockIcon from '../../assets/icons/clock-three.svg?react';
 import ClockPendingIcon from '../../assets/icons/pending.svg?react';
 import UsersIcon from '../../assets/icons/users.svg?react';
 import HeartIcon from '../../assets/icons/heart.svg?react';
-import HeartFilledIcon from '../../assets/icons/heart-filled.svg?react';
 import CommentIcon from '../../assets/icons/comment-dots.svg?react';
 import LocationIcon from '../../assets/icons/marker.svg?react';
 import PhoneIcon from '../../assets/icons/phone-call.svg?react';
@@ -28,32 +28,45 @@ import BellIcon from '../../assets/icons/bell.svg?react';
 import SettingsIcon from '../../assets/icons/settings.svg?react';
 import ShieldIcon from '../../assets/icons/shield-check.svg?react';
 import GlobeIcon from '../../assets/icons/globe.svg?react';
+import SirenIcon from '../../assets/icons/siren-on.svg?react';
 import XmarkIcon from '../../assets/icons/cross-circle.svg?react';
 import SaveIcon from '../../assets/icons/disk.svg?react';
-import ShareIcon from '../../assets/icons/share.svg?react';
-import RetweetIcon from '../../assets/icons/arrows-retweet.svg?react';
-import MarkerIcon from '../../assets/icons/marker.svg?react';
-import PollHIcon from '../../assets/icons/poll-h.svg?react';
 
 const Profile = () => {
   const { currentUser } = useUser();
-  const { userPosts } = usePosts();
+  const { userPosts, userReports } = usePosts();
   const headerOpacity = useHeaderFade();
   const [isEditing, setIsEditing] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'posts' | 'settings'>('overview');
-  const [likedPosts, setLikedPosts] = useState<Set<number>>(new Set());
-  const [repostedPosts, setRepostedPosts] = useState<Set<number>>(new Set());
-  const [expandedPosts, setExpandedPosts] = useState<Set<number>>(new Set());
+  const [activeSubTab, setActiveSubTab] = useState<'posts' | 'reports'>('posts');
 
-  // Filter user's own posts
-  const myPosts = userPosts.filter(post => 
+  // Combine all posts and filter user's own posts
+  const allPosts = [...userPosts, ...municipalityPosts, ...ghanaPosts];
+  const myPosts = allPosts.filter(post => 
     !post.anonymous && post.author.name === currentUser.name
   );
+  
+  // Combine posts and reports for "Your Posts" section
+  const myContent = [...myPosts, ...userReports].sort((a, b) => {
+    // Sort by time, with "Just now" items first
+    if (a.time === 'Just now' && b.time !== 'Just now') return -1;
+    if (a.time !== 'Just now' && b.time === 'Just now') return 1;
+    return b.id - a.id; // Then by ID (newer first)
+  });
 
-  // Calculate total likes from user's posts
-  const totalLikes = myPosts.reduce((sum, post) => sum + post.likes, 0);
+  // Calculate total likes from user's posts and reports
+  const totalLikes = myContent.reduce((sum, post) => sum + post.likes, 0);
+  
+  // Calculate total comments from user's posts and reports
+  const totalComments = myContent.reduce((sum, post) => sum + (post.commentsData?.length || 0), 0);
+  
+  // Calculate report statistics
+  const totalReports = userReports.length;
+  const resolvedReports = userReports.filter(report => report.status === 'resolved').length;
+  const inProgressReports = userReports.filter(report => report.status === 'in-progress').length;
+  const pendingReports = userReports.filter(report => report.status === 'pending' || report.status === 'urgent').length;
 
   const getInitials = (name: string) => {
     const names = name.trim().split(' ');
@@ -94,13 +107,13 @@ const Profile = () => {
   });
 
   const stats = {
-    reportsSubmitted: myPosts.length,
-    resolved: 15,
-    inProgress: 6,
-    pending: 2,
+    reportsSubmitted: totalReports,
+    resolved: resolvedReports,
+    inProgress: inProgressReports,
+    pending: pendingReports,
     followers: 142,
     likes: totalLikes,
-    comments: 94,
+    comments: totalComments,
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -142,48 +155,7 @@ const Profile = () => {
     }
   };
 
-  const handleLike = (postId: number, e: React.MouseEvent) => {
-    e.stopPropagation();
-    setLikedPosts(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(postId)) {
-        newSet.delete(postId);
-      } else {
-        newSet.add(postId);
-      }
-      return newSet;
-    });
-  };
 
-  const handleRepost = (postId: number, e: React.MouseEvent) => {
-    e.stopPropagation();
-    setRepostedPosts(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(postId)) {
-        newSet.delete(postId);
-      } else {
-        newSet.add(postId);
-      }
-      return newSet;
-    });
-  };
-
-  const toggleExpanded = (postId: number, e: React.MouseEvent) => {
-    e.stopPropagation();
-    setExpandedPosts(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(postId)) {
-        newSet.delete(postId);
-      } else {
-        newSet.add(postId);
-      }
-      return newSet;
-    });
-  };
-
-  const shouldTruncate = (content: string) => {
-    return content.length > 300;
-  };
 
   const handleSave = () => {
     // Save logic here
@@ -305,7 +277,7 @@ const Profile = () => {
                     onClick={() => setActiveTab('posts')}
                   >
                     <MegaphoneIcon className={styles.tabIcon} />
-                    Your Posts
+                    Posts & Reports
                   </button>
                   <button
                     className={`${styles.tab} ${activeTab === 'settings' ? styles.activeTab : ''}`}
@@ -492,130 +464,117 @@ const Profile = () => {
                 </Zoom>
               )}
 
-              {/* Your Posts Tab */}
+              {/* Posts & Reports Tab */}
               {activeTab === 'posts' && (
                 <Zoom duration={600} triggerOnce>
                   <div className={styles.tabContent}>
                     <div className={styles.section}>
                       <h3 className={styles.sectionTitle}>
                         <MegaphoneIcon className={styles.sectionIcon} />
-                        Your Posts ({myPosts.length})
+                        Posts & Reports
                       </h3>
-                      {myPosts.length > 0 ? (
-                        <div className={homeStyles.feedContainer}>
-                          {myPosts.map((post) => (
-                            <Fade key={post.id} duration={600} triggerOnce>
-                              <article className={homeStyles.postCard}>
-                                {/* Post Header */}
-                                <div className={homeStyles.postHeader}>
-                                  <div className={homeStyles.authorInfo}>
-                                    <div className={homeStyles.userAvatar}>{post.author.avatar}</div>
-                                    <div className={homeStyles.authorDetails}>
-                                      <div className={homeStyles.authorName}>
-                                        {post.author.name}
-                                      </div>
-                                      {post.author.role && (
-                                        <span className={homeStyles.authorRole}>{post.author.role}</span>
-                                      )}
-                                      <span className={homeStyles.postTime}>{post.time}</span>
-                                    </div>
-                                  </div>
-                                  <div className={homeStyles.headerRight}>
-                                    {post.category && (
-                                      <span className={homeStyles.postCategory}>{post.category}</span>
-                                    )}
-                                  </div>
-                                </div>
+                      
+                      {/* Sub-tabs */}
+                      <div className={styles.subTabs}>
+                        <button
+                          className={`${styles.subTab} ${activeSubTab === 'posts' ? styles.activeSubTab : ''}`}
+                          onClick={() => setActiveSubTab('posts')}
+                        >
+                          <MegaphoneIcon className={styles.subTabIcon} />
+                          Posts ({myPosts.length})
+                        </button>
+                        <button
+                          className={`${styles.subTab} ${activeSubTab === 'reports' ? styles.activeSubTab : ''}`}
+                          onClick={() => setActiveSubTab('reports')}
+                        >
+                          <SirenIcon className={styles.subTabIcon} />
+                          Reports ({userReports.length})
+                        </button>
+                      </div>
 
-                                {/* Post Content */}
-                                <div className={homeStyles.postContent}>
-                                  <p className={`${homeStyles.postText} ${shouldTruncate(post.content) && !expandedPosts.has(post.id) ? homeStyles.postTextTruncated : ''}`}>
-                                    {post.content}
-                                  </p>
-                                  {shouldTruncate(post.content) && (
-                                    <button 
-                                      className={homeStyles.readMoreBtn}
-                                      onClick={(e) => toggleExpanded(post.id, e)}
-                                    >
-                                      {expandedPosts.has(post.id) ? 'Read less' : 'Read more'}
-                                    </button>
-                                  )}
-                                  <div className={homeStyles.postMetaRow}>
-                                    {post.location && (
-                                      <span className={homeStyles.postLocation}>
-                                        <MarkerIcon className={homeStyles.locationIcon} />
-                                        {post.location}
-                                      </span>
-                                    )}
-                                    {post.poll && (
-                                      <span className={homeStyles.pollTag}>
-                                        <PollHIcon className={homeStyles.pollTagIcon} />
-                                        Poll
-                                      </span>
-                                    )}
-                                  </div>
-                                  {post.image && (
-                                    <div className={homeStyles.postImageWrapper}>
-                                      <img 
-                                        src={post.image} 
-                                        alt="Post content" 
-                                        className={homeStyles.postImage}
-                                      />
-                                    </div>
-                                  )}
-                                  {post.images && post.images.length > 0 && (
-                                    <div className={`${homeStyles.postImageWrapper} ${homeStyles[`imageGrid${post.images.length}`]}`}>
-                                      {post.images.map((img, idx) => (
-                                        <img 
-                                          key={idx} 
-                                          src={img} 
-                                          alt={`Post content ${idx + 1}`} 
-                                          className={homeStyles.postImage}
-                                        />
-                                      ))}
-                                    </div>
-                                  )}
-                                </div>
-
-                                {/* Post Footer */}
-                                <div className={homeStyles.postFooter}>
-                                  <div className={homeStyles.postActions}>
-                                    <button 
-                                      className={`${homeStyles.actionBtn} ${likedPosts.has(post.id) ? homeStyles.liked : ''}`}
-                                      onClick={(e) => handleLike(post.id, e)}
-                                    >
-                                      {likedPosts.has(post.id) ? (
-                                        <HeartIcon className={homeStyles.actionIcon} />
-                                      ) : (
-                                        <HeartFilledIcon className={homeStyles.actionIcon} />
-                                      )}
-                                      <span>{post.likes + (likedPosts.has(post.id) ? 1 : 0)}</span>
-                                    </button>
-                                    <button className={homeStyles.actionBtn}>
-                                      <CommentIcon className={homeStyles.actionIcon} />
-                                      <span>{post.commentsData?.length || 0}</span>
-                                    </button>
-                                    <button 
-                                      className={`${homeStyles.actionBtn} ${repostedPosts.has(post.id) ? homeStyles.reposted : ''}`}
-                                      onClick={(e) => handleRepost(post.id, e)}
-                                    >
-                                      <RetweetIcon className={homeStyles.actionIcon} />
-                                      <span>{post.reposts + (repostedPosts.has(post.id) ? 1 : 0)}</span>
-                                    </button>
-                                    <button className={homeStyles.actionBtn} onClick={(e) => e.stopPropagation()}>
-                                      <ShareIcon className={homeStyles.actionIcon} />
-                                      <span>{post.shares}</span>
-                                    </button>
-                                  </div>
-                                </div>
-                              </article>
-                            </Fade>
-                          ))}
+                      {/* Posts Content */}
+                      {activeSubTab === 'posts' && (
+                        <div className={styles.subTabContent}>
+                          {myPosts.length > 0 ? (
+                            <PostFeed posts={myPosts} />
+                          ) : (
+                            <div className={styles.emptyState}>
+                              <MegaphoneIcon className={styles.emptyStateIcon} />
+                              <p>You haven't created any posts yet.</p>
+                              <p className={styles.emptyStateSubtext}>
+                                Share your thoughts with the community on the Home page.
+                              </p>
+                            </div>
+                          )}
                         </div>
-                      ) : (
-                        <p style={{ textAlign: 'center', color: 'var(--color-gray-medium)', padding: '2rem' }}>
-                          You haven't created any posts yet.
-                        </p>
+                      )}
+
+                      {/* Reports Content */}
+                      {activeSubTab === 'reports' && (
+                        <div className={styles.subTabContent}>
+                          {userReports.length > 0 ? (
+                            <div className={styles.reportsContainer}>
+                              {userReports.map((report) => (
+                                <div key={report.id} className={styles.reportCard}>
+                                  <div className={styles.reportHeader}>
+                                    <div className={styles.reportMeta}>
+                                      <span className={styles.reportId}>Report #{report.id}</span>
+                                      <span className={styles.reportTarget}>
+                                        To: {report.scope === 'municipality' ? 'Municipality' : 'Civil Service'}
+                                      </span>
+                                    </div>
+                                    <div className={`${styles.reportStatus} ${styles[report.status || 'pending']}`}>
+                                      {report.status === 'resolved' && <CheckCircleIcon className={styles.statusIcon} />}
+                                      {report.status === 'in-progress' && <ClockIcon className={styles.statusIcon} />}
+                                      {(report.status === 'pending' || report.status === 'urgent') && <ClockPendingIcon className={styles.statusIcon} />}
+                                      <span>{report.status === 'urgent' ? 'URGENT' : (report.status?.replace('-', ' ') || 'pending')}</span>
+                                    </div>
+                                  </div>
+                                  
+                                  <div className={styles.reportBody}>
+                                    <div className={styles.reportDetails}>
+                                      <div className={styles.reportCategory}>
+                                        <span className={styles.categoryBadge}>{report.category}</span>
+                                        {report.location && (
+                                          <span className={styles.locationBadge}>
+                                            <LocationIcon className={styles.locationIcon} />
+                                            {report.location}
+                                          </span>
+                                        )}
+                                      </div>
+                                      
+                                      <div className={styles.reportContent}>
+                                        <p>{report.content}</p>
+                                      </div>
+                                    </div>
+                                    
+                                    <div className={styles.reportFooter}>
+                                      <span className={styles.reportDate}>Submitted {report.time}</span>
+                                      <div className={styles.reportActions}>
+                                        <span className={styles.reportInteraction}>
+                                          <HeartIcon className={styles.interactionIcon} />
+                                          {report.likes}
+                                        </span>
+                                        <span className={styles.reportInteraction}>
+                                          <CommentIcon className={styles.interactionIcon} />
+                                          {report.comments}
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <div className={styles.emptyState}>
+                              <SirenIcon className={styles.emptyStateIcon} />
+                              <p>You haven't submitted any reports yet.</p>
+                              <p className={styles.emptyStateSubtext}>
+                                Submit reports to authorities from the Voice Out page.
+                              </p>
+                            </div>
+                          )}
+                        </div>
                       )}
                     </div>
                   </div>

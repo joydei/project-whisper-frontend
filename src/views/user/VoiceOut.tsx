@@ -38,7 +38,7 @@ interface FormData {
 }
 
 const VoiceOut = () => {
-  const { addPost } = usePosts();
+  const { addPost, addReport } = usePosts();
   const { currentUser } = useUser();
   const headerOpacity = useHeaderFade();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -206,10 +206,21 @@ const VoiceOut = () => {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      console.log('Submitting report:', {
+      const reportData = {
         reportType,
-        ...formData
-      });
+        ...formData,
+        author: formData.anonymous ? null : {
+          name: currentUser.name,
+          username: currentUser.username,
+          avatar: currentUser.avatar,
+          verified: currentUser.verified
+        }
+      };
+      
+      console.log('Submitting report:', reportData);
+      
+      // Add report to context so it appears in Profile
+      addReport(reportData);
       
       setShowSuccessModal(true);
       
