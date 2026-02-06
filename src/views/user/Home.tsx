@@ -201,6 +201,33 @@ const Home = () => {
           }));
         }
       }
+      
+      // Check if post is deleted and will have no comments left
+      if (selectedPost) {
+        const postIsDeleted = selectedPost.isDeleted || deletedPosts.has(selectedPost.id);
+        if (postIsDeleted) {
+          const originalComments = selectedPost.commentsData || [];
+          const dynamicCommentsForPost = dynamicComments[selectedPost.id] || [];
+          
+          // Count remaining comments
+          const remainingOriginal = originalComments.filter(c => 
+            c.id !== commentToDelete.id && !deletedComments.has(c.id)
+          );
+          const remainingDynamic = commentToDelete.hasReplies 
+            ? dynamicCommentsForPost 
+            : dynamicCommentsForPost.filter(c => c.id !== commentToDelete.id);
+          
+          const hasReplies = [...remainingOriginal, ...remainingDynamic].some(c => 
+            c.replies && c.replies.length > 0
+          );
+          
+          if (remainingOriginal.length === 0 && remainingDynamic.length === 0 && !hasReplies) {
+            // No more comments and post is deleted - close modal
+            setTimeout(() => setSelectedPost(null), 100);
+          }
+        }
+      }
+      
       setShowDeleteModal(false);
       setCommentToDelete(null);
       setShowDeleteSuccessModal(true);
@@ -243,6 +270,21 @@ const Home = () => {
               newSet.delete(replyToDelete.commentId);
               return newSet;
             });
+            
+            // Check if post is deleted and has no more comments
+            const postIsDeleted = selectedPost.isDeleted || deletedPosts.has(selectedPost.id);
+            if (postIsDeleted) {
+              const remainingComments = allComments.filter(c => 
+                c.id !== replyToDelete.commentId && 
+                !deletedComments.has(c.id) &&
+                (!c.replies || c.replies.length > 0 || !deletedComments.has(c.id))
+              );
+              
+              if (remainingComments.length === 0) {
+                // No more comments and post is deleted - close modal
+                setSelectedPost(null);
+              }
+            }
             
             return {
               ...prev,
@@ -484,13 +526,17 @@ const Home = () => {
           return newSet;
         });
       } else {
-        // Remove completely if no comments
-        // This would need to be handled in the PostsContext to actually remove the post
+        // Remove completely if no comments - close modal if viewing it
         setDeletedPosts(prev => {
           const newSet = new Set(prev);
           newSet.add(postToDelete);
           return newSet;
         });
+        
+        // Close modal if viewing this post
+        if (selectedPost?.id === postToDelete) {
+          setSelectedPost(null);
+        }
       }
       
       setShowDeleteModal(false);
@@ -621,7 +667,14 @@ const Home = () => {
           </div>
 
           <div className={styles.feedContainer}>
-            {currentPosts.map((post) => (
+            {currentPosts
+              .filter((post) => {
+                // Hide deleted posts that have no comments
+                const isDeleted = post.isDeleted || deletedPosts.has(post.id);
+                const hasComments = (post.commentsData?.length || 0) > 0 || (dynamicComments[post.id]?.length || 0) > 0;
+                return !(isDeleted && !hasComments);
+              })
+              .map((post) => (
               <Fade key={post.id} duration={600} triggerOnce>
                 <article 
                   className={`${styles.postCard} ${post.type === 'ad' ? styles.adPost : ''}`}
@@ -769,7 +822,10 @@ const Home = () => {
                               src={img} 
                               alt={`Post content ${idx + 1}`} 
                               className={styles.postImage}
-                              onClick={() => setImageViewer({ images: post.images || [], currentIndex: idx })}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setImageViewer({ images: post.images || [], currentIndex: idx });
+                              }}
                             />
                           ))
                         ) : post.image ? (
@@ -777,7 +833,10 @@ const Home = () => {
                             src={post.image} 
                             alt="Post content" 
                             className={styles.postImage}
-                            onClick={() => setImageViewer({ images: [post.image!], currentIndex: 0 })}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setImageViewer({ images: [post.image!], currentIndex: 0 });
+                            }}
                           />
                         ) : null}
                       </div>
@@ -975,68 +1034,80 @@ const Home = () => {
               </div>
               
               <div className={styles.postContent}>
-                <p className={styles.postText}>
-                  {selectedPost.content}
-                  {selectedPost.poll && <span className={styles.pollTag}><PollHIcon className={styles.pollTagIcon} /> Poll</span>}
-                </p>
-                {selectedPost.location && (
-                  <span className={styles.postLocation}>
-                    <MarkerIcon className={styles.locationIcon} />
-                    {selectedPost.location}
-                  </span>
-                )}
-                {(selectedPost.image || (selectedPost.images && selectedPost.images.length > 0)) && (
-                  <div className={`${styles.postImageWrapper} ${selectedPost.images && selectedPost.images.length > 1 ? styles[`imageGrid${selectedPost.images.length}`] : ''}`}>
-                    {selectedPost.images && selectedPost.images.length > 0 ? (
-                      selectedPost.images.map((img, idx) => (
-                        <img 
-                          key={idx} 
-                          src={img} 
-                          alt={`Post content ${idx + 1}`} 
-                          className={styles.postImage}
-                          onClick={() => setImageViewer({ images: selectedPost.images || [], currentIndex: idx })}
+                {(selectedPost.isDeleted || deletedPosts.has(selectedPost.id)) ? (
+                  <p className={styles.deletedPostText}>
+                    This post is not available
+                  </p>
+                ) : (
+                  <>
+                    <p className={styles.postText}>
+                      {selectedPost.content}
+                      {selectedPost.poll && <span className={styles.pollTag}><PollHIcon className={styles.pollTagIcon} /> Poll</span>}
+                    </p>
+                    {selectedPost.location && (
+                      <span className={styles.postLocation}>
+                        <MarkerIcon className={styles.locationIcon} />
+                        {selectedPost.location}
+                      </span>
+                    )}
+                    {(selectedPost.image || (selectedPost.images && selectedPost.images.length > 0)) && (
+                      <div className={`${styles.postImageWrapper} ${selectedPost.images && selectedPost.images.length > 1 ? styles[`imageGrid${selectedPost.images.length}`] : ''}`}>
+                        {selectedPost.images && selectedPost.images.length > 0 ? (
+                          selectedPost.images.map((img, idx) => (
+                            <img 
+                              key={idx} 
+                              src={img} 
+                              alt={`Post content ${idx + 1}`} 
+                              className={styles.postImage}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setImageViewer({ images: selectedPost.images || [], currentIndex: idx });
+                              }}
+                            />
+                          ))
+                        ) : selectedPost.image ? (
+                          <img 
+                            src={selectedPost.image} 
+                            alt="Post content" 
+                            className={styles.postImage}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setImageViewer({ images: [selectedPost.image!], currentIndex: 0 });
+                            }}
+                          />
+                        ) : null}
+                      </div>
+                    )}
+                    
+                    {selectedPost.video && (
+                      <div className={styles.videoWrapper}>
+                        <video 
+                          src={selectedPost.video} 
+                          className={styles.videoPlayer}
+                          controls
+                          preload="metadata"
                         />
-                      ))
-                    ) : selectedPost.image ? (
-                      <img 
-                        src={selectedPost.image} 
-                        alt="Post content" 
-                        className={styles.postImage}
-                        onClick={() => setImageViewer({ images: [selectedPost.image!], currentIndex: 0 })}
-                      />
-                    ) : null}
-                  </div>
-                )}
-                
-                {selectedPost.video && (
-                  <div className={styles.videoWrapper}>
-                    <video 
-                      src={selectedPost.video} 
-                      className={styles.videoPlayer}
-                      controls
-                      preload="metadata"
-                    />
-                  </div>
-                )}
-                
-                {selectedPost.documents && selectedPost.documents.length > 0 && (
-                  <div className={styles.documentsWrapper}>
-                    {selectedPost.documents.map((doc, idx) => (
-                      <a 
-                        key={idx} 
-                        href={doc.url} 
-                        download={doc.name}
-                        className={styles.documentItem}
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <ClipFileIcon className={styles.documentItemIcon} />
-                        <span className={styles.documentItemName}>{doc.name}</span>
-                      </a>
-                    ))}
-                  </div>
-                )}
-                
-                {selectedPost.poll && (
+                      </div>
+                    )}
+                    
+                    {selectedPost.documents && selectedPost.documents.length > 0 && (
+                      <div className={styles.documentsWrapper}>
+                        {selectedPost.documents.map((doc, idx) => (
+                          <a 
+                            key={idx} 
+                            href={doc.url} 
+                            download={doc.name}
+                            className={styles.documentItem}
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <ClipFileIcon className={styles.documentItemIcon} />
+                            <span className={styles.documentItemName}>{doc.name}</span>
+                          </a>
+                        ))}
+                      </div>
+                    )}
+                    
+                    {selectedPost.poll && (
                   <div className={styles.pollContainer}>
                     <h4 className={styles.pollQuestion}>{selectedPost.poll.question}</h4>
                     <div className={styles.pollOptions}>
@@ -1115,6 +1186,8 @@ const Home = () => {
                       )}
                     </div>
                   </div>
+                )}
+                  </>
                 )}
               </div>
               
