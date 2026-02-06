@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Fade, Zoom } from 'react-awesome-reveal';
+import { useHeaderFade } from '../../hooks/useHeaderFade';
 import styles from '../../styles/user/Notifications.module.css';
 
 // Import SVG icons
@@ -27,6 +28,7 @@ interface Notification {
 }
 
 const Notifications = () => {
+  const headerOpacity = useHeaderFade();
   const [filter, setFilter] = useState<'all' | 'unread'>('all');
   const [showClearModal, setShowClearModal] = useState(false);
   const [clearConfirmed, setClearConfirmed] = useState(false);
@@ -210,7 +212,7 @@ const Notifications = () => {
 
   return (
     <div className={styles.notificationsPage}>
-      <section className={styles.header}>
+      <section className={styles.header} style={{ opacity: headerOpacity, transition: 'opacity 0.3s ease' }}>
         <div className={styles.container}>
           <div className={styles.headerContent}>
             <div>

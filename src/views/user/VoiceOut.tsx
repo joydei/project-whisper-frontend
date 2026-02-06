@@ -1,6 +1,8 @@
 import { useState, useRef, type FormEvent } from 'react';
 import { Fade, Slide } from 'react-awesome-reveal';
 import { usePosts } from '../../context/PostsContext';
+import { useUser } from '../../context/UserContext';
+import { useHeaderFade } from '../../hooks/useHeaderFade';
 import styles from '../../styles/user/VoiceOut.module.css';
 
 // Import SVG icons
@@ -21,6 +23,8 @@ import XIcon from '../../assets/icons/cross-circle.svg?react';
 import GhanaDarkIcon from '../../assets/icons/ghana-dark.svg?react';
 import CameraIcon from '../../assets/icons/camera.svg?react';
 import PollHIcon from '../../assets/icons/poll-h.svg?react';
+import WinkIcon from '../../assets/icons/laugh-wink.svg?react';
+import LeaderSpeechIcon from '../../assets/icons/leader-speech.svg?react';
 
 interface FormData {
   category: string;
@@ -34,6 +38,8 @@ interface FormData {
 
 const VoiceOut = () => {
   const { addPost } = usePosts();
+  const { currentUser } = useUser();
+  const headerOpacity = useHeaderFade();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [reportType, setReportType] = useState<'municipality' | 'civil'>('municipality');
   const [formData, setFormData] = useState<FormData>({
@@ -60,9 +66,9 @@ const VoiceOut = () => {
   const [showPostModal, setShowPostModal] = useState(false);
   const [postScope, setPostScope] = useState<'municipality' | 'ghana' | ''>('municipality');
   const [postContent, setPostContent] = useState('');
-  const [postHideLocation, setPostHideLocation] = useState(false);
+  const [locationVisibility, setLocationVisibility] = useState<'show' | 'hide'>('show');
   const [postImages, setPostImages] = useState<File[]>([]);
-  const [postAnonymous, setPostAnonymous] = useState(false);
+  const [publicityType, setPublicityType] = useState<'public' | 'anonymous'>('public');
   const [showPostSuccessModal, setShowPostSuccessModal] = useState(false);
   const [postErrors, setPostErrors] = useState<{[key: string]: string}>({});
   const [replyRestriction, setReplyRestriction] = useState<'everyone' | 'followers' | 'municipality'>('everyone');
@@ -71,9 +77,16 @@ const VoiceOut = () => {
   const [pollOptions, setPollOptions] = useState(['', '']);
   const [pollDuration, setPollDuration] = useState<'1day' | '3days' | '1week' | 'unlimited'>('1day');
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [showLocationDropdown, setShowLocationDropdown] = useState(false);
+  const [showPublicityDropdown, setShowPublicityDropdown] = useState(false);
 
-  // Common emojis for quick access
-  const commonEmojis = ['😊', '👍', '❤️', '🙏', '👏', '🎉', '🔥', '💯', '😂', '😍', '🤔', '😢', '😡', '💪', '🌟', '✨'];
+  // Common emojis for quick access - using system emojis
+  const commonEmojis = [
+    '😊', '😂', '❤️', '👍', '🙏', '😍', '🎉', '🔥',
+    '😢', '😅', '🤔', '👏', '💪', '🙌', '✨', '💯',
+    '😎', '🥰', '😇', '🤗', '🙂', '😉', '😃', '😄',
+    '🤩', '😁', '💙', '💚', '💛', '🧡', '💜', '🖤'
+  ];
 
   // Counting animation for stats
   useState(() => {
@@ -259,9 +272,9 @@ const VoiceOut = () => {
     setShowPostModal(false);
     setPostScope('municipality');
     setPostContent('');
-    setPostHideLocation(false);
+    setLocationVisibility('show');
     setPostImages([]);
-    setPostAnonymous(false);
+    setPublicityType('public');
     setPostErrors({});
     setReplyRestriction('everyone');
     setShowPoll(false);
@@ -269,6 +282,8 @@ const VoiceOut = () => {
     setPollOptions(['', '']);
     setPollDuration('1day');
     setShowEmojiPicker(false);
+    setShowLocationDropdown(false);
+    setShowPublicityDropdown(false);
   };
 
   const handlePostImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -363,16 +378,18 @@ const VoiceOut = () => {
       const newPost: any = {
         type: 'user' as const,
         author: {
-          name: postAnonymous ? 'Anonymous' : 'Current User',
-          username: postAnonymous ? undefined : 'current_user',
-          avatar: postAnonymous ? undefined : 'CU',
-          verified: false
+          name: publicityType === 'anonymous' ? 'Anonymous' : currentUser.name,
+          username: publicityType === 'anonymous' ? undefined : currentUser.username,
+          avatar: publicityType === 'anonymous' ? undefined : currentUser.avatar,
+          verified: currentUser.verified
         },
         content: postContent,
-        location: postHideLocation ? undefined : 'Your Location',
+        location: locationVisibility === 'hide' ? undefined : 'Your Location',
         image: postImages.length > 0 ? URL.createObjectURL(postImages[0]) : undefined,
         replyRestriction,
-        scope: postScope
+        scope: postScope,
+        anonymous: publicityType === 'anonymous',
+        hideLocation: locationVisibility === 'hide'
       };
 
       if (showPoll) {
@@ -400,9 +417,9 @@ const VoiceOut = () => {
       console.log('Submitting post:', {
         scope: postScope,
         content: postContent,
-        hideLocation: postHideLocation,
+        hideLocation: locationVisibility === 'hide',
         images: postImages,
-        anonymous: postAnonymous,
+        anonymous: publicityType === 'anonymous',
         replyRestriction,
         poll: showPoll ? { question: pollQuestion, options: pollOptions, duration: pollDuration } : null
       });
@@ -420,7 +437,7 @@ const VoiceOut = () => {
 
   return (
     <div className={styles.voiceOutPage}>
-      <section className={styles.header}>
+      <section className={styles.header} style={{ opacity: headerOpacity, transition: 'opacity 0.3s ease' }}>
         <div className={styles.container}>
           <h1 className={styles.pageTitle}>Voice Out</h1>
           <p className={styles.pageSubtitle}>Share your concerns and make your voice heard</p>
@@ -901,7 +918,7 @@ const VoiceOut = () => {
                           onClick={() => removePostImage(index)}
                           title="Remove image"
                         >
-                          ×
+                          <XIcon />
                         </button>
                       </div>
                     ))}
@@ -1028,11 +1045,15 @@ const VoiceOut = () => {
                     <button
                       type="button"
                       className={`${styles.controlBtn} ${!postScope ? styles.disabled : ''}`}
-                      onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                      onClick={() => {
+                        setShowEmojiPicker(!showEmojiPicker);
+                        setShowLocationDropdown(false);
+                        setShowPublicityDropdown(false);
+                      }}
                       disabled={!postScope}
                       title="Add emoji"
                     >
-                      <span className={styles.emojiIcon}>😊</span>
+                      <WinkIcon className={styles.controlIcon} />
                     </button>
                     
                     {showEmojiPicker && (
@@ -1053,28 +1074,91 @@ const VoiceOut = () => {
                   
                   <div className={styles.controlDivider}></div>
                   
-                  {/* Hide Location Toggle */}
-                  <button
-                    type="button"
-                    className={`${styles.controlToggle} ${postHideLocation ? styles.active : ''}`}
-                    onClick={() => setPostHideLocation(!postHideLocation)}
-                    disabled={!postScope}
-                    title={postHideLocation ? "Location hidden" : "Location visible"}
-                  >
-                    <MarkerIcon className={styles.controlIcon} />
-                    {postHideLocation && <span className={styles.toggleSlash}>/</span>}
-                  </button>
+                  {/* Location Visibility Dropdown */}
+                  <div className={styles.controlDropdownWrapper}>
+                    <button
+                      type="button"
+                      className={`${styles.controlToggle} ${locationVisibility === 'hide' ? styles.active : ''}`}
+                      onClick={() => {
+                        setShowLocationDropdown(!showLocationDropdown);
+                        setShowEmojiPicker(false);
+                        setShowPublicityDropdown(false);
+                      }}
+                      disabled={!postScope}
+                      title="Location visibility"
+                    >
+                      <MarkerIcon className={styles.controlIcon} />
+                      {locationVisibility === 'hide' && <span className={styles.toggleSlash}>/</span>}
+                    </button>
+                    
+                    {showLocationDropdown && (
+                      <div className={styles.controlDropdownPopup}>
+                        <button
+                          type="button"
+                          className={`${styles.dropdownOption} ${locationVisibility === 'show' ? styles.selected : ''}`}
+                          onClick={() => {
+                            setLocationVisibility('show');
+                            setShowLocationDropdown(false);
+                          }}
+                        >
+                          Show Location
+                        </button>
+                        <button
+                          type="button"
+                          className={`${styles.dropdownOption} ${locationVisibility === 'hide' ? styles.selected : ''}`}
+                          onClick={() => {
+                            setLocationVisibility('hide');
+                            setShowLocationDropdown(false);
+                          }}
+                        >
+                          Hide Location
+                        </button>
+                      </div>
+                    )}
+                  </div>
                   
-                  {/* Anonymous Toggle */}
-                  <button
-                    type="button"
-                    className={`${styles.controlToggle} ${postAnonymous ? styles.active : ''}`}
-                    onClick={() => setPostAnonymous(!postAnonymous)}
-                    title={postAnonymous ? "Anonymous" : "Public"}
-                  >
-                    <GovernmentIcon className={styles.controlIcon} />
-                    {postAnonymous && <span className={styles.toggleSlash}>/</span>}
-                  </button>
+                  {/* Publicity Type Dropdown */}
+                  <div className={styles.controlDropdownWrapper}>
+                    <button
+                      type="button"
+                      className={`${styles.controlToggle} ${publicityType === 'anonymous' ? styles.active : ''}`}
+                      onClick={() => {
+                        setShowPublicityDropdown(!showPublicityDropdown);
+                        setShowEmojiPicker(false);
+                        setShowLocationDropdown(false);
+                      }}
+                      disabled={!postScope}
+                      title="Publicity type"
+                    >
+                      <LeaderSpeechIcon className={styles.controlIcon} />
+                      {publicityType === 'anonymous' && <span className={styles.toggleSlash}>/</span>}
+                    </button>
+                    
+                    {showPublicityDropdown && (
+                      <div className={styles.controlDropdownPopup}>
+                        <button
+                          type="button"
+                          className={`${styles.dropdownOption} ${publicityType === 'public' ? styles.selected : ''}`}
+                          onClick={() => {
+                            setPublicityType('public');
+                            setShowPublicityDropdown(false);
+                          }}
+                        >
+                          Public
+                        </button>
+                        <button
+                          type="button"
+                          className={`${styles.dropdownOption} ${publicityType === 'anonymous' ? styles.selected : ''}`}
+                          onClick={() => {
+                            setPublicityType('anonymous');
+                            setShowPublicityDropdown(false);
+                          }}
+                        >
+                          Anonymous
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
                 
                 <div className={styles.postControlsRight}>

@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Fade } from 'react-awesome-reveal';
 import { usePosts } from '../../context/PostsContext';
+import { useUser } from '../../context/UserContext';
+import { useHeaderFade } from '../../hooks/useHeaderFade';
 import styles from '../../styles/user/Home.module.css';
 import type { Post } from '../../data/postsData';
 import { municipalityPosts, ghanaPosts } from '../../data/postsData';
@@ -32,6 +34,8 @@ import PollHIcon from '../../assets/icons/poll-h.svg?react';
 
 const Home = () => {
   const { userPosts } = usePosts();
+  const { currentUser } = useUser();
+  const headerOpacity = useHeaderFade();
   const [activeTab, setActiveTab] = useState<'municipality' | 'ghana'>('municipality');
   const [likedPosts, setLikedPosts] = useState<Set<number>>(new Set());
   const [repostedPosts, setRepostedPosts] = useState<Set<number>>(new Set());
@@ -58,6 +62,9 @@ const Home = () => {
   const [openMenuReplyId, setOpenMenuReplyId] = useState<number | null>(null);
   const [showDeleteSuccessModal, setShowDeleteSuccessModal] = useState(false);
   const [replyToDelete, setReplyToDelete] = useState<{id: number; commentId: number} | null>(null);
+  
+  // Poll voting state
+  const [pollVotes, setPollVotes] = useState<{[postId: number]: number}>({});
   
   // Combine user posts with static posts and sort by time (newest first)
   const staticPosts = activeTab === 'municipality' ? municipalityPosts : ghanaPosts;
@@ -88,6 +95,26 @@ const Home = () => {
     });
   };
 
+  const handlePollVote = (postId: number, optionIndex: number, e: React.MouseEvent, isPollEnded: boolean) => {
+    e.stopPropagation();
+    // Allow voting if poll hasn't ended (users can change their vote)
+    if (!isPollEnded) {
+      setPollVotes(prev => ({
+        ...prev,
+        [postId]: optionIndex
+      }));
+    }
+  };
+
+  const handleRemoveVote = (postId: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setPollVotes(prev => {
+      const newVotes = { ...prev };
+      delete newVotes[postId];
+      return newVotes;
+    });
+  };
+
   const handlePostClick = (post: Post) => {
     setSelectedPost(post);
   };
@@ -104,9 +131,9 @@ const Home = () => {
     if (newComment.trim() && selectedPost) {
       const newCommentObj = {
         id: Date.now(),
-        author: commentAnonymous ? 'Anonymous' : 'Joy Dei',
-        username: commentAnonymous ? undefined : 'joy_dei',
-        avatar: commentAnonymous ? undefined : 'JD',
+        author: commentAnonymous ? 'Anonymous' : currentUser.name,
+        username: commentAnonymous ? undefined : currentUser.username,
+        avatar: commentAnonymous ? undefined : currentUser.avatar,
         content: newComment,
         time: 'Just now',
         anonymous: commentAnonymous,
@@ -346,9 +373,9 @@ const Home = () => {
       
       const newReply = {
         id: Date.now(),
-        author: 'Joy Dei',
-        username: 'joy_dei',
-        avatar: 'JD',
+        author: currentUser.name,
+        username: currentUser.username,
+        avatar: currentUser.avatar,
         content: content,
         time: 'Just now',
         anonymous: false,
@@ -451,7 +478,7 @@ const Home = () => {
   return (
     <div className={styles.homePage}>
       {/* Hero Section */}
-      <section className={styles.hero}>
+      <section className={styles.hero} style={{ opacity: headerOpacity, transition: 'opacity 0.3s ease' }}>
         <div className={styles.heroContent}>
           <Fade duration={600} triggerOnce>
             <h1 className={styles.heroTitle}>Stay Connected with Your Community</h1>
@@ -537,65 +564,121 @@ const Home = () => {
 
                   {/* Post Content */}
                   <div className={styles.postContent}>
-                    <p className={`${styles.postText} ${shouldTruncate(post.content) && !expandedPosts.has(post.id) ? styles.postTextTruncated : ''}`}>
-                      {post.content}
-                      {post.poll && <span className={styles.pollTag}><PollHIcon className={styles.pollTagIcon} /> Poll</span>}
-                    </p>
-                    {shouldTruncate(post.content) && (
-                      <button 
-                        className={styles.readMoreBtn}
-                        onClick={(e) => toggleExpanded(post.id, e)}
-                      >
-                        {expandedPosts.has(post.id) ? 'Read less' : 'Read more'}
-                      </button>
+                    {post.isDeleted ? (
+                      <p className={styles.deletedPostText}>
+                        This post is not available
+                      </p>
+                    ) : (
+                      <>
+                        <p className={`${styles.postText} ${shouldTruncate(post.content) && !expandedPosts.has(post.id) ? styles.postTextTruncated : ''}`}>
+                          {post.content}
+                        </p>
+                        {shouldTruncate(post.content) && (
+                          <button 
+                            className={styles.readMoreBtn}
+                            onClick={(e) => toggleExpanded(post.id, e)}
+                          >
+                            {expandedPosts.has(post.id) ? 'Read less' : 'Read more'}
+                          </button>
+                        )}
+                      </>
                     )}
-                    {post.location && (
-                      <span className={styles.postLocation}>
-                        <MarkerIcon className={styles.locationIcon} />
-                        {post.location}
-                      </span>
-                    )}
-                    {post.image && (
+                    <div className={styles.postMetaRow}>
+                      {!post.isDeleted && post.location && (
+                        <span className={styles.postLocation}>
+                          <MarkerIcon className={styles.locationIcon} />
+                          {post.location}
+                        </span>
+                      )}
+                      {post.poll && (
+                        <span className={styles.pollTag}>
+                          <PollHIcon className={styles.pollTagIcon} />
+                          Poll
+                        </span>
+                      )}
+                    </div>
+                    {!post.isDeleted && post.image && (
                       <div className={styles.postImageWrapper}>
                         <img src={post.image} alt="Post content" className={styles.postImage} />
                       </div>
                     )}
                     
-                    {post.poll && (
+                    {!post.isDeleted && post.poll && (
                       <div className={styles.pollContainer}>
                         <h4 className={styles.pollQuestion}>{post.poll.question}</h4>
                         <div className={styles.pollOptions}>
-                          {post.poll.options.map((option, index) => (
-                            <button
-                              key={index}
-                              className={`${styles.pollOption} ${post.poll?.userVoted === index ? styles.voted : ''}`}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                // Handle vote logic here
-                              }}
-                            >
-                              <div className={styles.pollOptionContent}>
-                                <span className={styles.pollOptionText}>{option.text}</span>
-                                {post.poll && post.poll.totalVotes > 0 && (
-                                  <span className={styles.pollOptionPercentage}>{option.percentage}%</span>
+                          {post.poll.options.map((option, index) => {
+                            const userVotedOption = pollVotes[post.id] !== undefined ? pollVotes[post.id] : post.poll?.userVoted;
+                            const hasVoted = userVotedOption !== undefined;
+                            const isUserChoice = userVotedOption === index;
+                            const isPollEnded = post.poll?.endsAt ? new Date(post.poll.endsAt) < new Date() : false;
+                            const showResults = hasVoted || isPollEnded;
+                            
+                            // Calculate updated vote counts if user voted
+                            let displayVotes = option.votes;
+                            let displayPercentage = option.percentage;
+                            
+                            if (pollVotes[post.id] !== undefined && post.poll?.userVoted === undefined) {
+                              // User just voted (not in original data)
+                              const newTotal = post.poll!.totalVotes + 1;
+                              if (isUserChoice) {
+                                displayVotes = option.votes + 1;
+                              }
+                              displayPercentage = Math.round((displayVotes / newTotal) * 100);
+                            }
+                            
+                            return (
+                              <button
+                                key={index}
+                                className={`${styles.pollOption} ${isUserChoice ? styles.voted : ''} ${showResults ? styles.showResults : ''}`}
+                                onClick={(e) => handlePollVote(post.id, index, e, isPollEnded)}
+                                disabled={isPollEnded}
+                              >
+                                <div className={styles.pollOptionContent}>
+                                  <span className={styles.pollOptionText}>
+                                    {option.text}
+                                    {isUserChoice && <CheckCircleIcon className={styles.pollCheckIcon} />}
+                                  </span>
+                                  {showResults && (
+                                    <span className={styles.pollOptionPercentage}>{displayPercentage}%</span>
+                                  )}
+                                </div>
+                                {showResults && (
+                                  <div 
+                                    className={styles.pollOptionBar} 
+                                    style={{ width: `${displayPercentage}%` }}
+                                  />
                                 )}
-                              </div>
-                              {post.poll && post.poll.totalVotes > 0 && (
-                                <div 
-                                  className={styles.pollOptionBar} 
-                                  style={{ width: `${option.percentage}%` }}
-                                />
-                              )}
-                            </button>
-                          ))}
+                              </button>
+                            );
+                          })}
                         </div>
                         <div className={styles.pollFooter}>
-                          <span>{post.poll.totalVotes} {post.poll.totalVotes === 1 ? 'vote' : 'votes'}</span>
-                          {post.poll.endsAt && (
-                            <span>• Ends {new Date(post.poll.endsAt).toLocaleDateString()}</span>
-                          )}
-                          {post.poll.duration === 'unlimited' && (
-                            <span>• No time limit</span>
+                          {post.poll.endsAt && new Date(post.poll.endsAt) < new Date() ? (
+                            <span>Poll ended • {post.poll.totalVotes} {post.poll.totalVotes === 1 ? 'vote' : 'votes'}</span>
+                          ) : (
+                            <>
+                              <span>
+                                {pollVotes[post.id] !== undefined && post.poll?.userVoted === undefined
+                                  ? post.poll.totalVotes + 1
+                                  : post.poll.totalVotes
+                                } {(pollVotes[post.id] !== undefined && post.poll?.userVoted === undefined ? post.poll.totalVotes + 1 : post.poll.totalVotes) === 1 ? 'vote' : 'votes'}
+                              </span>
+                              {post.poll.endsAt && (
+                                <span>• Ends {new Date(post.poll.endsAt).toLocaleDateString()}</span>
+                              )}
+                              {post.poll.duration === 'unlimited' && (
+                                <span>• No time limit</span>
+                              )}
+                              {pollVotes[post.id] !== undefined && (
+                                <button
+                                  className={styles.removeVoteBtn}
+                                  onClick={(e) => handleRemoveVote(post.id, e)}
+                                >
+                                  Remove vote
+                                </button>
+                              )}
+                            </>
                           )}
                         </div>
                       </div>
@@ -704,36 +787,78 @@ const Home = () => {
                   <div className={styles.pollContainer}>
                     <h4 className={styles.pollQuestion}>{selectedPost.poll.question}</h4>
                     <div className={styles.pollOptions}>
-                      {selectedPost.poll.options.map((option, index) => (
-                        <button
-                          key={index}
-                          className={`${styles.pollOption} ${selectedPost.poll?.userVoted === index ? styles.voted : ''}`}
-                          onClick={() => {
-                            // Handle vote logic here
-                          }}
-                        >
-                          <div className={styles.pollOptionContent}>
-                            <span className={styles.pollOptionText}>{option.text}</span>
-                            {selectedPost.poll!.totalVotes > 0 && (
-                              <span className={styles.pollOptionPercentage}>{option.percentage}%</span>
+                      {selectedPost.poll.options.map((option, index) => {
+                        const userVotedOption = pollVotes[selectedPost.id] !== undefined ? pollVotes[selectedPost.id] : selectedPost.poll?.userVoted;
+                        const hasVoted = userVotedOption !== undefined;
+                        const isUserChoice = userVotedOption === index;
+                        const isPollEnded = selectedPost.poll?.endsAt ? new Date(selectedPost.poll.endsAt) < new Date() : false;
+                        const showResults = hasVoted || isPollEnded;
+                        
+                        // Calculate updated vote counts if user voted
+                        let displayVotes = option.votes;
+                        let displayPercentage = option.percentage;
+                        
+                        if (pollVotes[selectedPost.id] !== undefined && selectedPost.poll?.userVoted === undefined) {
+                          // User just voted (not in original data)
+                          const newTotal = selectedPost.poll!.totalVotes + 1;
+                          if (isUserChoice) {
+                            displayVotes = option.votes + 1;
+                          }
+                          displayPercentage = Math.round((displayVotes / newTotal) * 100);
+                        }
+                        
+                        return (
+                          <button
+                            key={index}
+                            className={`${styles.pollOption} ${isUserChoice ? styles.voted : ''} ${showResults ? styles.showResults : ''}`}
+                            onClick={(e) => handlePollVote(selectedPost.id, index, e, isPollEnded)}
+                            disabled={isPollEnded}
+                          >
+                            <div className={styles.pollOptionContent}>
+                              <span className={styles.pollOptionText}>
+                                {option.text}
+                                {isUserChoice && <CheckCircleIcon className={styles.pollCheckIcon} />}
+                              </span>
+                              {showResults && (
+                                <span className={styles.pollOptionPercentage}>{displayPercentage}%</span>
+                              )}
+                            </div>
+                            {showResults && (
+                              <div 
+                                className={styles.pollOptionBar} 
+                                style={{ width: `${displayPercentage}%` }}
+                              />
                             )}
-                          </div>
-                          {selectedPost.poll!.totalVotes > 0 && (
-                            <div 
-                              className={styles.pollOptionBar} 
-                              style={{ width: `${option.percentage}%` }}
-                            />
-                          )}
-                        </button>
-                      ))}
+                          </button>
+                        );
+                      })}
                     </div>
                     <div className={styles.pollFooter}>
-                      <span>{selectedPost.poll.totalVotes} {selectedPost.poll.totalVotes === 1 ? 'vote' : 'votes'}</span>
-                      {selectedPost.poll.endsAt && (
-                        <span>• Ends {new Date(selectedPost.poll.endsAt).toLocaleDateString()}</span>
-                      )}
-                      {selectedPost.poll.duration === 'unlimited' && (
-                        <span>• No time limit</span>
+                      {selectedPost.poll.endsAt && new Date(selectedPost.poll.endsAt) < new Date() ? (
+                        <span>Poll ended • {selectedPost.poll.totalVotes} {selectedPost.poll.totalVotes === 1 ? 'vote' : 'votes'}</span>
+                      ) : (
+                        <>
+                          <span>
+                            {pollVotes[selectedPost.id] !== undefined && selectedPost.poll?.userVoted === undefined
+                              ? selectedPost.poll.totalVotes + 1
+                              : selectedPost.poll.totalVotes
+                            } {(pollVotes[selectedPost.id] !== undefined && selectedPost.poll?.userVoted === undefined ? selectedPost.poll.totalVotes + 1 : selectedPost.poll.totalVotes) === 1 ? 'vote' : 'votes'}
+                          </span>
+                          {selectedPost.poll.endsAt && (
+                            <span>• Ends {new Date(selectedPost.poll.endsAt).toLocaleDateString()}</span>
+                          )}
+                          {selectedPost.poll.duration === 'unlimited' && (
+                            <span>• No time limit</span>
+                          )}
+                          {pollVotes[selectedPost.id] !== undefined && (
+                            <button
+                              className={styles.removeVoteBtn}
+                              onClick={(e) => handleRemoveVote(selectedPost.id, e)}
+                            >
+                              Remove vote
+                            </button>
+                          )}
+                        </>
                       )}
                     </div>
                   </div>
@@ -808,7 +933,7 @@ const Home = () => {
                               </>
                             )}
                             <span className={styles.commentTime}>{comment.time}</span>
-                            {!deletedComments.has(comment.id) && comment.author === 'Joy Dei' && (
+                            {!deletedComments.has(comment.id) && comment.author === currentUser.name && (
                               <div className={styles.commentMenuWrapper}>
                                 <button
                                   className={styles.commentMenuBtn}
@@ -893,7 +1018,7 @@ const Home = () => {
                                         <span style={{color: '#888', fontWeight: 400}}> @{reply.username}</span>
                                       )}
                                       <span className={styles.commentTime}>{reply.time}</span>
-                                      {reply.author === 'Joy Dei' && (
+                                      {reply.author === currentUser.name && (
                                         <div className={styles.commentMenuWrapper}>
                                           <button
                                             className={styles.commentMenuBtn}

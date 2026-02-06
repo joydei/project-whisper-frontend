@@ -4,6 +4,7 @@
 .profilePage {
   min-height: 100vh;
   background-color: var(--color-gray-light);
+  padding-top: 5.5rem;
 }
 
 /* Header Section */
@@ -753,12 +754,12 @@
 
 .modalContent {
   background-color: var(--color-white);
-  padding: 3rem 2rem 2rem;
-  border-radius: 8px;
-  max-width: 700px;
+  padding: 3rem;
+  border-radius: 12px;
+  max-width: 550px;
   width: 100%;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  text-align: center;
+  text-align: left;
   position: relative;
 }
 
@@ -793,11 +794,11 @@
 }
 
 .modalTitle {
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   font-weight: 600;
   color: var(--color-black);
-  margin: 0 0 1rem 0;
-  text-align: center;
+  margin: 0 0 0.5rem 0;
+  text-align: left;
 }
 
 .modalMessage {
@@ -812,6 +813,7 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  margin-top: 2rem;
 }
 
 .modalActions {
@@ -921,6 +923,7 @@ body:has(.modalOverlay) {
 
   .modalContent {
     padding: 2rem 1.5rem 1.5rem;
+    max-width: 90%;
   }
 
   .modalIcon {

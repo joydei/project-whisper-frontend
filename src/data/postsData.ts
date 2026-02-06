@@ -44,6 +44,9 @@ export interface Post {
     endsAt?: string;
     userVoted?: number;
   };
+  isDeleted?: boolean;
+  anonymous?: boolean;
+  hideLocation?: boolean;
 }
 
 export interface Comment {
@@ -527,13 +530,74 @@ export const ghanaPosts: Post[] = [
     id: 17,
     type: 'user',
     author: {
+      name: 'Joy Dei',
+      username: 'joy_dei',
+      avatar: 'JD',
+      verified: false
+    },
+    content: 'Help me decide what to cook for the community potluck this weekend!',
+    time: '30 minutes ago',
+    likes: 12,
+    comments: 3,
+    shares: 1,
+    reposts: 0,
+    location: 'Labone, Accra',
+    poll: {
+      question: 'What should I cook for the potluck?',
+      options: [
+        { text: 'Jollof Rice', votes: 45, percentage: 38 },
+        { text: 'Waakye', votes: 32, percentage: 27 },
+        { text: 'Banku & Tilapia', votes: 28, percentage: 23 },
+        { text: 'Kelewele & Plantain', votes: 15, percentage: 12 }
+      ],
+      totalVotes: 120,
+      duration: '1day',
+      endsAt: new Date(Date.now() + 20 * 3600000).toISOString()
+    },
+    commentsData: []
+  },
+  {
+    id: 18,
+    type: 'user',
+    author: {
+      name: 'Kwame Boateng',
+      username: 'kwame_b',
+      avatar: 'KB',
+      verified: false
+    },
+    content: 'Final results from last week\'s poll about our neighborhood security.',
+    time: '2 days ago',
+    likes: 178,
+    comments: 34,
+    shares: 15,
+    reposts: 8,
+    location: 'East Legon',
+    poll: {
+      question: 'Should we hire additional security for our neighborhood?',
+      options: [
+        { text: 'Yes, definitely', votes: 156, percentage: 52 },
+        { text: 'Maybe, need more info', votes: 89, percentage: 30 },
+        { text: 'No, not necessary', votes: 45, percentage: 15 },
+        { text: 'Undecided', votes: 10, percentage: 3 }
+      ],
+      totalVotes: 300,
+      duration: '1week',
+      endsAt: new Date(Date.now() - 2 * 86400000).toISOString(),
+      userVoted: 0
+    },
+    commentsData: []
+  },
+  {
+    id: 19,
+    type: 'user',
+    author: {
       name: 'Ama Osei',
       username: 'ama_osei',
       avatar: 'AO',
       verified: false
     },
     content: 'What do you think is the most important issue facing our community right now?',
-    time: '4 hours ago',
+    time: '3 days ago',
     likes: 234,
     comments: 67,
     shares: 12,
@@ -548,96 +612,7 @@ export const ghanaPosts: Post[] = [
       ],
       totalVotes: 348,
       duration: '3days',
-      endsAt: new Date(Date.now() + 2 * 86400000).toISOString()
-    },
-    commentsData: []
-  },
-  {
-    id: 18,
-    type: 'municipality',
-    author: {
-      name: 'Kumasi Metropolitan Assembly',
-      verified: true,
-      role: 'Municipality',
-      icon: 'government'
-    },
-    content: 'We want your input! Help us decide which park should receive renovation funding this year.',
-    image: defaultImage,
-    time: '6 hours ago',
-    likes: 456,
-    comments: 89,
-    shares: 34,
-    reposts: 12,
-    poll: {
-      question: 'Which park should we renovate first?',
-      options: [
-        { text: 'Central Park', votes: 234, percentage: 38 },
-        { text: 'Heritage Gardens', votes: 189, percentage: 31 },
-        { text: 'Children\'s Playground', votes: 123, percentage: 20 },
-        { text: 'Sports Complex', votes: 67, percentage: 11 }
-      ],
-      totalVotes: 613,
-      duration: '1week',
-      endsAt: new Date(Date.now() + 5 * 86400000).toISOString()
-    },
-    commentsData: []
-  },
-  {
-    id: 19,
-    type: 'user',
-    author: {
-      name: 'Kofi Mensah',
-      username: 'kofi_mensah',
-      avatar: 'KM',
-      verified: false
-    },
-    content: 'Quick poll for my neighbors: When should we have our community clean-up day?',
-    time: '8 hours ago',
-    likes: 89,
-    comments: 23,
-    shares: 5,
-    reposts: 2,
-    location: 'Osu, Accra',
-    poll: {
-      question: 'When should we have our community clean-up day?',
-      options: [
-        { text: 'This Saturday Morning', votes: 45, percentage: 50 },
-        { text: 'Sunday Afternoon', votes: 28, percentage: 31 },
-        { text: 'Next Saturday', votes: 17, percentage: 19 }
-      ],
-      totalVotes: 90,
-      duration: '1day',
-      endsAt: new Date(Date.now() + 12 * 3600000).toISOString()
-    },
-    commentsData: []
-  },
-  {
-    id: 20,
-    type: 'user',
-    author: {
-      name: 'Abena Kwarteng',
-      username: 'abena_k',
-      avatar: 'AK',
-      verified: true
-    },
-    content: 'What type of local business would you most like to see in our area? Share your thoughts!',
-    image: defaultImage,
-    time: '10 hours ago',
-    likes: 167,
-    comments: 45,
-    shares: 18,
-    reposts: 7,
-    location: 'Tema',
-    poll: {
-      question: 'What type of local business would you most like to see in our area?',
-      options: [
-        { text: 'Coffee Shop/Cafe', votes: 78, percentage: 35 },
-        { text: 'Grocery Store', votes: 67, percentage: 30 },
-        { text: 'Fitness Center', votes: 45, percentage: 20 },
-        { text: 'Book Store', votes: 34, percentage: 15 }
-      ],
-      totalVotes: 224,
-      duration: 'unlimited'
+      endsAt: new Date(Date.now() - 1 * 3600000).toISOString()
     },
     commentsData: []
   }

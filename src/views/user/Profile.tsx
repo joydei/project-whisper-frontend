@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Fade, Zoom } from 'react-awesome-reveal';
+import { useUser } from '../../context/UserContext';
+import { useHeaderFade } from '../../hooks/useHeaderFade';
 import styles from '../../styles/user/Profile.module.css';
 
 // Import SVG icons
@@ -29,6 +31,8 @@ import XmarkIcon from '../../assets/icons/cross-circle.svg?react';
 import SaveIcon from '../../assets/icons/disk.svg?react';
 
 const Profile = () => {
+  const { currentUser } = useUser();
+  const headerOpacity = useHeaderFade();
   const [isEditing, setIsEditing] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -44,13 +48,13 @@ const Profile = () => {
   
   const [profilePicture, setProfilePicture] = useState<string | null>(null);
   const [formData, setFormData] = useState({
-    fullName: 'Joy Dei',
-    username: 'joy_dei',
-    email: 'joy.dei@example.com',
-    phone: '+233 24 123 4567',
+    fullName: currentUser.name,
+    username: currentUser.username,
+    email: currentUser.email,
+    phone: currentUser.phone,
     municipality: 'Accra Metropolitan',
-    address: '123 Independence Avenue, Accra',
-    bio: 'Active community member passionate about improving our neighborhood.',
+    address: currentUser.location,
+    bio: currentUser.bio,
   });
 
   const [notifications, setNotifications] = useState({
@@ -188,7 +192,7 @@ const Profile = () => {
 
   return (
     <div className={styles.profilePage}>
-      <section className={styles.header}>
+      <section className={styles.header} style={{ opacity: headerOpacity, transition: 'opacity 0.3s ease' }}>
         <div className={styles.container}>
           <Fade duration={600} triggerOnce>
             <div className={styles.headerContent}>
@@ -232,7 +236,7 @@ const Profile = () => {
                     <p className={styles.userEmail}>@{formData.username}</p>
                     <p className={styles.memberSince}>
                       <CalendarIcon className={styles.inlineIcon} />
-                      Member since January 2026
+                      Member since {currentUser.joinDate}
                     </p>
                   </div>
 

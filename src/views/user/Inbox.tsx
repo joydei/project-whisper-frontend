@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Fade, Zoom } from 'react-awesome-reveal';
+import { useHeaderFade } from '../../hooks/useHeaderFade';
 import styles from '../../styles/user/Inbox.module.css';
 
 // Import SVG icons
@@ -42,6 +43,7 @@ interface Message {
 }
 
 const Inbox = () => {
+  const headerOpacity = useHeaderFade();
   const [filter, setFilter] = useState<'all' | 'unread' | 'read' | 'starred'>('all');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -295,7 +297,7 @@ const Inbox = () => {
 
   return (
     <div className={styles.inboxPage}>
-      <section className={styles.header}>
+      <section className={styles.header} style={{ opacity: headerOpacity, transition: 'opacity 0.3s ease' }}>
         <div className={styles.container}>
           <div className={styles.headerContent}>
             <div>

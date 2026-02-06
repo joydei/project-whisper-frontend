@@ -4,6 +4,7 @@
 .inboxPage {
   min-height: 100vh;
   background-color: var(--color-gray-light);
+  padding-top: 5.5rem;
 }
 
 .header {

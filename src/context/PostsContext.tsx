@@ -28,7 +28,17 @@ export const PostsProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   };
 
   const deletePost = (postId: number) => {
-    setUserPosts(prev => prev.filter(post => post.id !== postId));
+    setUserPosts(prev => prev.map(post => {
+      if (post.id === postId) {
+        // If post has comments, mark as deleted but keep it
+        if (post.commentsData && post.commentsData.length > 0) {
+          return { ...post, isDeleted: true };
+        }
+        // If no comments, we can filter it out
+        return null;
+      }
+      return post;
+    }).filter((post): post is Post => post !== null));
   };
 
   return (
