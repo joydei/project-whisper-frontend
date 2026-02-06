@@ -25,6 +25,7 @@ import CameraIcon from '../../assets/icons/camera.svg?react';
 import PollHIcon from '../../assets/icons/poll-h.svg?react';
 import WinkIcon from '../../assets/icons/laugh-wink.svg?react';
 import LeaderSpeechIcon from '../../assets/icons/leader-speech.svg?react';
+import ScreenPlayIcon from '../../assets/icons/screen-play.svg?react';
 
 interface FormData {
   category: string;
@@ -41,6 +42,8 @@ const VoiceOut = () => {
   const { currentUser } = useUser();
   const headerOpacity = useHeaderFade();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const videoInputRef = useRef<HTMLInputElement>(null);
+  const documentInputRef = useRef<HTMLInputElement>(null);
   const [reportType, setReportType] = useState<'municipality' | 'civil'>('municipality');
   const [formData, setFormData] = useState<FormData>({
     category: '',
@@ -68,6 +71,8 @@ const VoiceOut = () => {
   const [postContent, setPostContent] = useState('');
   const [locationVisibility, setLocationVisibility] = useState<'show' | 'hide'>('show');
   const [postImages, setPostImages] = useState<File[]>([]);
+  const [postVideo, setPostVideo] = useState<File | null>(null);
+  const [postDocuments, setPostDocuments] = useState<File[]>([]);
   const [publicityType, setPublicityType] = useState<'public' | 'anonymous'>('public');
   const [showPostSuccessModal, setShowPostSuccessModal] = useState(false);
   const [postErrors, setPostErrors] = useState<{[key: string]: string}>({});
@@ -274,6 +279,8 @@ const VoiceOut = () => {
     setPostContent('');
     setLocationVisibility('show');
     setPostImages([]);
+    setPostVideo(null);
+    setPostDocuments([]);
     setPublicityType('public');
     setPostErrors({});
     setReplyRestriction('everyone');
@@ -304,6 +311,76 @@ const VoiceOut = () => {
     
     setPostImages(prev => [...prev, ...validFiles].slice(0, 4)); // Max 4 images
     setPostErrors(prev => ({ ...prev, images: '' }));
+  };
+
+  const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Check file type
+    if (!file.type.startsWith('video/')) {
+      setPostErrors(prev => ({ ...prev, video: 'Please select a valid video file' }));
+      return;
+    }
+
+    // Check file size (max 500MB)
+    const maxSize = 500 * 1024 * 1024;
+    if (file.size > maxSize) {
+      setPostErrors(prev => ({ ...prev, video: 'Video file size cannot exceed 500MB' }));
+      return;
+    }
+
+    // Check video duration
+    const video = document.createElement('video');
+    video.preload = 'metadata';
+
+    video.onloadedmetadata = function() {
+      window.URL.revokeObjectURL(video.src);
+      const duration = video.duration;
+      const maxDuration = 30 * 60; // 30 minutes in seconds
+
+      if (duration > maxDuration) {
+        setPostErrors(prev => ({ ...prev, video: 'Video duration cannot exceed 30 minutes' }));
+        return;
+      }
+
+      setPostVideo(file);
+      setPostImages([]); // Clear images when video is added
+      setPostErrors(prev => ({ ...prev, video: '' }));
+    };
+
+    video.onerror = function() {
+      setPostErrors(prev => ({ ...prev, video: 'Error loading video file' }));
+    };
+
+    video.src = URL.createObjectURL(file);
+  };
+
+  const removePostVideo = () => {
+    setPostVideo(null);
+    if (videoInputRef.current) {
+      videoInputRef.current.value = '';
+    }
+  };
+
+  const handleDocumentUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    const maxSize = 10 * 1024 * 1024; // 10MB per document
+    
+    const validFiles = files.filter(file => {
+      if (file.size > maxSize) {
+        setPostErrors(prev => ({ ...prev, documents: `${file.name} exceeds 10MB limit` }));
+        return false;
+      }
+      return true;
+    });
+    
+    setPostDocuments(prev => [...prev, ...validFiles].slice(0, 5)); // Max 5 documents
+    setPostErrors(prev => ({ ...prev, documents: '' }));
+  };
+
+  const removePostDocument = (index: number) => {
+    setPostDocuments(prev => prev.filter((_, i) => i !== index));
   };
 
   const removePostImage = (index: number) => {
@@ -346,8 +423,8 @@ const VoiceOut = () => {
       return;
     }
 
-    if (!postContent.trim() && !showPoll) {
-      setPostErrors({ content: 'Please write something for your post or create a poll' });
+    if (!postContent.trim() && !showPoll && postImages.length === 0 && !postVideo && postDocuments.length === 0) {
+      setPostErrors({ content: 'Please write something, add media, or create a poll' });
       return;
     }
 
@@ -385,7 +462,9 @@ const VoiceOut = () => {
         },
         content: postContent,
         location: locationVisibility === 'hide' ? undefined : 'Your Location',
-        image: postImages.length > 0 ? URL.createObjectURL(postImages[0]) : undefined,
+        images: postImages.length > 0 ? postImages.map(img => URL.createObjectURL(img)) : undefined,
+        video: postVideo ? URL.createObjectURL(postVideo) : undefined,
+        documents: postDocuments.length > 0 ? postDocuments.map(doc => ({ name: doc.name, url: URL.createObjectURL(doc) })) : undefined,
         replyRestriction,
         scope: postScope,
         anonymous: publicityType === 'anonymous',
@@ -925,6 +1004,67 @@ const VoiceOut = () => {
                   </div>
                 )}
 
+                {/* Video Preview */}
+                {postVideo && (
+                  <div className={styles.postVideoPreview}>
+                    <div className={styles.postVideoItem}>
+                      <video 
+                        src={URL.createObjectURL(postVideo)} 
+                        className={styles.postVideoThumb}
+                        controls
+                      />
+                      <button
+                        type="button"
+                        className={styles.removeVideoBtn}
+                        onClick={removePostVideo}
+                        title="Remove video"
+                      >
+                        <XIcon />
+                      </button>
+                    </div>
+                    <p className={styles.videoInfo}>
+                      {postVideo.name} ({(postVideo.size / (1024 * 1024)).toFixed(2)} MB)
+                    </p>
+                  </div>
+                )}
+
+                {postErrors.video && (
+                  <div className={styles.errorText} style={{ marginTop: '0.5rem' }}>
+                    {postErrors.video}
+                  </div>
+                )}
+
+                {/* Document Preview */}
+                {postDocuments.length > 0 && (
+                  <div className={styles.postDocumentPreview}>
+                    {postDocuments.map((file, index) => (
+                      <div key={index} className={styles.postDocumentItem}>
+                        <div className={styles.documentInfo}>
+                          <ClipFileIcon className={styles.documentIcon} />
+                          <div className={styles.documentDetails}>
+                            <span className={styles.documentName}>{file.name}</span>
+                            <span className={styles.documentSize}>{(file.size / 1024).toFixed(1)} KB</span>
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          className={styles.removeDocumentBtn}
+                          onClick={() => removePostDocument(index)}
+                          title="Remove document"
+                        >
+                          <XIcon />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {postErrors.documents && (
+                  <div className={styles.errorText} style={{ marginTop: '0.5rem' }}>
+                    {postErrors.documents}
+                  </div>
+                )}
+
                 {/* Poll Section */}
                 {showPoll && (
                   <div className={styles.pollSection}>
@@ -1018,15 +1158,52 @@ const VoiceOut = () => {
                     multiple
                     accept="image/*"
                     onChange={handlePostImageChange}
-                    disabled={!postScope || postImages.length >= 4}
+                    disabled={!postScope || postImages.length >= 4 || !!postVideo}
                     ref={fileInputRef}
                   />
                   <label 
                     htmlFor="postFileInput" 
-                    className={`${styles.controlBtn} ${(!postScope || postImages.length >= 4) ? styles.disabled : ''}`}
-                    title="Add images"
+                    className={`${styles.controlBtn} ${(!postScope || postImages.length >= 4 || !!postVideo) ? styles.disabled : ''}`}
+                    title="Add images (up to 4)"
                   >
                     <CameraIcon className={styles.controlIcon} />
+                  </label>
+                  
+                  {/* Video Upload */}
+                  <input
+                    id="postVideoInput"
+                    type="file"
+                    className={styles.postFileInput}
+                    accept="video/*"
+                    onChange={handleVideoUpload}
+                    disabled={!postScope || !!postVideo || postImages.length > 0}
+                    ref={videoInputRef}
+                  />
+                  <label 
+                    htmlFor="postVideoInput" 
+                    className={`${styles.controlBtn} ${(!postScope || !!postVideo || postImages.length > 0) ? styles.disabled : ''}`}
+                    title="Add video (max 30 minutes)"
+                  >
+                    <ScreenPlayIcon className={styles.controlIcon} />
+                  </label>
+                  
+                  {/* Document Upload */}
+                  <input
+                    id="postDocumentInput"
+                    type="file"
+                    className={styles.postFileInput}
+                    multiple
+                    accept=".pdf,.doc,.docx,.txt,.xls,.xlsx,.ppt,.pptx"
+                    onChange={handleDocumentUpload}
+                    disabled={!postScope || postDocuments.length >= 5}
+                    ref={documentInputRef}
+                  />
+                  <label 
+                    htmlFor="postDocumentInput" 
+                    className={`${styles.controlBtn} ${(!postScope || postDocuments.length >= 5) ? styles.disabled : ''}`}
+                    title="Add documents (up to 5)"
+                  >
+                    <ClipFileIcon className={styles.controlIcon} />
                   </label>
                   
                   {/* Poll Button */}
@@ -1181,7 +1358,7 @@ const VoiceOut = () => {
                   <button 
                     className={styles.postSubmitBtn} 
                     onClick={handleSubmitPost}
-                    disabled={isSubmitting || !postContent.trim() && !showPoll}
+                    disabled={isSubmitting || (!postContent.trim() && !showPoll && postImages.length === 0 && !postVideo && postDocuments.length === 0)}
                   >
                     {isSubmitting ? 'Posting...' : 'Post'}
                   </button>

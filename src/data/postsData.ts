@@ -16,6 +16,10 @@ export interface Post {
   };
   content: string;
   image?: string;
+  images?: string[]; // Support multiple images
+  video?: string; // Support video
+  videoThumbnail?: string; // Video thumbnail
+  documents?: Array<{ name: string; url: string }>; // Support documents
   category?: string;
   time: string;
   likes: number;

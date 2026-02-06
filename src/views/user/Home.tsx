@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Fade } from 'react-awesome-reveal';
 import { usePosts } from '../../context/PostsContext';
 import { useUser } from '../../context/UserContext';
@@ -31,6 +31,9 @@ import PendingIcon from '../../assets/icons/pending.svg?react';
 import ClockIcon from '../../assets/icons/clock-three.svg?react';
 import SirenIcon from '../../assets/icons/siren-on.svg?react';
 import PollHIcon from '../../assets/icons/poll-h.svg?react';
+import TrashIcon from '../../assets/icons/trash.svg?react';
+import ClipFileIcon from '../../assets/icons/clip-file.svg?react';
+import FlagIcon from '../../assets/icons/flag.svg?react';
 
 const Home = () => {
   const { userPosts } = usePosts();
@@ -62,6 +65,15 @@ const Home = () => {
   const [openMenuReplyId, setOpenMenuReplyId] = useState<number | null>(null);
   const [showDeleteSuccessModal, setShowDeleteSuccessModal] = useState(false);
   const [replyToDelete, setReplyToDelete] = useState<{id: number; commentId: number} | null>(null);
+  const [postToDelete, setPostToDelete] = useState<number | null>(null);
+  const [deletedPosts, setDeletedPosts] = useState<Set<number>>(new Set());
+  const [openMenuPostId, setOpenMenuPostId] = useState<number | null>(null);
+  const [imageViewer, setImageViewer] = useState<{images: string[]; currentIndex: number} | null>(null);
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [reportItem, setReportItem] = useState<{type: 'post' | 'comment' | 'reply'; id: number; content: string} | null>(null);
+  const [reportReason, setReportReason] = useState('');
+  const [selectedReportOffense, setSelectedReportOffense] = useState('');
+  const [showReportSuccessModal, setShowReportSuccessModal] = useState(false);
   
   // Poll voting state
   const [pollVotes, setPollVotes] = useState<{[postId: number]: number}>({});
@@ -69,6 +81,18 @@ const Home = () => {
   // Combine user posts with static posts and sort by time (newest first)
   const staticPosts = activeTab === 'municipality' ? municipalityPosts : ghanaPosts;
   const currentPosts = [...userPosts, ...staticPosts];
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = () => {
+      setOpenMenuCommentId(null);
+      setOpenMenuReplyId(null);
+      setOpenMenuPostId(null);
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
 
   const handleLike = (postId: number) => {
     setLikedPosts(prev => {
@@ -440,6 +464,93 @@ const Home = () => {
     });
   };
 
+  const handleDeletePost = (postId: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setOpenMenuPostId(null);
+    setPostToDelete(postId);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDeletePost = () => {
+    if (postToDelete) {
+      const post = currentPosts.find(p => p.id === postToDelete);
+      const hasComments = post && post.commentsData && post.commentsData.length > 0;
+      
+      if (hasComments) {
+        // Mark as deleted if has comments
+        setDeletedPosts(prev => {
+          const newSet = new Set(prev);
+          newSet.add(postToDelete);
+          return newSet;
+        });
+      } else {
+        // Remove completely if no comments
+        // This would need to be handled in the PostsContext to actually remove the post
+        setDeletedPosts(prev => {
+          const newSet = new Set(prev);
+          newSet.add(postToDelete);
+          return newSet;
+        });
+      }
+      
+      setShowDeleteModal(false);
+      setPostToDelete(null);
+      setShowDeleteSuccessModal(true);
+    }
+  };
+
+  const handleReportPost = (post: Post, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setOpenMenuPostId(null);
+    setReportItem({
+      type: 'post',
+      id: post.id,
+      content: post.content
+    });
+    setShowReportModal(true);
+  };
+
+  const handleReportComment = (comment: any, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setOpenMenuCommentId(null);
+    setReportItem({
+      type: 'comment',
+      id: comment.id,
+      content: comment.content
+    });
+    setShowReportModal(true);
+  };
+
+  const handleReportReply = (reply: any, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setOpenMenuReplyId(null);
+    setReportItem({
+      type: 'reply',
+      id: reply.id,
+      content: reply.content
+    });
+    setShowReportModal(true);
+  };
+
+  const handleSubmitReport = () => {
+    // Validate that either an offense is selected, or "Other" is selected with description
+    const isValid = selectedReportOffense && (selectedReportOffense !== 'other' || reportReason.trim());
+    
+    if (isValid && reportItem) {
+      console.log('Report submitted:', {
+        type: reportItem.type,
+        id: reportItem.id,
+        offense: selectedReportOffense,
+        reason: reportReason
+      });
+      setShowReportModal(false);
+      setReportItem(null);
+      setReportReason('');
+      setSelectedReportOffense('');
+      setShowReportSuccessModal(true);
+    }
+  };
+
   const shouldTruncate = (content: string) => {
     return content.length > 300;
   };
@@ -559,12 +670,64 @@ const Home = () => {
                           </span>
                         ) : null;
                       })()}
+                      {/* Delete button for user's own posts */}
+                      {post.type === 'user' && !post.anonymous && post.author.name === currentUser.name && !deletedPosts.has(post.id) && (
+                        <div className={styles.commentMenuWrapper}>
+                          <button
+                            className={styles.deletePostBtn}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setOpenMenuPostId(openMenuPostId === post.id ? null : post.id);
+                            }}
+                            title="More options"
+                          >
+                            <MenuDotsIcon className={styles.menuDotsIcon} />
+                          </button>
+                          {openMenuPostId === post.id && (
+                            <div className={styles.commentDropdown} onClick={(e) => e.stopPropagation()}>
+                              <button
+                                className={styles.dropdownItem}
+                                onClick={(e) => handleDeletePost(post.id, e)}
+                              >
+                                <TrashIcon style={{ width: '1rem', height: '1rem', marginRight: '0.5rem' }} />
+                                Delete Post
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                      {/* Report button for other users' posts */}
+                      {post.type === 'user' && (post.anonymous || post.author.name !== currentUser.name) && !deletedPosts.has(post.id) && (
+                        <div className={styles.commentMenuWrapper}>
+                          <button
+                            className={styles.deletePostBtn}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setOpenMenuPostId(openMenuPostId === post.id ? null : post.id);
+                            }}
+                            title="More options"
+                          >
+                            <MenuDotsIcon className={styles.menuDotsIcon} />
+                          </button>
+                          {openMenuPostId === post.id && (
+                            <div className={styles.commentDropdown} onClick={(e) => e.stopPropagation()}>
+                              <button
+                                className={styles.dropdownItem}
+                                onClick={(e) => handleReportPost(post, e)}
+                              >
+                                <FlagIcon style={{ width: '1rem', height: '1rem', marginRight: '0.5rem' }} />
+                                Report Post
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
                   </div>
 
                   {/* Post Content */}
                   <div className={styles.postContent}>
-                    {post.isDeleted ? (
+                    {(post.isDeleted || deletedPosts.has(post.id)) ? (
                       <p className={styles.deletedPostText}>
                         This post is not available
                       </p>
@@ -584,7 +747,7 @@ const Home = () => {
                       </>
                     )}
                     <div className={styles.postMetaRow}>
-                      {!post.isDeleted && post.location && (
+                      {!post.isDeleted && !deletedPosts.has(post.id) && post.location && (
                         <span className={styles.postLocation}>
                           <MarkerIcon className={styles.locationIcon} />
                           {post.location}
@@ -597,13 +760,58 @@ const Home = () => {
                         </span>
                       )}
                     </div>
-                    {!post.isDeleted && post.image && (
-                      <div className={styles.postImageWrapper}>
-                        <img src={post.image} alt="Post content" className={styles.postImage} />
+                    {!post.isDeleted && !deletedPosts.has(post.id) && (post.image || (post.images && post.images.length > 0)) && (
+                      <div className={`${styles.postImageWrapper} ${post.images && post.images.length > 1 ? styles[`imageGrid${post.images.length}`] : ''}`}>
+                        {post.images && post.images.length > 0 ? (
+                          post.images.map((img, idx) => (
+                            <img 
+                              key={idx} 
+                              src={img} 
+                              alt={`Post content ${idx + 1}`} 
+                              className={styles.postImage}
+                              onClick={() => setImageViewer({ images: post.images || [], currentIndex: idx })}
+                            />
+                          ))
+                        ) : post.image ? (
+                          <img 
+                            src={post.image} 
+                            alt="Post content" 
+                            className={styles.postImage}
+                            onClick={() => setImageViewer({ images: [post.image!], currentIndex: 0 })}
+                          />
+                        ) : null}
                       </div>
                     )}
                     
-                    {!post.isDeleted && post.poll && (
+                    {!post.isDeleted && !deletedPosts.has(post.id) && post.video && (
+                      <div className={styles.videoWrapper}>
+                        <video 
+                          src={post.video} 
+                          className={styles.videoPlayer}
+                          controls
+                          preload="metadata"
+                        />
+                      </div>
+                    )}
+                    
+                    {!post.isDeleted && !deletedPosts.has(post.id) && post.documents && post.documents.length > 0 && (
+                      <div className={styles.documentsWrapper}>
+                        {post.documents.map((doc, idx) => (
+                          <a 
+                            key={idx} 
+                            href={doc.url} 
+                            download={doc.name}
+                            className={styles.documentItem}
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <ClipFileIcon className={styles.documentItemIcon} />
+                            <span className={styles.documentItemName}>{doc.name}</span>
+                          </a>
+                        ))}
+                      </div>
+                    )}
+                    
+                    {!post.isDeleted && !deletedPosts.has(post.id) && post.poll && (
                       <div className={styles.pollContainer}>
                         <h4 className={styles.pollQuestion}>{post.poll.question}</h4>
                         <div className={styles.pollOptions}>
@@ -777,9 +985,54 @@ const Home = () => {
                     {selectedPost.location}
                   </span>
                 )}
-                {selectedPost.image && (
-                  <div className={styles.postImageWrapper}>
-                    <img src={selectedPost.image} alt="Post content" className={styles.postImage} />
+                {(selectedPost.image || (selectedPost.images && selectedPost.images.length > 0)) && (
+                  <div className={`${styles.postImageWrapper} ${selectedPost.images && selectedPost.images.length > 1 ? styles[`imageGrid${selectedPost.images.length}`] : ''}`}>
+                    {selectedPost.images && selectedPost.images.length > 0 ? (
+                      selectedPost.images.map((img, idx) => (
+                        <img 
+                          key={idx} 
+                          src={img} 
+                          alt={`Post content ${idx + 1}`} 
+                          className={styles.postImage}
+                          onClick={() => setImageViewer({ images: selectedPost.images || [], currentIndex: idx })}
+                        />
+                      ))
+                    ) : selectedPost.image ? (
+                      <img 
+                        src={selectedPost.image} 
+                        alt="Post content" 
+                        className={styles.postImage}
+                        onClick={() => setImageViewer({ images: [selectedPost.image!], currentIndex: 0 })}
+                      />
+                    ) : null}
+                  </div>
+                )}
+                
+                {selectedPost.video && (
+                  <div className={styles.videoWrapper}>
+                    <video 
+                      src={selectedPost.video} 
+                      className={styles.videoPlayer}
+                      controls
+                      preload="metadata"
+                    />
+                  </div>
+                )}
+                
+                {selectedPost.documents && selectedPost.documents.length > 0 && (
+                  <div className={styles.documentsWrapper}>
+                    {selectedPost.documents.map((doc, idx) => (
+                      <a 
+                        key={idx} 
+                        href={doc.url} 
+                        download={doc.name}
+                        className={styles.documentItem}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <ClipFileIcon className={styles.documentItemIcon} />
+                        <span className={styles.documentItemName}>{doc.name}</span>
+                      </a>
+                    ))}
                   </div>
                 )}
                 
@@ -951,7 +1204,33 @@ const Home = () => {
                                       className={styles.dropdownItem}
                                       onClick={(e) => handleDeleteComment(comment, e)}
                                     >
+                                      <TrashIcon style={{ width: '1rem', height: '1rem', marginRight: '0.5rem', fill: 'currentColor' }} />
                                       Delete Comment
+                                    </button>
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                            {!deletedComments.has(comment.id) && comment.author !== currentUser.name && (
+                              <div className={styles.commentMenuWrapper}>
+                                <button
+                                  className={styles.commentMenuBtn}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setOpenMenuCommentId(openMenuCommentId === comment.id ? null : comment.id);
+                                  }}
+                                  title="Options"
+                                >
+                                  <MenuDotsIcon className={styles.menuDotsIcon} />
+                                </button>
+                                {openMenuCommentId === comment.id && (
+                                  <div className={styles.commentDropdown}>
+                                    <button
+                                      className={styles.dropdownItem}
+                                      onClick={(e) => handleReportComment(comment, e)}
+                                    >
+                                      <FlagIcon style={{ width: '1rem', height: '1rem', marginRight: '0.5rem', fill: 'currentColor' }} />
+                                      Report Comment
                                     </button>
                                   </div>
                                 )}
@@ -1036,7 +1315,33 @@ const Home = () => {
                                                 className={styles.dropdownItem}
                                                 onClick={(e) => handleDeleteReply(reply, comment, e)}
                                               >
+                                                <TrashIcon style={{ width: '1rem', height: '1rem', marginRight: '0.5rem', fill: 'currentColor' }} />
                                                 Delete Reply
+                                              </button>
+                                            </div>
+                                          )}
+                                        </div>
+                                      )}
+                                      {reply.author !== currentUser.name && (
+                                        <div className={styles.commentMenuWrapper}>
+                                          <button
+                                            className={styles.commentMenuBtn}
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              setOpenMenuReplyId(openMenuReplyId === reply.id ? null : reply.id);
+                                            }}
+                                            title="Options"
+                                          >
+                                            <MenuDotsIcon className={styles.menuDotsIcon} />
+                                          </button>
+                                          {openMenuReplyId === reply.id && (
+                                            <div className={styles.commentDropdown}>
+                                              <button
+                                                className={styles.dropdownItem}
+                                                onClick={(e) => handleReportReply(reply, e)}
+                                              >
+                                                <FlagIcon style={{ width: '1rem', height: '1rem', marginRight: '0.5rem', fill: 'currentColor' }} />
+                                                Report Reply
                                               </button>
                                             </div>
                                           )}
@@ -1202,8 +1507,12 @@ const Home = () => {
             <div className={styles.tipModalIconWrapper}>
               <XIcon className={styles.tipModalIcon} style={{color: '#dc2626'}} />
             </div>
-            <h2 className={styles.tipModalTitle}>{replyToDelete ? 'Delete Reply' : 'Delete Comment'}</h2>
-            <p className={styles.tipModalMessage}>Are you sure you want to delete this {replyToDelete ? 'reply' : 'comment'}?</p>
+            <h2 className={styles.tipModalTitle}>
+              {postToDelete ? 'Delete Post' : replyToDelete ? 'Delete Reply' : 'Delete Comment'}
+            </h2>
+            <p className={styles.tipModalMessage}>
+              Are you sure you want to delete this {postToDelete ? 'post' : replyToDelete ? 'reply' : 'comment'}?
+            </p>
             <div className={styles.deleteModalActions}>
               <button 
                 className={styles.deleteCancelBtn}
@@ -1211,13 +1520,14 @@ const Home = () => {
                   setShowDeleteModal(false);
                   setCommentToDelete(null);
                   setReplyToDelete(null);
+                  setPostToDelete(null);
                 }}
               >
                 Cancel
               </button>
               <button 
                 className={styles.deleteConfirmBtn}
-                onClick={replyToDelete ? confirmDeleteReply : confirmDeleteComment}
+                onClick={postToDelete ? confirmDeletePost : replyToDelete ? confirmDeleteReply : confirmDeleteComment}
               >
                 Yes, Delete
               </button>
@@ -1243,9 +1553,146 @@ const Home = () => {
           </div>
         </div>
       )}
+
+      {/* Image Viewer Modal */}
+      {imageViewer && (
+        <div className={styles.imageViewerOverlay} onClick={() => setImageViewer(null)}>
+          <div className={styles.imageViewerContent} onClick={(e) => e.stopPropagation()}>
+            <button 
+              className={styles.imageViewerClose}
+              onClick={() => setImageViewer(null)}
+            >
+              <XIcon className={styles.closeIcon} />
+            </button>
+            
+            <img 
+              src={imageViewer.images[imageViewer.currentIndex]} 
+              alt={`Image ${imageViewer.currentIndex + 1}`}
+              className={styles.imageViewerImage}
+            />
+            
+            {imageViewer.images.length > 1 && (
+              <>
+                <button
+                  className={`${styles.imageViewerNav} ${styles.imageViewerPrev}`}
+                  onClick={() => setImageViewer(prev => prev ? {
+                    ...prev,
+                    currentIndex: prev.currentIndex > 0 ? prev.currentIndex - 1 : prev.images.length - 1
+                  } : null)}
+                >
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                  </svg>
+                </button>
+                
+                <button
+                  className={`${styles.imageViewerNav} ${styles.imageViewerNext}`}
+                  onClick={() => setImageViewer(prev => prev ? {
+                    ...prev,
+                    currentIndex: prev.currentIndex < prev.images.length - 1 ? prev.currentIndex + 1 : 0
+                  } : null)}
+                >
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/>
+                  </svg>
+                </button>
+                
+                <div className={styles.imageCounter}>
+                  {imageViewer.currentIndex + 1} / {imageViewer.images.length}
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Report Modal */}
+      {showReportModal && reportItem && (
+        <div className={styles.modalOverlay} onClick={() => setShowReportModal(false)}>
+          <div className={styles.tipModalContent} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.tipModalIconWrapper}>
+              <FlagIcon className={styles.tipModalIcon} style={{color: '#dc2626'}} />
+            </div>
+            <h2 className={styles.tipModalTitle}>Report {reportItem.type}</h2>
+            <p className={styles.tipModalMessage}>
+              Please select a reason for reporting this {reportItem.type}
+            </p>
+            <select
+              className={styles.reportDropdown}
+              value={selectedReportOffense}
+              onChange={(e) => {
+                setSelectedReportOffense(e.target.value);
+                if (e.target.value !== 'other') {
+                  setReportReason('');
+                }
+              }}
+            >
+              <option value="">Select an offense...</option>
+              <option value="spam">Spam or misleading content</option>
+              <option value="harassment">Harassment or bullying</option>
+              <option value="hate-speech">Hate speech or discrimination</option>
+              <option value="violence">Violence or threats</option>
+              <option value="misinformation">False or misleading information</option>
+              <option value="inappropriate">Inappropriate or offensive content</option>
+              <option value="privacy">Privacy violation</option>
+              <option value="impersonation">Impersonation</option>
+              <option value="other">Other (please specify)</option>
+            </select>
+            {selectedReportOffense === 'other' && (
+              <textarea
+                className={styles.reportTextarea}
+                placeholder="Please provide a detailed description..."
+                value={reportReason}
+                onChange={(e) => setReportReason(e.target.value)}
+                rows={4}
+              />
+            )}
+            <div className={styles.deleteModalActions}>
+              <button 
+                className={styles.deleteCancelBtn}
+                onClick={() => {
+                  setShowReportModal(false);
+                  setReportItem(null);
+                  setReportReason('');
+                  setSelectedReportOffense('');
+                }}
+              >
+                Cancel
+              </button>
+              <button 
+                className={styles.deleteConfirmBtn}
+                onClick={handleSubmitReport}
+                disabled={!selectedReportOffense || (selectedReportOffense === 'other' && !reportReason.trim())}
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Report Success Modal */}
+      {showReportSuccessModal && (
+        <div className={styles.modalOverlay} onClick={() => setShowReportSuccessModal(false)}>
+          <div className={styles.tipModalContent} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.tipModalIconWrapper}>
+              <CheckCircleIcon className={styles.tipModalIcon} style={{color: '#059669'}} />
+            </div>
+            <h2 className={styles.tipModalTitle}>Report Submitted</h2>
+            <p className={styles.tipModalMessage}>
+              Thank you for your report. We'll review it and take appropriate action if necessary.
+            </p>
+            <button 
+              className={styles.tipModalBtn}
+              onClick={() => setShowReportSuccessModal(false)}
+            >
+              Done
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
 export default Home;
-      
