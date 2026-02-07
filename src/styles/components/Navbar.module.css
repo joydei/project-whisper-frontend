@@ -134,6 +134,65 @@
   gap: 0.8125rem;
 }
 
+/* ========== Messages CTA ========== */
+.messagesCta {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.messagesCta:hover {
+  transform: translateY(-2px);
+  opacity: 0.85;
+}
+
+.messagesCta:hover .messagesCtaIcon {
+  color: var(--color-white);
+}
+
+.messagesCtaActive {
+  opacity: 1;
+}
+
+.messagesCtaActive .messagesCtaIcon {
+  color: var(--color-white);
+}
+
+.messagesCtaIcon {
+  width: 20px;
+  height: 20px;
+  color: var(--color-white);
+  transition: color 0.3s ease;
+  stroke: currentColor;
+  fill: none;
+}
+
+.messagesCtaPulse {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 8px;
+  height: 8px;
+  background-color: #22c55e;
+  border-radius: 50%;
+  border: none;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.2); }
+}
+
 .loginBtn {
   background-color: transparent;
   color: var(--color-white);
@@ -179,6 +238,16 @@
 
   .nav {
     display: none;
+  }
+
+  .messagesCta {
+    width: 36px;
+    height: 36px;
+  }
+
+  .messagesCtaIcon {
+    width: 16px;
+    height: 16px;
   }
 
   .authButtons {

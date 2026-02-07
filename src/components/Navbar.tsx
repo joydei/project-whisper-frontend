@@ -1,4 +1,4 @@
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, useLocation } from 'react-router-dom';
 import styles from '../styles/components/Navbar.module.css';
 
 // Import SVG icons
@@ -8,8 +8,12 @@ import InboxIcon from '../assets/icons/inbox-full.svg?react';
 import BellIcon from '../assets/icons/bell.svg?react';
 import UserIcon from '../assets/icons/circle-user.svg?react';
 import SearchIcon from '../assets/icons/search.svg?react';
+import MessagesIcon from '../assets/icons/messages.svg?react';
 
 const Navbar = () => {
+  const location = useLocation();
+  const isMessagesActive = location.pathname.startsWith('/messages');
+
   return (
     <header className={styles.navbar}>
       <div className={styles.container}>
@@ -48,6 +52,10 @@ const Navbar = () => {
             Profile
           </NavLink>
         </nav>
+        <Link to="/messages" className={`${styles.messagesCta} ${isMessagesActive ? styles.messagesCtaActive : ''}`}>
+          <MessagesIcon className={styles.messagesCtaIcon} />
+          <span className={styles.messagesCtaPulse} />
+        </Link>
         <div className={styles.authButtons}>
           <Link to="/login">
             <button className={styles.loginBtn}>Login</button>

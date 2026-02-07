@@ -14,6 +14,8 @@ import VoiceOut from '../views/user/VoiceOut';
 import Inbox from '../views/user/Inbox';
 import Notifications from '../views/user/Notifications';
 import Profile from '../views/user/Profile';
+import UserProfile from '../views/user/UserProfile';
+import Messages from '../views/user/Messages';
 
 // Municipality Views
 import Dashboard from '../views/municipality/Dashboard';
@@ -37,6 +39,9 @@ const AppRoutes = () => {
         <Route path="inbox" element={<Inbox />} />
         <Route path="notifications" element={<Notifications />} />
         <Route path="profile" element={<Profile />} />
+        <Route path="user/:username" element={<UserProfile />} />
+        <Route path="messages" element={<Messages />} />
+        <Route path="messages/:username" element={<Messages />} />
       </Route>
 
       {/* Municipality Routes */}

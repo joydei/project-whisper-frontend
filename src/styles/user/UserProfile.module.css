@@ -1,0 +1,520 @@
+/* Fibonacci Typography Scale - Base: 0.8125rem (13px) */
+/* 0.8125rem, 1rem, 1.3125rem, 2.125rem, 3.4375rem */
+
+.userProfilePage {
+  min-height: 100vh;
+  background-color: var(--color-gray-light);
+  padding-top: 5.5rem;
+}
+
+/* Header Section */
+.header {
+  background-color: var(--color-black);
+  color: var(--color-white);
+  padding: 3.4375rem 2rem 2.125rem;
+}
+
+.container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  border: 2px solid var(--color-white);
+  color: var(--color-white);
+  padding: 0.5rem 1rem;
+  border-radius: 1px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.backButton:hover {
+  background: var(--color-white);
+  color: var(--color-black);
+}
+
+.pageTitle {
+  font-size: 2.125rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--color-white);
+}
+
+/* Content Section */
+.content {
+  padding: 2.125rem 2rem;
+}
+
+.profileContainer {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Profile Header */
+.profileHeader {
+  background: var(--color-white);
+  border-radius: 1px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5rem;
+}
+
+.coverImage {
+  height: 150px;
+  background: var(--color-black);
+  position: relative;
+}
+
+.profileInfo {
+  padding: 0 2rem;
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+  position: relative;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 1.5rem;
+}
+
+.avatarWrapper {
+  margin-top: -3rem;
+  position: relative;
+  z-index: 10;
+}
+
+.avatar,
+.avatarPlaceholder {
+  width: 6rem;
+  height: 6rem;
+  border-radius: 1px;
+  border: 4px solid var(--color-white);
+  background: var(--color-gray-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.avatarInitials {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-black);
+  text-transform: uppercase;
+}
+
+.userInfo {
+  flex: 1;
+  padding-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.nameSection {
+  margin-bottom: 0.5rem;
+}
+
+.userName {
+  font-size: 1.3125rem;
+  font-weight: 700;
+  color: var(--color-black);
+  margin: 0 0 0.25rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.userUsername {
+  font-size: 0.8125rem;
+  color: var(--color-gray-medium);
+  margin: 0;
+}
+
+.actionButtons {
+  display: flex;
+  gap: 0.75rem;
+  padding-top: 0.5rem;
+}
+
+.followBtn,
+.messageBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 1px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid var(--color-black);
+}
+
+.followBtn {
+  background: var(--color-black);
+  color: var(--color-white);
+}
+
+.followBtn .btnIcon {
+  color: var(--color-white);
+  fill: var(--color-white);
+}
+
+.followBtn:hover {
+  background: transparent;
+  color: var(--color-black);
+  transform: translateY(-2px);
+}
+
+.followBtn:hover .btnIcon {
+  color: var(--color-black);
+  fill: var(--color-black);
+}
+
+.followBtn.following {
+  background: var(--color-white);
+  color: var(--color-black);
+  border-color: var(--color-black);
+}
+
+.followBtn.following .btnIcon {
+  color: var(--color-black);
+  fill: var(--color-black);
+}
+
+.followBtn.following:hover {
+  background: var(--color-black);
+  color: var(--color-white);
+}
+
+.followBtn.following:hover .btnIcon {
+  color: var(--color-white);
+  fill: var(--color-white);
+}
+
+.messageBtn {
+  background: var(--color-white);
+  color: var(--color-black);
+  border: 2px solid var(--color-black);
+}
+
+.messageBtn .btnIcon {
+  color: var(--color-black);
+  fill: var(--color-black);
+}
+
+.messageBtn:hover {
+  background: var(--color-black);
+  color: var(--color-white);
+  transform: translateY(-2px);
+}
+
+.messageBtn:hover .btnIcon {
+  color: var(--color-white);
+  fill: var(--color-white);
+}
+
+.btnIcon {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Profile Details */
+.profileDetails {
+  padding: 1.5rem 2rem;
+}
+
+.bio {
+  font-size: 0.8125rem;
+  color: var(--color-black);
+  line-height: 1.6;
+  margin: 0 0 1rem 0;
+}
+
+.detailsRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.detail {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--color-gray-medium);
+}
+
+.detailIcon {
+  width: 1rem;
+  height: 1rem;
+  color: var(--color-black);
+}
+
+.statsRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  border-radius: 1px;
+  transition: all 0.2s ease;
+}
+
+.stat:hover {
+  background: var(--color-gray-light);
+  transform: translateY(-2px);
+}
+
+.statValue {
+  font-size: 1.3125rem;
+  font-weight: 700;
+  color: var(--color-black);
+}
+
+.statLabel {
+  font-size: 0.8125rem;
+  color: var(--color-gray-medium);
+  text-transform: capitalize;
+}
+
+/* Posts Section */
+.postsSection {
+  background: transparent;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0;
+  margin-bottom: 1rem;
+}
+
+.sectionTitle {
+  font-size: 1.3125rem;
+  font-weight: 700;
+  color: var(--color-black);
+  margin: 0;
+}
+
+.postCount {
+  font-size: 0.8125rem;
+  color: var(--color-gray-medium);
+  background: var(--color-white);
+  padding: 0.375rem 0.875rem;
+  border-radius: 1px;
+  font-weight: 600;
+  border: 1px solid #e0e0e0;
+}
+
+/* Empty State */
+.emptyState {
+  background: var(--color-white);
+  border-radius: 1px;
+  padding: 3rem 2rem;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.emptyIcon {
+  width: 4rem;
+  height: 4rem;
+  color: var(--color-gray-medium);
+  margin: 0 auto 1rem;
+}
+
+.emptyText {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-black);
+  margin: 0 0 0.5rem 0;
+}
+
+.emptySubtext {
+  font-size: 0.8125rem;
+  color: var(--color-gray-medium);
+  margin: 0;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* Not Found State */
+.notFound {
+  background: var(--color-white);
+  border-radius: 1px;
+  padding: 4rem 2rem;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  margin: 2rem auto;
+}
+
+.notFoundIcon {
+  width: 5rem;
+  height: 5rem;
+  color: var(--color-gray-medium);
+  margin: 0 auto 1.5rem;
+}
+
+.notFound h2 {
+  font-size: 1.3125rem;
+  font-weight: 700;
+  color: var(--color-black);
+  margin: 0 0 0.75rem 0;
+}
+
+.notFound p {
+  font-size: 0.8125rem;
+  color: var(--color-gray-medium);
+  margin: 0 0 1.5rem 0;
+}
+
+.backBtn {
+  background: var(--color-black);
+  color: var(--color-white);
+  border: 2px solid var(--color-black);
+  padding: 0.75rem 1.5rem;
+  border-radius: 1px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.backBtn:hover {
+  background: transparent;
+  color: var(--color-black);
+  transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .header {
+    padding: 2.125rem 1rem 1.3125rem;
+  }
+
+  .container {
+    padding: 0 1rem;
+  }
+
+  .content {
+    padding: 1.3125rem 1rem;
+  }
+
+  .coverImage {
+    height: 120px;
+  }
+
+  .profileInfo {
+    flex-direction: column;
+    padding: 0 1rem 1rem;
+  }
+
+  .avatarWrapper {
+    margin-top: -2.5rem;
+  }
+
+  .avatar,
+  .avatarPlaceholder {
+    width: 5rem;
+    height: 5rem;
+    font-size: 2.5rem;
+  }
+
+  .avatarInitials {
+    font-size: 1.3125rem;
+  }
+
+  .userInfo {
+    width: 100%;
+    flex-direction: column;
+    gap: 1rem;
+    padding-top: 0.5rem;
+  }
+
+  .userName {
+    font-size: 1rem;
+  }
+
+  .actionButtons {
+    width: 100%;
+    padding-top: 0;
+  }
+
+  .followBtn,
+  .messageBtn {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .profileDetails {
+    padding: 1rem;
+  }
+
+  .statsRow {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .pageTitle {
+    font-size: 1.3125rem;
+  }
+
+  .sectionTitle {
+    font-size: 1rem;
+  }
+
+  .backButton {
+    font-size: 0.8125rem;
+    padding: 0.5rem 0.875rem;
+  }
+
+  .notFound,
+  .emptyState {
+    padding: 2rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .detailsRow {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .statsRow {
+    gap: 0.75rem;
+  }
+
+  .statValue {
+    font-size: 1rem;
+  }
+
+  .statLabel {
+    font-size: 0.8125rem;
+  }
+}

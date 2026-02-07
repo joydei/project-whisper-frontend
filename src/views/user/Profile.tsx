@@ -77,6 +77,7 @@ const Profile = () => {
   };
   
   const [profilePicture, setProfilePicture] = useState<string | null>(null);
+  const [coverImage, setCoverImage] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     fullName: currentUser.name,
     username: currentUser.username,
@@ -155,6 +156,17 @@ const Profile = () => {
     }
   };
 
+  const handleCoverImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setCoverImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
 
 
   const handleSave = () => {
@@ -189,6 +201,26 @@ const Profile = () => {
             <div className={styles.leftColumn}>
               <Fade delay={100} duration={800} triggerOnce>
                 <div className={styles.profileCard}>
+                  {/* Cover Image Section */}
+                  <div className={styles.coverImageSection}>
+                    {coverImage ? (
+                      <img src={coverImage} alt="Cover" className={styles.coverImage} />
+                    ) : (
+                      <div className={styles.coverImagePlaceholder}></div>
+                    )}
+                    <label htmlFor="coverImageInput" className={styles.coverImageUpload}>
+                      <CameraIcon className={styles.coverCameraIcon} />
+                      <span>Change Cover</span>
+                    </label>
+                    <input
+                      id="coverImageInput"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleCoverImageChange}
+                      style={{ display: 'none' }}
+                    />
+                  </div>
+
                   <div className={styles.avatarSection}>
                     <div className={styles.avatarWrapper}>
                       <div className={styles.avatar}>

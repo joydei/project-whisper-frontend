@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Fade } from 'react-awesome-reveal';
 import { useUser } from '../context/UserContext';
 import { usePosts } from '../context/PostsContext';
@@ -39,6 +40,7 @@ interface PostFeedProps {
 const PostFeed = ({ posts }: PostFeedProps) => {
   const { currentUser } = useUser();
   const { likePost, addComment } = usePosts();
+  const navigate = useNavigate();
   const [likedPosts, setLikedPosts] = useState<Set<number>>(new Set());
   const [repostedPosts, setRepostedPosts] = useState<Set<number>>(new Set());
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
@@ -137,6 +139,13 @@ const PostFeed = ({ posts }: PostFeedProps) => {
 
   const handlePostClick = (post: Post) => {
     setSelectedPost(post);
+  };
+
+  const handleUserClick = (username: string | undefined, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (username) {
+      navigate(`/user/${username}`);
+    }
   };
 
   const handleCloseModal = () => {
@@ -611,7 +620,13 @@ const PostFeed = ({ posts }: PostFeedProps) => {
               <div className={styles.postHeader}>
                 <div className={styles.authorInfo}>
                   {post.type === 'user' ? (
-                    <div className={styles.userAvatar}>{post.author.avatar}</div>
+                    <div 
+                      className={styles.userAvatar}
+                      onClick={(e) => !post.anonymous && post.author.username ? handleUserClick(post.author.username, e) : undefined}
+                      style={{ cursor: !post.anonymous && post.author.username ? 'pointer' : 'default' }}
+                    >
+                      {post.author.avatar}
+                    </div>
                   ) : post.type === 'ad' && post.author.avatar ? (
                     <div className={styles.adAvatar}>
                       <img src={post.author.avatar} alt={post.author.name} className={styles.adAvatarImage} />
@@ -622,8 +637,17 @@ const PostFeed = ({ posts }: PostFeedProps) => {
                     </div>
                   )}
                   <div className={styles.authorDetails}>
-                    <div className={styles.authorName}>
-                      {post.author.name}
+                    <div className={styles.authorNameRow}>
+                      <span 
+                        className={styles.authorName}
+                        onClick={(e) => post.type === 'user' && !post.anonymous && post.author.username ? handleUserClick(post.author.username, e) : undefined}
+                        style={{ cursor: post.type === 'user' && !post.anonymous && post.author.username ? 'pointer' : 'default' }}
+                      >
+                        {post.author.name}
+                      </span>
+                      {post.type === 'user' && !post.anonymous && post.author.username && (
+                        <span className={styles.authorUsername}>@{post.author.username}</span>
+                      )}
                       {post.author.verified && (
                         <ShieldTrustIcon className={styles.verifiedBadge} />
                       )}
@@ -933,7 +957,13 @@ const PostFeed = ({ posts }: PostFeedProps) => {
               <div className={styles.postHeader}>
                 <div className={styles.authorInfo}>
                   {selectedPost.type === 'user' ? (
-                    <div className={styles.userAvatar}>{selectedPost.author.avatar}</div>
+                    <div 
+                      className={styles.userAvatar}
+                      onClick={(e) => !selectedPost.anonymous && selectedPost.author.username ? handleUserClick(selectedPost.author.username, e) : undefined}
+                      style={{ cursor: !selectedPost.anonymous && selectedPost.author.username ? 'pointer' : 'default' }}
+                    >
+                      {selectedPost.author.avatar}
+                    </div>
                   ) : selectedPost.type === 'ad' && selectedPost.author.avatar ? (
                     <div className={styles.adAvatar}>
                       <img src={selectedPost.author.avatar} alt={selectedPost.author.name} className={styles.adAvatarImage} />
@@ -944,8 +974,17 @@ const PostFeed = ({ posts }: PostFeedProps) => {
                     </div>
                   )}
                   <div className={styles.authorDetails}>
-                    <div className={styles.authorName}>
-                      {selectedPost.author.name}
+                    <div className={styles.authorNameRow}>
+                      <span 
+                        className={styles.authorName}
+                        onClick={(e) => selectedPost.type === 'user' && !selectedPost.anonymous && selectedPost.author.username ? handleUserClick(selectedPost.author.username, e) : undefined}
+                        style={{ cursor: selectedPost.type === 'user' && !selectedPost.anonymous && selectedPost.author.username ? 'pointer' : 'default' }}
+                      >
+                        {selectedPost.author.name}
+                      </span>
+                      {selectedPost.type === 'user' && !selectedPost.anonymous && selectedPost.author.username && (
+                        <span className={styles.authorUsername}>@{selectedPost.author.username}</span>
+                      )}
                       {selectedPost.author.verified && (
                         <ShieldTrustIcon className={styles.verifiedBadge} />
                       )}
