@@ -1,6 +1,3 @@
-/* Fibonacci Typography Scale - Base: 0.8125rem (13px) */
-/* 0.8125rem, 1rem, 1.3125rem, 2.125rem, 3.4375rem */
-
 .homePage {
   width: 100%;
   min-height: 100vh;
@@ -339,26 +336,6 @@
 
 .postStatus.inProgress .statusIcon {
   fill: #FF9800;
-}
-
-.postStatus.pending {
-  background-color: #D7E5FF;
-  color: #367DFF;
-  border: 1px solid #367DFF;
-}
-
-.postStatus.pending .statusIcon {
-  fill: #367DFF;
-}
-
-.postStatus.urgent {
-  background-color: #FFE5E5;
-  color: #E5402F;
-  border: 1px solid #E5402F;
-}
-
-.postStatus.urgent .statusIcon {
-  fill: #E5402F;
 }
 
 .postStatus.pending {
