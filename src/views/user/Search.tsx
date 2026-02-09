@@ -161,6 +161,31 @@ const Search = () => {
     { id: 'ministries', label: 'Ministries', icon: <GovernmentIcon />, count: searchResults.ministries.length },
   ];
 
+  // Get empty state content based on active filter
+  const getFilterEmptyState = () => {
+    const emptyStates: Record<FilterType, { icon: React.ReactNode; title: string; description: string }> = {
+      all: { icon: <SearchIcon className={styles.emptyIcon} />, title: 'No results found', description: 'Try different keywords or check your spelling' },
+      posts: { icon: <NewspaperIcon className={styles.emptyIcon} />, title: 'No posts found', description: `No posts match "${query}"` },
+      users: { icon: <CircleUserIcon className={styles.emptyIcon} />, title: 'No users found', description: `No users match "${query}"` },
+      municipalities: { icon: <BuildingIcon className={styles.emptyIcon} />, title: 'No municipalities found', description: `No municipalities match "${query}"` },
+      civil: { icon: <ShieldIcon className={styles.emptyIcon} />, title: 'No civil services found', description: `No civil services match "${query}"` },
+      ministries: { icon: <GovernmentIcon className={styles.emptyIcon} />, title: 'No ministries found', description: `No ministries match "${query}"` },
+    };
+    return emptyStates[activeFilter];
+  };
+
+  // Check if current filter has results
+  const currentFilterHasResults = () => {
+    switch (activeFilter) {
+      case 'posts': return searchResults.posts.length > 0;
+      case 'users': return searchResults.users.length > 0;
+      case 'municipalities': return searchResults.municipalities.length > 0;
+      case 'civil': return searchResults.civilServices.length > 0;
+      case 'ministries': return searchResults.ministries.length > 0;
+      default: return totalResults > 0;
+    }
+  };
+
   return (
     <div className={styles.searchPage}>
       {/* Search Header */}
@@ -212,11 +237,11 @@ const Search = () => {
               <h2>Search Aircho</h2>
               <p>Find posts, users, municipalities, civil services, and ministries</p>
             </div>
-          ) : totalResults === 0 ? (
+          ) : !currentFilterHasResults() ? (
             <div className={styles.emptyState}>
-              <SearchIcon className={styles.emptyIcon} />
-              <h2>No results found</h2>
-              <p>Try different keywords or check your spelling</p>
+              {getFilterEmptyState().icon}
+              <h2>{getFilterEmptyState().title}</h2>
+              <p>{getFilterEmptyState().description}</p>
             </div>
           ) : (
             <Fade cascade damping={0.05} triggerOnce>
