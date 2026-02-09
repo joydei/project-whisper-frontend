@@ -4,6 +4,7 @@ import styles from '../styles/components/Navbar.module.css';
 import { municipalityData } from '../data/municipalityData';
 import { civilServiceData } from '../data/civilServiceData';
 import { ministryData } from '../data/ministryData';
+import { municipalityPosts, ghanaPosts } from '../data/postsData';
 
 // Import SVG icons
 import HomeIcon from '../assets/icons/home.svg?react';
@@ -18,6 +19,23 @@ import ShieldIcon from '../assets/icons/shield-check.svg?react';
 import GovernmentIcon from '../assets/icons/government-flag.svg?react';
 import ShieldTrustIcon from '../assets/icons/shield-trust.svg?react';
 import ChevronRightIcon from '../assets/icons/angle-small-right.svg?react';
+import CircleUserIcon from '../assets/icons/circle-user.svg?react';
+
+// User type for search
+interface SearchUser {
+  name: string;
+  username: string;
+  avatar?: string;
+}
+
+// Get initials from name (e.g., "Joy Dei" -> "JD")
+const getInitials = (name: string): string => {
+  return name
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase())
+    .slice(0, 2)
+    .join('');
+};
 
 const Navbar = () => {
   const location = useLocation();
@@ -33,7 +51,25 @@ const Navbar = () => {
   // Search results
   const searchResults = useMemo(() => {
     const query = searchQuery.toLowerCase().trim();
-    if (!query || query.length < 2) return { municipalities: [], civilServices: [], ministries: [] };
+    if (!query || query.length < 2) return { users: [], municipalities: [], civilServices: [], ministries: [] };
+
+    // Extract unique users from posts
+    const allPosts = [...municipalityPosts, ...ghanaPosts];
+    const userMap = new Map<string, SearchUser>();
+    allPosts.forEach(post => {
+      if (post.type === 'user' && post.author.username) {
+        if (!userMap.has(post.author.username)) {
+          userMap.set(post.author.username, {
+            name: post.author.name,
+            username: post.author.username,
+            avatar: post.author.avatar
+          });
+        }
+      }
+    });
+    const users = Array.from(userMap.values())
+      .filter(u => u.name.toLowerCase().includes(query) || u.username.toLowerCase().includes(query))
+      .slice(0, 3);
 
     const municipalities = Object.values(municipalityData)
       .filter(m => m.name.toLowerCase().includes(query) || m.region.toLowerCase().includes(query))
@@ -47,10 +83,11 @@ const Navbar = () => {
       .filter(m => m.name.toLowerCase().includes(query) || m.abbreviation.toLowerCase().includes(query))
       .slice(0, 3);
 
-    return { municipalities, civilServices, ministries };
+    return { users, municipalities, civilServices, ministries };
   }, [searchQuery]);
 
-  const hasResults = searchResults.municipalities.length > 0 || 
+  const hasResults = searchResults.users.length > 0 ||
+                      searchResults.municipalities.length > 0 || 
                       searchResults.civilServices.length > 0 || 
                       searchResults.ministries.length > 0;
 
@@ -132,6 +169,31 @@ const Navbar = () => {
                 </div>
               ) : (
                 <>
+                  {/* Users */}
+                  {searchResults.users.length > 0 && (
+                    <div className={styles.dropdownSection}>
+                      <div className={styles.dropdownHeader}>
+                        <CircleUserIcon />
+                        <span>Users</span>
+                      </div>
+                      {searchResults.users.map(u => (
+                        <div 
+                          key={u.username} 
+                          className={styles.dropdownItem}
+                          onClick={() => handleResultClick(`/user/${u.username}`)}
+                        >
+                          <div className={styles.dropdownAvatar}>
+                            <span className={styles.dropdownInitials}>{getInitials(u.name)}</span>
+                          </div>
+                          <div className={styles.dropdownInfo}>
+                            <span className={styles.dropdownName}>{u.name}</span>
+                            <span className={styles.dropdownMeta}>@{u.username}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
                   {/* Municipalities */}
                   {searchResults.municipalities.length > 0 && (
                     <div className={styles.dropdownSection}>

@@ -35,9 +35,29 @@ import FlagIcon from '../assets/icons/flag.svg?react';
 
 interface PostFeedProps {
   posts: Post[];
+  highlightQuery?: string;
 }
 
-const PostFeed = ({ posts }: PostFeedProps) => {
+// Utility function to highlight matching text
+const highlightText = (text: string, query: string | undefined): React.ReactNode => {
+  if (!query || !query.trim()) return text;
+  
+  const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const regex = new RegExp(`(${escapedQuery})`, 'gi');
+  const parts = text.split(regex);
+  
+  return parts.map((part, index) => 
+    part.toLowerCase() === query.toLowerCase() ? (
+      <mark key={index} style={{ backgroundColor: '#fff3cd', fontWeight: 600, padding: '0 2px', borderRadius: '2px' }}>
+        {part}
+      </mark>
+    ) : (
+      part
+    )
+  );
+};
+
+const PostFeed = ({ posts, highlightQuery }: PostFeedProps) => {
   const { currentUser } = useUser();
   const { likePost, addComment } = usePosts();
   const navigate = useNavigate();
@@ -778,7 +798,7 @@ const PostFeed = ({ posts }: PostFeedProps) => {
                 ) : (
                   <>
                     <p className={`${styles.postText} ${shouldTruncate(post.content) && !expandedPosts.has(post.id) ? styles.postTextTruncated : ''}`}>
-                      {post.content}
+                      {highlightText(post.content, highlightQuery)}
                     </p>
                     {shouldTruncate(post.content) && (
                       <button 
@@ -1060,7 +1080,7 @@ const PostFeed = ({ posts }: PostFeedProps) => {
                 ) : (
                   <>
                     <p className={styles.postText}>
-                      {selectedPost.content}
+                      {highlightText(selectedPost.content, highlightQuery)}
                       {selectedPost.poll && <span className={styles.pollTag}><PollHIcon className={styles.pollTagIcon} /> Poll</span>}
                     </p>
                     {selectedPost.location && (

@@ -19,20 +19,45 @@ import UsersIcon from '../../assets/icons/users.svg?react';
 import XIcon from '../../assets/icons/cross-circle.svg?react';
 import ChevronRightIcon from '../../assets/icons/angle-small-right.svg?react';
 import ShieldTrustIcon from '../../assets/icons/shield-trust.svg?react';
+import CircleUserIcon from '../../assets/icons/circle-user.svg?react';
 
-type FilterType = 'all' | 'posts' | 'municipalities' | 'civil' | 'ministries';
+type FilterType = 'all' | 'posts' | 'users' | 'municipalities' | 'civil' | 'ministries';
+
+// User type for search results
+interface SearchUser {
+  name: string;
+  username: string;
+  avatar?: string;
+  postCount: number;
+}
+
+// Get initials from name (e.g., "Joy Dei" -> "JD")
+const getInitials = (name: string): string => {
+  return name
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase())
+    .slice(0, 2)
+    .join('');
+};
 
 const Search = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-  const initialQuery = searchParams.get('q') || '';
-  const initialFilter = (searchParams.get('filter') as FilterType) || 'all';
   
-  const [query, setQuery] = useState(initialQuery);
-  const [activeFilter, setActiveFilter] = useState<FilterType>(initialFilter);
-  const [inputValue, setInputValue] = useState(initialQuery);
+  const [query, setQuery] = useState(searchParams.get('q') || '');
+  const [activeFilter, setActiveFilter] = useState<FilterType>((searchParams.get('filter') as FilterType) || 'all');
+  const [inputValue, setInputValue] = useState(searchParams.get('q') || '');
 
-  // Update URL when filter changes
+  // Sync state with URL params when they change (e.g., from Navbar search)
+  useEffect(() => {
+    const urlQuery = searchParams.get('q') || '';
+    const urlFilter = (searchParams.get('filter') as FilterType) || 'all';
+    setQuery(urlQuery);
+    setInputValue(urlQuery);
+    setActiveFilter(urlFilter);
+  }, [searchParams]);
+
+  // Update URL when filter changes (but not query - query updates URL on submit)
   useEffect(() => {
     const params = new URLSearchParams();
     if (query) params.set('q', query);
@@ -43,10 +68,31 @@ const Search = () => {
   // Combined posts
   const allPosts = useMemo(() => [...municipalityPosts, ...ghanaPosts], []);
 
+  // Extract unique users from posts
+  const allUsers = useMemo(() => {
+    const userMap = new Map<string, SearchUser>();
+    allPosts.forEach(post => {
+      if (post.type === 'user' && post.author.username) {
+        const existing = userMap.get(post.author.username);
+        if (existing) {
+          existing.postCount++;
+        } else {
+          userMap.set(post.author.username, {
+            name: post.author.name,
+            username: post.author.username,
+            avatar: post.author.avatar,
+            postCount: 1
+          });
+        }
+      }
+    });
+    return Array.from(userMap.values());
+  }, [allPosts]);
+
   // Search results
   const searchResults = useMemo(() => {
     const lowerQuery = query.toLowerCase().trim();
-    if (!lowerQuery) return { posts: [], municipalities: [], civilServices: [], ministries: [] };
+    if (!lowerQuery) return { posts: [], users: [], municipalities: [], civilServices: [], ministries: [] };
 
     // Search posts
     const posts = allPosts.filter(post => 
@@ -54,6 +100,12 @@ const Search = () => {
       post.author.name.toLowerCase().includes(lowerQuery) ||
       post.category?.toLowerCase().includes(lowerQuery) ||
       post.location?.toLowerCase().includes(lowerQuery)
+    );
+
+    // Search users
+    const users = allUsers.filter(user =>
+      user.name.toLowerCase().includes(lowerQuery) ||
+      user.username.toLowerCase().includes(lowerQuery)
     );
 
     // Search municipalities
@@ -80,8 +132,8 @@ const Search = () => {
       m.services.some(s => s.toLowerCase().includes(lowerQuery))
     );
 
-    return { posts, municipalities, civilServices, ministries };
-  }, [query, allPosts]);
+    return { posts, users, municipalities, civilServices, ministries };
+  }, [query, allPosts, allUsers]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -95,6 +147,7 @@ const Search = () => {
 
   const totalResults = 
     searchResults.posts.length + 
+    searchResults.users.length +
     searchResults.municipalities.length + 
     searchResults.civilServices.length + 
     searchResults.ministries.length;
@@ -102,6 +155,7 @@ const Search = () => {
   const filters: { id: FilterType; label: string; icon: React.ReactNode; count: number }[] = [
     { id: 'all', label: 'All', icon: <FilterIcon />, count: totalResults },
     { id: 'posts', label: 'Posts', icon: <NewspaperIcon />, count: searchResults.posts.length },
+    { id: 'users', label: 'Users', icon: <CircleUserIcon />, count: searchResults.users.length },
     { id: 'municipalities', label: 'Municipalities', icon: <BuildingIcon />, count: searchResults.municipalities.length },
     { id: 'civil', label: 'Civil Services', icon: <ShieldIcon />, count: searchResults.civilServices.length },
     { id: 'ministries', label: 'Ministries', icon: <GovernmentIcon />, count: searchResults.ministries.length },
@@ -119,7 +173,7 @@ const Search = () => {
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                placeholder="Search posts, municipalities, civil services, ministries..."
+                placeholder="Search posts, users, municipalities, civil services, ministries..."
                 className={styles.searchInput}
                 autoFocus
               />
@@ -156,7 +210,7 @@ const Search = () => {
             <div className={styles.emptyState}>
               <SearchIcon className={styles.emptyIcon} />
               <h2>Search Aircho</h2>
-              <p>Find posts, municipalities, civil services, and ministries</p>
+              <p>Find posts, users, municipalities, civil services, and ministries</p>
             </div>
           ) : totalResults === 0 ? (
             <div className={styles.emptyState}>
@@ -269,6 +323,37 @@ const Search = () => {
                 </div>
               )}
 
+              {/* Users Results */}
+              {(activeFilter === 'all' || activeFilter === 'users') && 
+               searchResults.users.length > 0 && (
+                <div className={styles.resultSection}>
+                  <div className={styles.sectionHeader}>
+                    <CircleUserIcon className={styles.sectionIcon} />
+                    <h3>Users</h3>
+                    <span className={styles.resultCount}>{searchResults.users.length}</span>
+                  </div>
+                  <div className={styles.cardGrid}>
+                    {searchResults.users.map(user => (
+                      <div
+                        key={user.username}
+                        className={styles.resultCard}
+                        onClick={() => navigate(`/user/${user.username}`)}
+                      >
+                        <div className={styles.userAvatar}>
+                          <span className={styles.userInitials}>{getInitials(user.name)}</span>
+                        </div>
+                        <div className={styles.cardContent}>
+                          <h4>{user.name}</h4>
+                          <p className={styles.cardMeta}>@{user.username}</p>
+                          <p className={styles.cardDesc}>{user.postCount} post{user.postCount !== 1 ? 's' : ''}</p>
+                        </div>
+                        <ChevronRightIcon className={styles.cardArrow} />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {/* Posts Results */}
               {(activeFilter === 'all' || activeFilter === 'posts') && 
                searchResults.posts.length > 0 && (
@@ -279,7 +364,7 @@ const Search = () => {
                     <span className={styles.resultCount}>{searchResults.posts.length}</span>
                   </div>
                   <div className={styles.postsResults}>
-                    <PostFeed posts={searchResults.posts} />
+                    <PostFeed posts={searchResults.posts} highlightQuery={query} />
                   </div>
                 </div>
               )}

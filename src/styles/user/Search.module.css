@@ -278,6 +278,37 @@
   color: white;
 }
 
+.userAvatar {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background-color: var(--color-black);
+  overflow: hidden;
+}
+
+.userAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.userAvatar svg {
+  width: 2rem;
+  height: 2rem;
+  color: #999;
+}
+
+.userInitials {
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+}
+
 .cardContent {
   flex: 1;
   min-width: 0;
