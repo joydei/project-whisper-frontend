@@ -990,6 +990,83 @@
     padding: 0.5rem;
   }
 
+  /* Modal responsive */
+  .modalOverlay {
+    padding: 0;
+  }
+
+  .modalContent {
+    flex-direction: column;
+    height: 100vh;
+    max-height: 100vh;
+    max-width: 100%;
+    border-radius: 0;
+    overflow-y: auto;
+  }
+
+  .modalPost {
+    width: 100%;
+    height: auto;
+    max-height: none;
+    flex-shrink: 0;
+  }
+
+  .modalPost .postHeader {
+    padding: 1rem;
+  }
+
+  .modalPost .postContent {
+    padding: 1rem;
+  }
+
+  .modalPost .postImageWrapper {
+    max-height: 300px;
+    min-height: 150px;
+  }
+
+  .modalPost .postImage {
+    max-height: 300px;
+    object-fit: cover;
+  }
+
+  .modalPost.noImage .postContent {
+    max-height: none;
+    overflow: visible;
+  }
+
+  .modalRightColumn {
+    flex: 1;
+    height: auto;
+    max-height: none;
+    overflow: visible;
+    border-left: none;
+    border-top: 1px solid #e0e0e0;
+  }
+
+  .commentsSection {
+    padding: 1rem;
+  }
+
+  .commentsList {
+    max-height: none;
+  }
+
+  .tipsSection {
+    padding: 1rem;
+  }
+
+  .modalClose {
+    top: 0.5rem;
+    right: 0.5rem;
+    padding: 0.5rem;
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+
+  .closeIcon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
   .postFooter {
     flex-direction: column;
     gap: 1rem;
@@ -1106,51 +1183,51 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  padding: 1rem;
+  padding: 2rem;
   overflow-y: auto;
 }
 
 .modalContent {
   background-color: var(--color-white);
-  border-radius: 4px;
+  border-radius: 8px;
   max-width: 1100px;
   width: 100%;
-  max-height: 85vh;
+  max-height: 90vh;
   display: flex;
   position: relative;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   overflow: hidden;
 }
 
 .modalClose {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background-color: transparent;
+  top: 0.75rem;
+  right: 0.75rem;
+  background-color: rgba(0, 0, 0, 0.5);
   border: none;
   cursor: pointer;
   padding: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 2px;
+  border-radius: 50%;
   transition: background-color 0.2s ease;
   z-index: 10;
 }
 
 .modalClose:hover {
-  background-color: #f5f5f5;
+  background-color: rgba(0, 0, 0, 0.7);
 }
 
 .closeIcon {
-  width: 1.5rem;
-  height: 1.5rem;
-  fill: var(--color-black);
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: var(--color-white);
 }
 
 .modalPost {
@@ -1162,25 +1239,27 @@
   position: relative;
   flex-shrink: 0;
   overflow: hidden;
+  max-height: 90vh;
 }
 
 .modalPost .postHeader {
-  padding: 1.5rem;
+  padding: 1rem 1.25rem;
   background-color: var(--color-white);
   border-bottom: 1px solid #e0e0e0;
   flex-shrink: 0;
 }
 
 .modalPost .postContent {
-  padding: 1.5rem;
+  padding: 1rem 1.25rem;
   background-color: var(--color-white);
   flex-shrink: 0;
+  overflow-y: auto;
 }
 
 .modalPost.noImage .postContent {
   flex: 1;
   overflow-y: auto;
-  max-height: calc(50vh - 100px);
+  max-height: calc(90vh - 150px);
 }
 
 .modalPost .postImageWrapper {
@@ -1193,6 +1272,8 @@
   justify-content: center;
   background-color: #000;
   overflow: hidden;
+  max-height: 400px;
+  min-height: 200px;
 }
 
 .modalPost .postImage {
@@ -1206,8 +1287,9 @@
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  max-height: 85vh;
+  max-height: 90vh;
   background-color: var(--color-white);
+  border-left: 1px solid #e0e0e0;
 }
 
 /* Comments Section */

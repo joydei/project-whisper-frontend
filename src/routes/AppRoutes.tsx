@@ -16,6 +16,9 @@ import Notifications from '../views/user/Notifications';
 import Profile from '../views/user/Profile';
 import UserProfile from '../views/user/UserProfile';
 import Messages from '../views/user/Messages';
+import MunicipalityProfile from '../views/user/MunicipalityProfile';
+import CivilServiceProfile from '../views/user/CivilServiceProfile';
+import MinistryProfile from '../views/user/MinistryProfile';
 
 // Municipality Views
 import Dashboard from '../views/municipality/Dashboard';
@@ -40,6 +43,9 @@ const AppRoutes = () => {
         <Route path="notifications" element={<Notifications />} />
         <Route path="profile" element={<Profile />} />
         <Route path="user/:username" element={<UserProfile />} />
+        <Route path="municipality/:slug" element={<MunicipalityProfile />} />
+        <Route path="civil/:slug" element={<CivilServiceProfile />} />
+        <Route path="ministry/:slug" element={<MinistryProfile />} />
         <Route path="messages" element={<Messages />} />
         <Route path="messages/:username" element={<Messages />} />
       </Route>

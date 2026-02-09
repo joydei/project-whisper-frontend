@@ -210,7 +210,7 @@ const Profile = () => {
                     )}
                     <label htmlFor="coverImageInput" className={styles.coverImageUpload}>
                       <CameraIcon className={styles.coverCameraIcon} />
-                      <span>Change Cover</span>
+                      <span>{coverImage ? 'Change Cover' : 'Upload Cover Photo'}</span>
                     </label>
                     <input
                       id="coverImageInput"

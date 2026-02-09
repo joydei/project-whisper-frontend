@@ -5,7 +5,7 @@ import cokeAvatar from '../assets/pictures/images.png';
 
 export interface Post {
   id: number;
-  type: 'user' | 'municipality' | 'civil' | 'ad';
+  type: 'user' | 'municipality' | 'civil' | 'ministry' | 'ad';
   author: {
     name: string;
     username?: string;
@@ -294,9 +294,9 @@ export const municipalityPosts: Post[] = [
     id: 4,
     type: 'civil',
     author: {
-      name: 'Ghana Water Company Ltd',
+      name: 'Ghana Water Company',
       verified: true,
-      role: 'Civil Company',
+      role: 'Utility Provider',
       icon: 'water'
     },
     content: 'Scheduled Water Supply Interruption: We will be carrying out essential maintenance works on Friday, February 7th from 10:00 AM to 4:00 PM. Areas affected: Osu, Labone, East Legon, and surrounding communities. Water supply will be fully restored by 6:00 PM. We apologize for any inconvenience caused.',
@@ -316,7 +316,7 @@ export const municipalityPosts: Post[] = [
       name: 'Tema Metropolitan Assembly',
       verified: true,
       role: 'Municipality',
-      icon: 'sanitation'
+      icon: 'government'
     },
     content: 'New Waste Collection Schedule: Starting next week, waste collection will be done every Tuesday and Friday. Please have your bins ready by 6:00 AM on collection days. New collection trucks have been deployed to improve service efficiency. Let\'s keep our city clean!',
     category: 'Sanitation',
@@ -368,7 +368,7 @@ export const municipalityPosts: Post[] = [
     author: {
       name: 'Electricity Company of Ghana - Accra',
       verified: true,
-      role: 'Civil Company',
+      role: 'Utility Provider',
       icon: 'utility'
     },
     content: 'Power Restoration Complete: Power has been fully restored to all areas affected by yesterday\'s outage in the Greater Accra region. We sincerely apologize for the inconvenience caused. Our technical team continues to work on infrastructure upgrades to improve service reliability and prevent future occurrences.',
@@ -379,17 +379,220 @@ export const municipalityPosts: Post[] = [
     shares: 67,
     reposts: 45,
     commentsData: []
+  },
+  {
+    id: 32,
+    type: 'municipality',
+    author: {
+      name: 'Kumasi Metropolitan Assembly',
+      verified: true,
+      role: 'Municipality',
+      icon: 'government'
+    },
+    content: 'Kejetia Market Renovation Update: Phase 2 of the market renovation is now 80% complete. New stalls will be allocated to registered traders starting March 1st. The modern facility will include improved sanitation, fire safety systems, and covered walkways. Kumasi is growing!',
+    image: defaultImage,
+    category: 'Infrastructure',
+    time: '4 hours ago',
+    likes: 892,
+    comments: 156,
+    shares: 89,
+    reposts: 67,
+    status: 'in-progress',
+    commentsData: []
+  },
+  {
+    id: 33,
+    type: 'civil',
+    author: {
+      name: 'Ghana Police Service - Tema',
+      verified: true,
+      role: 'Emergency Services',
+      icon: 'police'
+    },
+    content: 'Port Security Enhanced: In collaboration with the Ghana Ports Authority, we have increased security measures at Tema Port. New screening equipment and additional personnel have been deployed. All commercial drivers must carry valid identification. 24/7 hotline: 191',
+    category: 'Security',
+    time: '5 hours ago',
+    likes: 456,
+    comments: 78,
+    shares: 45,
+    reposts: 34,
+    commentsData: []
+  },
+  {
+    id: 34,
+    type: 'civil',
+    author: {
+      name: 'Ghana Fire Service - Tema',
+      verified: true,
+      role: 'Emergency Services',
+      icon: 'fire'
+    },
+    content: 'Industrial Fire Prevention Training: All factories and warehouses in the Tema Industrial Area are required to participate in our mandatory fire safety training. Sessions start next Monday. Contact 192 to register your company. Safety first!',
+    time: '7 hours ago',
+    likes: 234,
+    comments: 45,
+    shares: 56,
+    reposts: 23,
+    commentsData: []
+  },
+  {
+    id: 35,
+    type: 'municipality',
+    author: {
+      name: 'Accra Metropolitan Assembly',
+      verified: true,
+      role: 'Municipality',
+      icon: 'government'
+    },
+    content: 'Building Permit Applications: We are now accepting online applications for building permits through our new digital portal. Processing time reduced from 3 weeks to 5 working days. Visit permits.ama.gov.gh to apply. Moving Accra forward!',
+    category: 'Services',
+    time: '8 hours ago',
+    likes: 345,
+    comments: 89,
+    shares: 67,
+    reposts: 45,
+    commentsData: []
+  },
+  {
+    id: 36,
+    type: 'civil',
+    author: {
+      name: 'Electricity Company of Ghana - Tema',
+      verified: true,
+      role: 'Utility Provider',
+      icon: 'utility'
+    },
+    content: 'Smart Meter Installation: We are rolling out smart meters to all residential customers in Tema. Installation is free and will allow you to monitor your electricity usage in real-time. Schedule your installation at ecgonline.info or call our helpline.',
+    category: 'Utilities',
+    time: '10 hours ago',
+    likes: 178,
+    comments: 67,
+    shares: 34,
+    reposts: 23,
+    commentsData: []
+  },
+  {
+    id: 37,
+    type: 'municipality',
+    author: {
+      name: 'Tema Metropolitan Assembly',
+      verified: true,
+      role: 'Municipality',
+      icon: 'government'
+    },
+    content: 'Community 1 Road Rehabilitation Complete! The 3km stretch from Community 1 to the Harbor has been fully resurfaced with new drainage systems. Traffic lights have been installed at major intersections. Thank you for your patience during construction.',
+    image: defaultImage,
+    category: 'Infrastructure',
+    time: '12 hours ago',
+    likes: 567,
+    comments: 123,
+    shares: 78,
+    reposts: 56,
+    status: 'resolved',
+    commentsData: []
+  },
+  {
+    id: 38,
+    type: 'civil',
+    author: {
+      name: 'Ghana Police Service - Kumasi',
+      verified: true,
+      role: 'Emergency Services',
+      icon: 'police'
+    },
+    content: 'Kejetia Market Security Update: Additional officers have been deployed to Kejetia and Central Market areas. Pickpocketing reports have decreased by 40% this month. Stay vigilant and report suspicious activities to 191. Your cooperation makes a difference!',
+    category: 'Security',
+    time: '6 hours ago',
+    likes: 678,
+    comments: 145,
+    shares: 89,
+    reposts: 67,
+    tipEnabled: true,
+    commentsData: []
+  },
+  {
+    id: 39,
+    type: 'civil',
+    author: {
+      name: 'Ghana Fire Service - Kumasi',
+      verified: true,
+      role: 'Emergency Services',
+      icon: 'fire'
+    },
+    content: 'Fire Outbreak Response: Our team successfully contained a fire at Adum commercial area this morning. No casualties reported. We urge all shop owners to ensure fire extinguishers are accessible and up to date. Prevention is better than cure!',
+    time: '3 hours ago',
+    likes: 456,
+    comments: 89,
+    shares: 67,
+    reposts: 45,
+    status: 'resolved',
+    commentsData: []
+  },
+  {
+    id: 40,
+    type: 'civil',
+    author: {
+      name: 'Electricity Company of Ghana - Kumasi',
+      verified: true,
+      role: 'Utility Provider',
+      icon: 'utility'
+    },
+    content: 'Scheduled Maintenance Notice: Power supply in Bantama, Adum, and Asafo areas will be interrupted on Saturday from 6 AM to 12 PM for essential transformer maintenance. We apologize for the inconvenience and appreciate your understanding.',
+    category: 'Utilities',
+    time: '9 hours ago',
+    likes: 234,
+    comments: 78,
+    shares: 45,
+    reposts: 34,
+    commentsData: []
+  },
+  {
+    id: 41,
+    type: 'municipality',
+    author: {
+      name: 'Kumasi Metropolitan Assembly',
+      verified: true,
+      role: 'Municipality',
+      icon: 'government'
+    },
+    content: 'Property Rate Payment Deadline: Reminder that property rates for 2026 are due by February 28th. Pay online at kma.gov.gh or visit any Zenith Bank branch. Early payment attracts a 5% discount. Avoid penalties - pay on time!',
+    category: 'Services',
+    time: '1 day ago',
+    likes: 123,
+    comments: 56,
+    shares: 34,
+    reposts: 23,
+    commentsData: []
+  },
+  {
+    id: 42,
+    type: 'civil',
+    author: {
+      name: 'National Ambulance Service',
+      verified: true,
+      role: 'Emergency Services',
+      icon: 'ambulance'
+    },
+    content: 'New Ambulance Station Opened: We have opened a new ambulance station in Madina to serve the La-Nkwantanang Municipality. Response time in the area reduced to under 10 minutes. For emergencies, dial 112. We are closer to you now!',
+    image: defaultImage,
+    category: 'Health',
+    time: '2 hours ago',
+    likes: 789,
+    comments: 134,
+    shares: 89,
+    reposts: 67,
+    commentsData: []
   }
 ];
 
 export const ghanaPosts: Post[] = [
   {
     id: 9,
-    type: 'municipality',
+    type: 'ministry',
     author: {
       name: 'Ministry of Roads and Highways',
       verified: true,
-      role: 'Government',
+      role: 'Ministry',
       icon: 'government'
     },
     content: 'National Road Safety Campaign Launched: The government has launched a nationwide campaign to promote road safety awareness. Over 500 billboards will be installed across all regions. The campaign includes free vehicle safety checks, driver education programs, and improved road signage. Drive safely, arrive safely!',
@@ -400,6 +603,24 @@ export const ghanaPosts: Post[] = [
     comments: 267,
     shares: 145,
     reposts: 89,
+    commentsData: []
+  },
+  {
+    id: 20,
+    type: 'ministry',
+    author: {
+      name: 'Ministry of Health',
+      verified: true,
+      role: 'Ministry',
+      icon: 'government'
+    },
+    content: 'National Health Insurance Scheme Update: Over 15 million Ghanaians are now registered under the NHIS. We have expanded coverage to include additional treatments and medications. Visit any NHIS office to register or renew your membership. Your health is our priority!',
+    category: 'Health',
+    time: '4 hours ago',
+    likes: 2156,
+    comments: 345,
+    shares: 189,
+    reposts: 112,
     commentsData: []
   },
   {
@@ -480,7 +701,7 @@ export const ghanaPosts: Post[] = [
     id: 14,
     type: 'civil',
     author: {
-      name: 'Ghana Police Service Headquarters',
+      name: 'Ghana Police Service',
       verified: true,
       role: 'Emergency Services',
       icon: 'police'
@@ -515,7 +736,7 @@ export const ghanaPosts: Post[] = [
     id: 16,
     type: 'civil',
     author: {
-      name: 'Ghana National Fire Service',
+      name: 'Ghana Fire Service',
       verified: true,
       role: 'Emergency Services',
       icon: 'fire'
@@ -618,6 +839,333 @@ export const ghanaPosts: Post[] = [
       duration: '3days',
       endsAt: new Date(Date.now() - 1 * 3600000).toISOString()
     },
+    commentsData: []
+  },
+  {
+    id: 43,
+    type: 'ministry',
+    author: {
+      name: 'Ministry of Finance',
+      verified: true,
+      role: 'Ministry',
+      icon: 'government'
+    },
+    content: '2026 Budget Highlights: The government has allocated GHS 15 billion for infrastructure development, GHS 8 billion for education, and GHS 6 billion for healthcare. Tax relief measures for small businesses have been introduced. Full budget document available at mofep.gov.gh',
+    category: 'Finance',
+    time: '1 hour ago',
+    likes: 3456,
+    comments: 567,
+    shares: 345,
+    reposts: 234,
+    commentsData: []
+  },
+  {
+    id: 44,
+    type: 'ministry',
+    author: {
+      name: 'Ministry of Energy',
+      verified: true,
+      role: 'Ministry',
+      icon: 'government'
+    },
+    content: 'Renewable Energy Initiative: Ghana is on track to generate 20% of electricity from renewable sources by 2027. Solar panel installation subsidies now available for residential homes. Apply at energy.gov.gh. Together, we build a sustainable future!',
+    image: defaultImage,
+    category: 'Energy',
+    time: '3 hours ago',
+    likes: 1890,
+    comments: 234,
+    shares: 178,
+    reposts: 123,
+    commentsData: []
+  },
+  {
+    id: 45,
+    type: 'ministry',
+    author: {
+      name: 'Ministry of Communications and Digitalisation',
+      verified: true,
+      role: 'Ministry',
+      icon: 'government'
+    },
+    content: 'Digital Ghana Agenda: Over 2,000 government services are now available online. The Ghana.Gov portal has processed over 5 million transactions. Free digital literacy training programs launching in all district capitals. Ghana is going digital!',
+    category: 'Technology',
+    time: '5 hours ago',
+    likes: 2345,
+    comments: 345,
+    shares: 234,
+    reposts: 156,
+    commentsData: []
+  },
+  {
+    id: 46,
+    type: 'ministry',
+    author: {
+      name: 'Ministry of Employment and Labour Relations',
+      verified: true,
+      role: 'Ministry',
+      icon: 'government'
+    },
+    content: 'Youth Employment Program: 50,000 new jobs created under the Nation Builders Corps (NABCO) extension. Graduates can apply through the NABCO portal. Skills training programs available in ICT, agriculture, and manufacturing sectors. Your future starts now!',
+    category: 'Employment',
+    time: '6 hours ago',
+    likes: 4567,
+    comments: 678,
+    shares: 456,
+    reposts: 345,
+    commentsData: []
+  },
+  {
+    id: 47,
+    type: 'ministry',
+    author: {
+      name: 'Ministry of Trade and Industry',
+      verified: true,
+      role: 'Ministry',
+      icon: 'government'
+    },
+    content: 'AfCFTA Update: Ghana continues to lead the African Continental Free Trade Area implementation. Export support grants now available for SMEs. Trade facilitation centers opened in Tema and Takoradi ports. Made in Ghana is going global!',
+    image: defaultImage,
+    category: 'Trade',
+    time: '8 hours ago',
+    likes: 1567,
+    comments: 234,
+    shares: 189,
+    reposts: 134,
+    commentsData: []
+  },
+  {
+    id: 48,
+    type: 'civil',
+    author: {
+      name: 'Electricity Company of Ghana',
+      verified: true,
+      role: 'Utility Provider',
+      icon: 'utility'
+    },
+    content: 'National Grid Expansion: We have completed the extension of high-voltage transmission lines to 150 additional communities. Over 500,000 households now have access to reliable electricity. Prepaid meter installation continues nationwide. Powering Ghana\'s progress!',
+    category: 'Utilities',
+    time: '7 hours ago',
+    likes: 1234,
+    comments: 345,
+    shares: 167,
+    reposts: 89,
+    commentsData: []
+  },
+  {
+    id: 49,
+    type: 'ministry',
+    author: {
+      name: 'Ministry of Education',
+      verified: true,
+      role: 'Ministry',
+      icon: 'government'
+    },
+    content: 'STEM Education Initiative: 500 new science laboratories to be built in senior high schools across all regions. Teacher training programs in robotics and coding underway. Ghana is preparing the next generation of innovators!',
+    category: 'Education',
+    time: '9 hours ago',
+    likes: 2890,
+    comments: 456,
+    shares: 345,
+    reposts: 234,
+    commentsData: []
+  },
+  {
+    id: 50,
+    type: 'civil',
+    author: {
+      name: 'Ghana Water Company',
+      verified: true,
+      role: 'Utility Provider',
+      icon: 'water'
+    },
+    content: 'Water for All Initiative: New treatment plants commissioned in Tamale, Sunyani, and Cape Coast. Water supply capacity increased by 40%. Pipe replacement project ongoing in Accra to reduce leakages. Clean water is a right, not a privilege!',
+    image: defaultImage,
+    category: 'Utilities',
+    time: '11 hours ago',
+    likes: 2345,
+    comments: 345,
+    shares: 234,
+    reposts: 167,
+    commentsData: []
+  },
+  {
+    id: 51,
+    type: 'ministry',
+    author: {
+      name: 'Ministry of Health',
+      verified: true,
+      role: 'Ministry',
+      icon: 'government'
+    },
+    content: 'Free Healthcare for Pregnant Women: All prenatal and postnatal care is now free at government hospitals nationwide. Over 100 new maternal health centers opened. Skilled midwives deployed to rural areas. Every mother deserves quality care!',
+    category: 'Health',
+    time: '1 day ago',
+    likes: 5678,
+    comments: 789,
+    shares: 567,
+    reposts: 456,
+    commentsData: []
+  },
+  {
+    id: 52,
+    type: 'user',
+    author: {
+      name: 'Yaw Frimpong',
+      username: 'yaw_frimpong',
+      avatar: 'YF'
+    },
+    content: 'Just registered my business online through the Registrar General portal. The whole process took less than 2 hours! This is the digital transformation we need. props to Ministry of Trade and Industry and Ministry of Communications. Ghana is moving forward! 🇬🇭',
+    location: 'Sunyani, Bono Region',
+    time: '4 hours ago',
+    likes: 567,
+    comments: 89,
+    shares: 45,
+    reposts: 34,
+    commentsData: []
+  },
+  {
+    id: 53,
+    type: 'civil',
+    author: {
+      name: 'Ghana Fire Service',
+      verified: true,
+      role: 'Emergency Services',
+      icon: 'fire'
+    },
+    content: 'Harmattan Fire Alert: The harmattan season brings increased fire risk. Clear dry vegetation around your property, store flammable materials safely, and never burn refuse near buildings. Our 192 hotline is available 24/7. Stay safe, Ghana!',
+    category: 'Safety',
+    time: '2 hours ago',
+    likes: 1456,
+    comments: 234,
+    shares: 345,
+    reposts: 189,
+    commentsData: []
+  },
+  {
+    id: 54,
+    type: 'ministry',
+    author: {
+      name: 'Ministry of Roads and Highways',
+      verified: true,
+      role: 'Ministry',
+      icon: 'government'
+    },
+    content: 'Year of Roads Update: 500km of new asphalt roads completed in the first quarter. The Accra-Takoradi Highway expansion is 60% complete. Bridge construction on Volta River progressing well. Connecting Ghana, one road at a time!',
+    image: defaultImage,
+    category: 'Infrastructure',
+    time: '10 hours ago',
+    likes: 3456,
+    comments: 456,
+    shares: 345,
+    reposts: 234,
+    commentsData: []
+  },
+  {
+    id: 55,
+    type: 'user',
+    author: {
+      name: 'Efua Mensah',
+      username: 'efua_mensah',
+      avatar: 'EM'
+    },
+    content: 'Thank you Ghana Police Service for the quick response when we reported a break-in attempt last night. Officers arrived within 8 minutes! Feeling much safer knowing help is just a call away. 191 works! 🚔',
+    location: 'Madina, Accra',
+    time: '5 hours ago',
+    likes: 890,
+    comments: 145,
+    shares: 78,
+    reposts: 56,
+    tipEnabled: true,
+    commentsData: []
+  },
+  {
+    id: 56,
+    type: 'civil',
+    author: {
+      name: 'Ghana Police Service',
+      verified: true,
+      role: 'Emergency Services',
+      icon: 'police'
+    },
+    content: 'Cybercrime Alert: Beware of fraudulent messages claiming you have won a lottery. Never share personal banking details online. Report suspected cyber fraud to our Cyber Crime Unit at 191. Stay vigilant, stay safe!',
+    category: 'Security',
+    time: '6 hours ago',
+    likes: 2345,
+    comments: 456,
+    shares: 567,
+    reposts: 345,
+    commentsData: []
+  },
+  {
+    id: 57,
+    type: 'ministry',
+    author: {
+      name: 'Ministry of Finance',
+      verified: true,
+      role: 'Ministry',
+      icon: 'government'
+    },
+    content: 'E-Levy Update: The revised Electronic Transfer Levy now exempts transactions below GHS 100 daily. Bank-to-bank transfers for personal use are exempt. Full guidelines available at gra.gov.gh. Building Ghana together!',
+    category: 'Finance',
+    time: '12 hours ago',
+    likes: 1234,
+    comments: 567,
+    shares: 345,
+    reposts: 234,
+    commentsData: []
+  },
+  {
+    id: 58,
+    type: 'civil',
+    author: {
+      name: 'Ghana National Ambulance Service',
+      verified: true,
+      role: 'Emergency Services',
+      icon: 'ambulance'
+    },
+    content: 'CPR Training Campaign: Free cardiopulmonary resuscitation (CPR) training sessions available at all regional hospitals this month. Learning CPR can save lives! Register at nas.gov.gh or call 112. Be a lifesaver!',
+    image: defaultImage,
+    category: 'Health',
+    time: '8 hours ago',
+    likes: 1567,
+    comments: 234,
+    shares: 189,
+    reposts: 145,
+    commentsData: []
+  },
+  {
+    id: 59,
+    type: 'user',
+    author: {
+      name: 'Kofi Asare',
+      username: 'kofi_asare',
+      avatar: 'KA'
+    },
+    content: 'Solar panels installed on my roof thanks to the Ministry of Energy subsidy program! My electricity bill dropped by 70%. The application process was smooth. Highly recommend this to all homeowners. Go green! ☀️🌱',
+    location: 'East Legon, Accra',
+    time: '1 day ago',
+    likes: 1234,
+    comments: 189,
+    shares: 134,
+    reposts: 89,
+    commentsData: []
+  },
+  {
+    id: 60,
+    type: 'ministry',
+    author: {
+      name: 'Ministry of Energy',
+      verified: true,
+      role: 'Ministry',
+      icon: 'government'
+    },
+    content: 'LPG Promotion Policy: Subsidized gas cylinders and cookers available through registered dealers. Exchange your charcoal stove for a gas cooker at 50% discount. Reducing deforestation while improving household cooking. Clean energy for all!',
+    category: 'Energy',
+    time: '1 day ago',
+    likes: 3456,
+    comments: 567,
+    shares: 456,
+    reposts: 345,
     commentsData: []
   }
 ];

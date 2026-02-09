@@ -290,11 +290,6 @@ const Messages = () => {
             <div className={styles.headerContent}>
               <div>
                 <h1 className={styles.pageTitle}>Messages</h1>
-                <p className={styles.pageSubtitle}>
-                  {totalUnread > 0
-                    ? `${totalUnread} unread message${totalUnread > 1 ? 's' : ''}`
-                    : 'All caught up'}
-                </p>
               </div>
               <div className={styles.headerStats}>
                 <div className={styles.statBadge}>

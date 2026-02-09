@@ -94,8 +94,11 @@ const PostFeed = ({ posts }: PostFeedProps) => {
   const handleLike = (postId: number) => {
     setLikedPosts(prev => {
       const newSet = new Set(prev);
-      if (!newSet.has(postId)) {
-        // Only increment if not already liked
+      if (newSet.has(postId)) {
+        // Unlike - remove from liked set
+        newSet.delete(postId);
+      } else {
+        // Like - add to liked set
         newSet.add(postId);
         // Update in context for real-time sync across components
         likePost(postId);
@@ -145,6 +148,28 @@ const PostFeed = ({ posts }: PostFeedProps) => {
     e.stopPropagation();
     if (username) {
       navigate(`/user/${username}`);
+    }
+  };
+
+  const handleOrganizationClick = (post: Post, e: React.MouseEvent) => {
+    e.stopPropagation();
+    
+    const name = post.author.name;
+    
+    // Generate slug from the full name (preserving location for local branches)
+    // e.g., "Ghana Police Service - Accra Division" -> "ghana-police-service-accra-division"
+    const slug = name
+      .toLowerCase()
+      .replace(/\s+-\s+/g, '-') // Replace " - " with just "-"
+      .replace(/\s+/g, '-')
+      .replace(/[^a-z0-9-]/g, '');
+    
+    if (post.type === 'municipality') {
+      navigate(`/municipality/${slug}`);
+    } else if (post.type === 'civil') {
+      navigate(`/civil/${slug}`);
+    } else if (post.type === 'ministry') {
+      navigate(`/ministry/${slug}`);
     }
   };
 
@@ -632,7 +657,11 @@ const PostFeed = ({ posts }: PostFeedProps) => {
                       <img src={post.author.avatar} alt={post.author.name} className={styles.adAvatarImage} />
                     </div>
                   ) : (
-                    <div className={styles.officialAvatar}>
+                    <div 
+                      className={styles.officialAvatar}
+                      onClick={(e) => (post.type === 'municipality' || post.type === 'civil' || post.type === 'ministry') ? handleOrganizationClick(post, e) : undefined}
+                      style={{ cursor: (post.type === 'municipality' || post.type === 'civil' || post.type === 'ministry') ? 'pointer' : 'default' }}
+                    >
                       {getAuthorIcon(post.author.icon)}
                     </div>
                   )}
@@ -640,8 +669,19 @@ const PostFeed = ({ posts }: PostFeedProps) => {
                     <div className={styles.authorNameRow}>
                       <span 
                         className={styles.authorName}
-                        onClick={(e) => post.type === 'user' && !post.anonymous && post.author.username ? handleUserClick(post.author.username, e) : undefined}
-                        style={{ cursor: post.type === 'user' && !post.anonymous && post.author.username ? 'pointer' : 'default' }}
+                        onClick={(e) => {
+                          if (post.type === 'user' && !post.anonymous && post.author.username) {
+                            handleUserClick(post.author.username, e);
+                          } else if (post.type === 'municipality' || post.type === 'civil' || post.type === 'ministry') {
+                            handleOrganizationClick(post, e);
+                          }
+                        }}
+                        style={{ 
+                          cursor: (post.type === 'user' && !post.anonymous && post.author.username) || 
+                                  post.type === 'municipality' || post.type === 'civil' || post.type === 'ministry'
+                            ? 'pointer' 
+                            : 'default' 
+                        }}
                       >
                         {post.author.name}
                       </span>
@@ -969,7 +1009,11 @@ const PostFeed = ({ posts }: PostFeedProps) => {
                       <img src={selectedPost.author.avatar} alt={selectedPost.author.name} className={styles.adAvatarImage} />
                     </div>
                   ) : (
-                    <div className={styles.officialAvatar}>
+                    <div 
+                      className={styles.officialAvatar}
+                      onClick={(e) => (selectedPost.type === 'municipality' || selectedPost.type === 'civil' || selectedPost.type === 'ministry') ? handleOrganizationClick(selectedPost, e) : undefined}
+                      style={{ cursor: (selectedPost.type === 'municipality' || selectedPost.type === 'civil' || selectedPost.type === 'ministry') ? 'pointer' : 'default' }}
+                    >
                       {getAuthorIcon(selectedPost.author.icon)}
                     </div>
                   )}
@@ -977,8 +1021,19 @@ const PostFeed = ({ posts }: PostFeedProps) => {
                     <div className={styles.authorNameRow}>
                       <span 
                         className={styles.authorName}
-                        onClick={(e) => selectedPost.type === 'user' && !selectedPost.anonymous && selectedPost.author.username ? handleUserClick(selectedPost.author.username, e) : undefined}
-                        style={{ cursor: selectedPost.type === 'user' && !selectedPost.anonymous && selectedPost.author.username ? 'pointer' : 'default' }}
+                        onClick={(e) => {
+                          if (selectedPost.type === 'user' && !selectedPost.anonymous && selectedPost.author.username) {
+                            handleUserClick(selectedPost.author.username, e);
+                          } else if (selectedPost.type === 'municipality' || selectedPost.type === 'civil' || selectedPost.type === 'ministry') {
+                            handleOrganizationClick(selectedPost, e);
+                          }
+                        }}
+                        style={{ 
+                          cursor: (selectedPost.type === 'user' && !selectedPost.anonymous && selectedPost.author.username) || 
+                                  selectedPost.type === 'municipality' || selectedPost.type === 'civil' || selectedPost.type === 'ministry'
+                            ? 'pointer' 
+                            : 'default' 
+                        }}
                       >
                         {selectedPost.author.name}
                       </span>
