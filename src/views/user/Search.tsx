@@ -15,7 +15,6 @@ import GovernmentIcon from '../../assets/icons/government-flag.svg?react';
 import ShieldIcon from '../../assets/icons/shield-check.svg?react';
 import BuildingIcon from '../../assets/icons/building.svg?react';
 import NewspaperIcon from '../../assets/icons/newspaper.svg?react';
-import UsersIcon from '../../assets/icons/users.svg?react';
 import XIcon from '../../assets/icons/cross-circle.svg?react';
 import ChevronRightIcon from '../../assets/icons/angle-small-right.svg?react';
 import ShieldTrustIcon from '../../assets/icons/shield-trust.svg?react';
