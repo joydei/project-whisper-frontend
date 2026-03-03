@@ -7,6 +7,7 @@ import CivilLayout from '../layouts/CivilLayout';
 
 // Public Views
 import Login from '../views/public/Login';
+import Signup from '../views/public/Signup';
 
 // User Views
 import Home from '../views/user/Home';
@@ -34,6 +35,7 @@ const AppRoutes = () => {
       {/* Public Routes */}
       <Route path="/" element={<BaseLayout />}>
         <Route path="login" element={<Login />} />
+        <Route path="signup" element={<Signup />} />
       </Route>
 
       {/* User Routes */}

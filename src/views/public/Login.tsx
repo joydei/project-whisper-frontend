@@ -45,7 +45,7 @@ const Login = () => {
   };
 
   const roles: RoleOption[] = [
-    { value: 'user',         label: 'Citizen',        icon: UserCheckIcon,  description: 'Report issues & follow updates'   },
+    { value: 'user',         label: 'User',           icon: UserCheckIcon,  description: 'Report issues & follow updates'   },
     { value: 'municipality', label: 'Municipality',   icon: GovernmentIcon, description: 'Manage reports & services'         },
     { value: 'civil',        label: 'Civil Services', icon: SirenIcon,      description: 'Emergency response management'     },
     { value: 'admin',        label: 'Admin',          icon: SettingsIcon,   description: 'System administration'             },
@@ -119,7 +119,7 @@ const Login = () => {
             <div className={styles.divider} />
 
             {/* Form */}
-            <p className={styles.formHeading}>Sign in</p>
+            <p className={styles.formHeading}>Log in</p>
             <p className={styles.formSubheading}>Welcome back — log in as {selectedRoleLabel}</p>
 
             <form className={styles.loginForm} onSubmit={handleLogin}>
@@ -192,7 +192,7 @@ const Login = () => {
             </form>
 
             <div className={styles.signupPrompt}>
-              <p>Don't have an account? <a href="#" className={styles.signupLink}>Sign Up</a></p>
+              <p>Don't have an account? <a href="/signup" className={styles.signupLink}>Sign Up</a></p>
             </div>
           </div>
         </Fade>
