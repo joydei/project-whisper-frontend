@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Fade, Slide } from 'react-awesome-reveal';
+import { Fade } from 'react-awesome-reveal';
 import styles from '../../styles/public/Login.module.css';
 
 // Import SVG icons
@@ -20,7 +20,6 @@ interface RoleOption {
   label: string;
   icon: React.FC<React.SVGProps<SVGSVGElement>>;
   description: string;
-  gradient: string;
 }
 
 const Login = () => {
@@ -35,187 +34,168 @@ const Login = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    
-    // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    // Navigate based on selected role
     switch (selectedRole) {
-      case 'user':
-        navigate('/');
-        break;
-      case 'municipality':
-        navigate('/municipality/dashboard');
-        break;
-      case 'civil':
-        navigate('/civil/dashboard');
-        break;
-      case 'admin':
-        navigate('/admin/dashboard');
-        break;
+      case 'user':        navigate('/'); break;
+      case 'municipality': navigate('/municipality/dashboard'); break;
+      case 'civil':       navigate('/civil/dashboard'); break;
+      case 'admin':       navigate('/admin/dashboard'); break;
     }
-    
     setIsLoading(false);
   };
 
   const roles: RoleOption[] = [
-    { 
-      value: 'user', 
-      label: 'Citizen', 
-      icon: UserCheckIcon, 
-      description: 'Report issues to your municipality',
-      gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-    },
-    { 
-      value: 'municipality', 
-      label: 'Municipality', 
-      icon: GovernmentIcon, 
-      description: 'Manage reports and services',
-      gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
-    },
-    { 
-      value: 'civil', 
-      label: 'Civil Services', 
-      icon: SirenIcon, 
-      description: 'Emergency response management',
-      gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'
-    },
-    { 
-      value: 'admin', 
-      label: 'Admin', 
-      icon: SettingsIcon, 
-      description: 'System administration',
-      gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)'
-    },
+    { value: 'user',         label: 'Citizen',        icon: UserCheckIcon,  description: 'Report issues & follow updates'   },
+    { value: 'municipality', label: 'Municipality',   icon: GovernmentIcon, description: 'Manage reports & services'         },
+    { value: 'civil',        label: 'Civil Services', icon: SirenIcon,      description: 'Emergency response management'     },
+    { value: 'admin',        label: 'Admin',          icon: SettingsIcon,   description: 'System administration'             },
   ];
+
+  const selectedRoleLabel = roles.find(r => r.value === selectedRole)?.label ?? '';
 
   return (
     <div className={styles.loginPage}>
-      <div className={styles.container}>
-        <Fade duration={800} triggerOnce>
+      {/* ── Left branding panel (desktop only) ── */}
+      <div className={styles.leftPanel}>
+        <div className={styles.brandBlock}>
+          <h1 className={styles.brandName}>Aircho</h1>
+          <p className={styles.brandTagline}>Connecting Communities with Services</p>
+        </div>
+
+        <ul className={styles.featureList}>
+          <li className={styles.featureItem}>
+            <span className={styles.featureDot} />
+            <p><strong>Report Issues</strong>Submit infrastructure, safety, and service concerns directly to your municipality.</p>
+          </li>
+          <li className={styles.featureItem}>
+            <span className={styles.featureDot} />
+            <p><strong>Track Progress</strong>Follow your reports in real time and get notified when they are resolved.</p>
+          </li>
+          <li className={styles.featureItem}>
+            <span className={styles.featureDot} />
+            <p><strong>Engage Locally</strong>Read updates from civil services and government entities in your area.</p>
+          </li>
+        </ul>
+
+        <p className={styles.leftFooter}>© {new Date().getFullYear()} Aircho · Ghana</p>
+      </div>
+
+      {/* ── Right form panel ── */}
+      <div className={styles.rightPanel}>
+        <Fade duration={500} triggerOnce>
           <div className={styles.loginCard}>
-            {/* Header */}
-            <div className={styles.header}>
-              <h1 className={styles.logo}>Aircho</h1>
-              <p className={styles.tagline}>Connecting Communities with Services</p>
+            {/* Mobile-only brand */}
+            <div className={styles.mobileBrand}>
+              <h1>Aircho</h1>
+              <p>Connecting Communities with Services</p>
             </div>
 
-            {/* Role Selection */}
-            <Slide direction="up" duration={600} delay={200} triggerOnce>
-              <div className={styles.roleSelector}>
-                <h2 className={styles.sectionTitle}>Select Your Role</h2>
-                <div className={styles.rolesGrid}>
-                  {roles.map((role) => {
-                    const RoleIcon = role.icon;
-                    return (
-                      <button
-                        key={role.value}
-                        type="button"
-                        className={`${styles.roleCard} ${selectedRole === role.value ? styles.active : ''}`}
-                        onClick={() => setSelectedRole(role.value)}
-                      >
-                        <div className={styles.roleIconWrapper}>
-                          <RoleIcon className={styles.roleIcon} />
-                        </div>
+            {/* Role selector */}
+            <div className={styles.roleSelector}>
+              <p className={styles.sectionTitle}>Select your role</p>
+              <div className={styles.rolesGrid}>
+                {roles.map(role => {
+                  const RoleIcon = role.icon;
+                  return (
+                    <button
+                      key={role.value}
+                      type="button"
+                      className={`${styles.roleCard} ${selectedRole === role.value ? styles.active : ''}`}
+                      onClick={() => setSelectedRole(role.value)}
+                    >
+                      <div className={styles.roleIconWrapper}>
+                        <RoleIcon className={styles.roleIcon} />
+                      </div>
+                      <div className={styles.roleText}>
                         <span className={styles.roleLabel}>{role.label}</span>
                         <span className={styles.roleDescription}>{role.description}</span>
-                      </button>
-                    );
-                  })}
-                </div>
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
-            </Slide>
+            </div>
 
-            {/* Login Form */}
-            <Slide direction="up" duration={600} delay={400} triggerOnce>
-              <form className={styles.loginForm} onSubmit={handleLogin}>
-                <div className={styles.formGroup}>
-                  <label htmlFor="email" className={styles.label}>
-                    <EnvelopeIcon className={styles.labelIcon} />
-                    Email Address
-                  </label>
+            <div className={styles.divider} />
+
+            {/* Form */}
+            <p className={styles.formHeading}>Sign in</p>
+            <p className={styles.formSubheading}>Welcome back — log in as {selectedRoleLabel}</p>
+
+            <form className={styles.loginForm} onSubmit={handleLogin}>
+              <div className={styles.formGroup}>
+                <label htmlFor="email" className={styles.label}>
+                  <EnvelopeIcon className={styles.labelIcon} />
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  className={styles.input}
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label htmlFor="password" className={styles.label}>
+                  <KeyIcon className={styles.labelIcon} />
+                  Password
+                </label>
+                <div className={styles.passwordWrapper}>
                   <input
-                    type="email"
-                    id="email"
+                    type={showPassword ? 'text' : 'password'}
+                    id="password"
                     className={styles.input}
-                    placeholder="Enter your email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your password"
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
                     required
                   />
+                  <button
+                    type="button"
+                    className={styles.togglePassword}
+                    onClick={() => setShowPassword(!showPassword)}
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  >
+                    <EyeIcon className={styles.eyeIcon} />
+                  </button>
                 </div>
-
-                <div className={styles.formGroup}>
-                  <label htmlFor="password" className={styles.label}>
-                    <KeyIcon className={styles.labelIcon} />
-                    Password
-                  </label>
-                  <div className={styles.passwordWrapper}>
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      id="password"
-                      className={styles.input}
-                      placeholder="Enter your password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                    />
-                    <button
-                      type="button"
-                      className={styles.togglePassword}
-                      onClick={() => setShowPassword(!showPassword)}
-                      aria-label={showPassword ? "Hide password" : "Show password"}
-                    >
-                      <EyeIcon className={styles.eyeIcon} />
-                    </button>
-                  </div>
-                </div>
-
-                <div className={styles.formOptions}>
-                  <label className={styles.checkboxLabel}>
-                    <input
-                      type="checkbox"
-                      checked={rememberMe}
-                      onChange={(e) => setRememberMe(e.target.checked)}
-                    />
-                    <span>Remember me</span>
-                  </label>
-                  <a href="#" className={styles.forgotPassword}>Forgot Password?</a>
-                </div>
-
-                <button 
-                  type="submit" 
-                  className={styles.loginBtn}
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
-                    <span className={styles.loadingText}>Logging in...</span>
-                  ) : (
-                    <>
-                      <span>Login as {roles.find(r => r.value === selectedRole)?.label}</span>
-                      <AngleRightIcon className={styles.btnIcon} />
-                    </>
-                  )}
-                </button>
-              </form>
-            </Slide>
-
-            {/* Signup Prompt */}
-            <Fade duration={600} delay={600} triggerOnce>
-              <div className={styles.signupPrompt}>
-                <p>Don't have an account? <a href="#" className={styles.signupLink}>Sign Up</a></p>
               </div>
-            </Fade>
+
+              <div className={styles.formOptions}>
+                <label className={styles.checkboxLabel}>
+                  <input
+                    type="checkbox"
+                    checked={rememberMe}
+                    onChange={e => setRememberMe(e.target.checked)}
+                  />
+                  <span>Remember me</span>
+                </label>
+                <a href="#" className={styles.forgotPassword}>Forgot Password?</a>
+              </div>
+
+              <button type="submit" className={styles.loginBtn} disabled={isLoading}>
+                {isLoading ? (
+                  <span className={styles.loadingDots}>
+                    <span /><span /><span />
+                  </span>
+                ) : (
+                  <>
+                    <span>Continue as {selectedRoleLabel}</span>
+                    <AngleRightIcon className={styles.btnIcon} />
+                  </>
+                )}
+              </button>
+            </form>
+
+            <div className={styles.signupPrompt}>
+              <p>Don't have an account? <a href="#" className={styles.signupLink}>Sign Up</a></p>
+            </div>
           </div>
         </Fade>
-
-        {/* Decorative Background Elements */}
-        <div className={styles.backgroundDecor}>
-          <div className={styles.decorCircle} style={{ top: '10%', left: '5%' }}></div>
-          <div className={styles.decorCircle} style={{ bottom: '15%', right: '8%' }}></div>
-          <div className={styles.decorSquare} style={{ top: '60%', left: '10%' }}></div>
-          <div className={styles.decorSquare} style={{ top: '20%', right: '12%' }}></div>
-        </div>
       </div>
     </div>
   );

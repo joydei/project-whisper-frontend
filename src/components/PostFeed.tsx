@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Fade } from 'react-awesome-reveal';
 import { useUser } from '../context/UserContext';
 import { usePosts } from '../context/PostsContext';
-import styles from '../styles/user/Home.module.css';
+import styles from '../styles/components/PostFeed.module.css';
 import type { Post } from '../data/postsData';
 
 // Import SVG icons

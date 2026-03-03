@@ -32,6 +32,7 @@ import FireStationIcon from '../../assets/icons/fire-station.svg?react';
 import AmbulanceIcon from '../../assets/icons/ambulance.svg?react';
 import RaindropsIcon from '../../assets/icons/raindrops.svg?react';
 import ScrollDocumentIcon from '../../assets/icons/scroll-document-story.svg?react';
+import ClockIcon from '../../assets/icons/clock-three.svg?react';
 
 // Icon mapper for different civil services
 const serviceIcons: Record<string, React.FC<React.SVGProps<SVGSVGElement>>> = {
