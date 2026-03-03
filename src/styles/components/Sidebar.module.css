@@ -133,3 +133,25 @@
     font-size: 0.8125rem;
   }
 }
+
+/* ── Dark mode ──────────────────────────────────────────── */
+/* Sidebar is already black — adjust dividers and hover bg to
+   be distinguishable from the page background in dark mode */
+
+:global([data-theme="dark"]) .sidebar {
+  background-color: #080808;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.8);
+}
+
+:global([data-theme="dark"]) .logo {
+  border-bottom-color: #161616;
+}
+
+:global([data-theme="dark"]) .sidebarFooter {
+  border-top-color: #161616;
+}
+
+:global([data-theme="dark"]) .navLink:hover,
+:global([data-theme="dark"]) .navLink.active {
+  background-color: #141414;
+}

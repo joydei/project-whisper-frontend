@@ -2,8 +2,12 @@ import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import styles from "../styles/components/Topbar.module.css";
 import logo from "../assets/imaginary-station.png";
+import { useTheme } from "../context/ThemeContext";
+import LightbulbIcon from "../assets/icons/lightbulb-on.svg?react";
+import MoonStarsIcon from "../assets/icons/moon-stars.svg?react";
 
 const TopBar = () => {
+  const { theme, toggleTheme } = useTheme();
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState('English');
   const dropdownRef = useRef<HTMLLIElement>(null);
@@ -83,6 +87,20 @@ const TopBar = () => {
               ))}
             </div>
           )}
+        </li>
+        <li>
+          <button
+            className={styles.themeToggle}
+            onClick={toggleTheme}
+            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            title={theme === 'dark' ? 'Light mode' : 'Dark mode'}
+          >
+            {theme === 'dark' ? (
+              <LightbulbIcon className={styles.themeIcon} />
+            ) : (
+              <MoonStarsIcon className={styles.themeIcon} />
+            )}
+          </button>
         </li>
       </ul>
     </div>

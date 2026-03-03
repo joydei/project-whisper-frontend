@@ -11,3 +11,8 @@
   flex: 1;
   width: 100%;
 }
+
+/* ── Dark mode ──────────────────────────────── */
+:global([data-theme="dark"]) .userLayout {
+  background-color: #0d0d0d;
+}

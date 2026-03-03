@@ -784,6 +784,53 @@
   border-color: var(--color-black);
 }
 
+/* Theme Pill Toggle */
+.themePill {
+  display: flex;
+  gap: 0;
+  border: 1.5px solid var(--color-black);
+  border-radius: 2px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.themePillOption {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: none;
+  font-size: 0.8125rem;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  color: var(--color-gray-medium);
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  line-height: 1;
+}
+
+.themePillOption:first-child {
+  border-right: 1.5px solid var(--color-black);
+}
+
+.themePillOption:hover {
+  background-color: var(--color-gray-light);
+  color: var(--color-black);
+}
+
+.themePillOption.themePillActive {
+  background-color: var(--color-black);
+  color: var(--color-white);
+}
+
+.themePillIcon {
+  width: 0.875rem;
+  height: 0.875rem;
+  fill: currentColor;
+  flex-shrink: 0;
+}
+
 /* Modal Styles */
 .modalOverlay {
   position: fixed;
@@ -1237,4 +1284,198 @@ body:has(.modalOverlay) {
   width: 12px;
   height: 12px;
   fill: currentColor;
+}
+
+/* ─── Dark Mode ───────────────────────────────────────────── */
+:global([data-theme="dark"]) .profilePage {
+  background-color: var(--dm-bg-page);
+}
+
+:global([data-theme="dark"]) .profileCard,
+:global([data-theme="dark"]) .tabs,
+:global([data-theme="dark"]) .section,
+:global([data-theme="dark"]) .modalContent {
+  background-color: var(--dm-bg-surface);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* Text overrides */
+:global([data-theme="dark"]) .userName,
+:global([data-theme="dark"]) .sectionTitle,
+:global([data-theme="dark"]) .settingTitle,
+:global([data-theme="dark"]) .formLabel,
+:global([data-theme="dark"]) .infoValue,
+:global([data-theme="dark"]) .statValue,
+:global([data-theme="dark"]) .quickStatValue,
+:global([data-theme="dark"]) .activityAction,
+:global([data-theme="dark"]) .actionTitle,
+:global([data-theme="dark"]) .reportId,
+:global([data-theme="dark"]) .modalTitle {
+  color: var(--dm-text-primary);
+}
+
+:global([data-theme="dark"]) .memberSince,
+:global([data-theme="dark"]) .activityTitle,
+:global([data-theme="dark"]) .reportContent p,
+:global([data-theme="dark"]) .locationBadge,
+:global([data-theme="dark"]) .modalMessage {
+  color: var(--dm-text-secondary);
+}
+
+/* Borders */
+:global([data-theme="dark"]) .avatarSection {
+  border-bottom-color: var(--dm-border);
+}
+
+:global([data-theme="dark"]) .statsGrid {
+  border-bottom-color: var(--dm-border);
+}
+
+:global([data-theme="dark"]) .settingItem {
+  border-bottom-color: var(--dm-border);
+}
+
+/* Light-background blocks → dark */
+:global([data-theme="dark"]) .statCard,
+:global([data-theme="dark"]) .infoItem,
+:global([data-theme="dark"]) .activityItem,
+:global([data-theme="dark"]) .actionBtn,
+:global([data-theme="dark"]) .actionBtnDanger {
+  background-color: var(--dm-bg-hover);
+  border-color: var(--dm-border);
+}
+
+:global([data-theme="dark"]) .activityItem:hover {
+  background-color: #1e1e1e;
+}
+
+:global([data-theme="dark"]) .statCard:hover {
+  background-color: #e8e8e8;
+}
+
+:global([data-theme="dark"]) .tab {
+  border-color: var(--dm-border);
+  color: var(--dm-text-secondary);
+}
+
+:global([data-theme="dark"]) .tab:hover {
+  background-color: var(--dm-bg-hover);
+  border-color: var(--dm-text-primary);
+}
+
+:global([data-theme="dark"]) .tab.activeTab {
+  background-color: #e8e8e8;
+  color: #0d0d0d;
+  border-color: #e8e8e8;
+}
+
+:global([data-theme="dark"]) .tab.activeTab .tabIcon {
+  filter: brightness(0);
+}
+
+:global([data-theme="dark"]) .subTab.activeSubTab {
+  background-color: var(--dm-bg-surface);
+  color: var(--dm-text-primary);
+  border-bottom-color: var(--dm-text-primary);
+}
+
+/* Inputs */
+:global([data-theme="dark"]) .formInput,
+:global([data-theme="dark"]) .formTextarea,
+:global([data-theme="dark"]) .select {
+  background-color: var(--dm-bg-input);
+  color: var(--dm-text-primary);
+  border-color: var(--dm-border-input);
+}
+
+:global([data-theme="dark"]) .formInput:focus,
+:global([data-theme="dark"]) .formTextarea:focus,
+:global([data-theme="dark"]) .select:focus {
+  border-color: var(--dm-text-primary);
+}
+
+/* Action buttons hover in dark */
+:global([data-theme="dark"]) .cancelBtn {
+  color: var(--dm-text-primary);
+  border-color: var(--dm-border);
+}
+
+:global([data-theme="dark"]) .cancelBtn:hover {
+  background-color: var(--dm-bg-hover);
+  border-color: var(--dm-text-primary);
+}
+
+:global([data-theme="dark"]) .actionBtn:hover {
+  background-color: #e8e8e8;
+  border-color: #e8e8e8;
+}
+
+:global([data-theme="dark"]) .actionBtn:hover .actionIcon,
+:global([data-theme="dark"]) .actionBtn:hover .actionTitle,
+:global([data-theme="dark"]) .actionBtn:hover .actionDesc {
+  color: #0d0d0d;
+  fill: #0d0d0d;
+}
+
+/* Modal */
+:global([data-theme="dark"]) .modalCancelBtn {
+  color: var(--dm-text-secondary);
+  border-color: var(--dm-border);
+}
+
+:global([data-theme="dark"]) .modalCancelBtn:hover {
+  background-color: var(--dm-bg-hover);
+  border-color: var(--dm-text-primary);
+}
+
+/* Report cards */
+:global([data-theme="dark"]) .reportCard {
+  background-color: var(--dm-bg-surface);
+  border-color: var(--dm-border);
+}
+
+:global([data-theme="dark"]) .reportCard:hover {
+  border-color: var(--dm-text-primary);
+}
+
+:global([data-theme="dark"]) .reportHeader {
+  background-color: var(--dm-bg-hover);
+  border-bottom-color: var(--dm-border);
+}
+
+:global([data-theme="dark"]) .reportFooter {
+  border-top-color: var(--dm-border);
+}
+
+/* Sicon overrides for dark */
+:global([data-theme="dark"]) .sectionIcon,
+:global([data-theme="dark"]) .infoIcon {
+  fill: var(--dm-text-primary);
+}
+
+:global([data-theme="dark"]) .statIcon {
+  fill: var(--dm-text-primary);
+}
+
+/* Theme Pill in dark mode */
+:global([data-theme="dark"]) .themePill {
+  border-color: var(--dm-border-input);
+}
+
+:global([data-theme="dark"]) .themePillOption {
+  color: var(--dm-text-secondary);
+}
+
+:global([data-theme="dark"]) .themePillOption:first-child {
+  border-right-color: var(--dm-border-input);
+}
+
+:global([data-theme="dark"]) .themePillOption:hover {
+  background-color: var(--dm-bg-hover);
+  color: var(--dm-text-primary);
+}
+
+:global([data-theme="dark"]) .themePillOption.themePillActive {
+  background-color: #e8e8e8;
+  color: #141414;
 }

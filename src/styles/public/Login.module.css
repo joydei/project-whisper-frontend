@@ -515,3 +515,146 @@
     gap: 0.75rem;
   }
 }
+
+/* ─── Dark Mode ───────────────────────────────────────────── */
+:global([data-theme="dark"]) .loginPage {
+  background-color: var(--dm-bg-page);
+}
+
+:global([data-theme="dark"]) .rightPanel {
+  background-color: var(--dm-bg-page);
+}
+
+:global([data-theme="dark"]) .loginCard {
+  background-color: var(--dm-bg-surface);
+  border-color: var(--dm-border);
+}
+
+/* Mobile brand */
+:global([data-theme="dark"]) .mobileBrand h1 {
+  color: var(--dm-text-primary);
+}
+
+:global([data-theme="dark"]) .mobileBrand p {
+  color: var(--dm-text-secondary);
+}
+
+/* Section title */
+:global([data-theme="dark"]) .sectionTitle {
+  color: var(--dm-text-secondary);
+}
+
+/* Role cards */
+:global([data-theme="dark"]) .roleCard {
+  background-color: var(--dm-bg-hover);
+  border-color: var(--dm-border);
+}
+
+:global([data-theme="dark"]) .roleCard:hover {
+  background-color: #1e1e1e;
+  border-color: #2a2a2a;
+}
+
+:global([data-theme="dark"]) .roleLabel {
+  color: var(--dm-text-primary);
+}
+
+:global([data-theme="dark"]) .roleIcon {
+  filter: brightness(0) invert(0.8);
+}
+
+:global([data-theme="dark"]) .roleCard.active {
+  background-color: #e8e8e8;
+  border-color: #e8e8e8;
+}
+
+:global([data-theme="dark"]) .roleCard.active .roleLabel,
+:global([data-theme="dark"]) .roleCard.active .roleDescription {
+  color: #0d0d0d;
+}
+
+:global([data-theme="dark"]) .roleCard.active .roleIcon {
+  filter: brightness(0);
+}
+
+/* Divider */
+:global([data-theme="dark"]) .divider {
+  background-color: var(--dm-divider);
+}
+
+/* Form heading */
+:global([data-theme="dark"]) .formHeading {
+  color: var(--dm-text-primary);
+}
+
+:global([data-theme="dark"]) .formSubheading {
+  color: var(--dm-text-secondary);
+}
+
+/* Labels */
+:global([data-theme="dark"]) .label {
+  color: var(--dm-text-primary);
+}
+
+:global([data-theme="dark"]) .labelIcon {
+  color: var(--dm-text-secondary);
+}
+
+/* Inputs */
+:global([data-theme="dark"]) .input {
+  background-color: var(--dm-bg-input);
+  color: var(--dm-text-primary);
+  border-color: var(--dm-border-input);
+}
+
+:global([data-theme="dark"]) .input::placeholder {
+  color: var(--dm-placeholder);
+}
+
+:global([data-theme="dark"]) .input:focus {
+  border-color: var(--dm-text-primary);
+}
+
+:global([data-theme="dark"]) .togglePassword {
+  color: var(--dm-text-secondary);
+}
+
+:global([data-theme="dark"]) .togglePassword:hover {
+  color: var(--dm-text-primary);
+}
+
+/* Options row */
+:global([data-theme="dark"]) .checkboxLabel {
+  color: var(--dm-text-secondary);
+}
+
+:global([data-theme="dark"]) .forgotPassword {
+  color: var(--dm-text-secondary);
+}
+
+:global([data-theme="dark"]) .forgotPassword:hover {
+  color: var(--dm-text-primary);
+}
+
+/* Submit button stays black for contrast */
+
+/* Sign-up prompt */
+:global([data-theme="dark"]) .signupPrompt {
+  border-top-color: var(--dm-divider);
+}
+
+:global([data-theme="dark"]) .signupPrompt p {
+  color: var(--dm-text-secondary);
+}
+
+:global([data-theme="dark"]) .signupLink {
+  color: var(--dm-text-primary);
+  border-bottom-color: var(--dm-text-primary);
+}
+
+@media (min-width: 1024px) {
+  :global([data-theme="dark"]) .loginCard {
+    background-color: transparent;
+    border-color: transparent;
+  }
+}

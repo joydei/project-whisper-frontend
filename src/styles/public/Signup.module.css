@@ -459,3 +459,123 @@ input[type='date'].input::-webkit-calendar-picker-indicator:hover {
     grid-template-columns: 1fr;
   }
 }
+
+/* ─── Dark Mode ───────────────────────────────────────────── */
+:global([data-theme="dark"]) .signupPage {
+  background-color: var(--dm-bg-page);
+}
+
+:global([data-theme="dark"]) .rightPanel {
+  background-color: var(--dm-bg-page);
+}
+
+:global([data-theme="dark"]) .signupCard {
+  background-color: var(--dm-bg-surface);
+  border-color: var(--dm-border);
+}
+
+/* Mobile brand */
+:global([data-theme="dark"]) .mobileBrand h1 {
+  color: var(--dm-text-primary);
+}
+
+:global([data-theme="dark"]) .mobileBrand p {
+  color: var(--dm-text-secondary);
+}
+
+/* Form heading */
+:global([data-theme="dark"]) .formHeading {
+  color: var(--dm-text-primary);
+}
+
+:global([data-theme="dark"]) .formSubheading {
+  color: var(--dm-text-secondary);
+}
+
+/* Labels */
+:global([data-theme="dark"]) .label {
+  color: var(--dm-text-primary);
+}
+
+:global([data-theme="dark"]) .labelIcon {
+  color: var(--dm-text-secondary);
+}
+
+/* Inputs */
+:global([data-theme="dark"]) .input {
+  background-color: var(--dm-bg-input);
+  color: var(--dm-text-primary);
+  border-color: var(--dm-border-input);
+}
+
+:global([data-theme="dark"]) .input::placeholder {
+  color: var(--dm-placeholder);
+}
+
+:global([data-theme="dark"]) .input:focus {
+  border-color: var(--dm-text-primary);
+}
+
+:global([data-theme="dark"]) .input:disabled {
+  background-color: var(--dm-bg-hover);
+  color: var(--dm-text-secondary);
+}
+
+/* Date picker indicator */
+:global([data-theme="dark"]) input[type='date'].input::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
+/* Select */
+:global([data-theme="dark"]) .select {
+  background-color: var(--dm-bg-input);
+  color: var(--dm-text-primary);
+  border-color: var(--dm-border-input);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23aaa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+}
+
+:global([data-theme="dark"]) .select:focus {
+  border-color: var(--dm-text-primary);
+}
+
+:global([data-theme="dark"]) .select:disabled {
+  background-color: var(--dm-bg-hover);
+  color: var(--dm-text-secondary);
+}
+
+/* Password toggle */
+:global([data-theme="dark"]) .togglePassword {
+  color: var(--dm-text-secondary);
+}
+
+:global([data-theme="dark"]) .togglePassword:hover {
+  color: var(--dm-text-primary);
+}
+
+/* Error text stays red */
+
+/* Divider */
+:global([data-theme="dark"]) .divider {
+  background-color: var(--dm-divider);
+}
+
+/* Log-in prompt */
+:global([data-theme="dark"]) .loginPrompt {
+  border-top-color: var(--dm-divider);
+}
+
+:global([data-theme="dark"]) .loginPrompt p {
+  color: var(--dm-text-secondary);
+}
+
+:global([data-theme="dark"]) .loginLink {
+  color: var(--dm-text-primary);
+  border-bottom-color: var(--dm-text-primary);
+}
+
+@media (min-width: 1024px) {
+  :global([data-theme="dark"]) .signupCard {
+    background-color: transparent;
+    border-color: transparent;
+  }
+}

@@ -32,6 +32,7 @@ import SirenIcon from '../../assets/icons/siren-on.svg?react';
 import XmarkIcon from '../../assets/icons/cross-circle.svg?react';
 import SaveIcon from '../../assets/icons/disk.svg?react';
 
+
 const Profile = () => {
   const { currentUser } = useUser();
   const { userPosts, userReports } = usePosts();
@@ -103,10 +104,6 @@ const Profile = () => {
     showActivity: true,
   });
 
-  const [appearance, setAppearance] = useState({
-    theme: 'light',
-  });
-
   const stats = {
     reportsSubmitted: totalReports,
     resolved: resolvedReports,
@@ -134,13 +131,6 @@ const Profile = () => {
   const handlePrivacyChange = (key: string, value: any) => {
     setPrivacy({
       ...privacy,
-      [key]: value,
-    });
-  };
-
-  const handleAppearanceChange = (key: string, value: any) => {
-    setAppearance({
-      ...appearance,
       [key]: value,
     });
   };
@@ -762,25 +752,6 @@ const Profile = () => {
                       </div>
                     </div>
 
-                    <div className={styles.section}>
-                      <h3 className={styles.sectionTitle}>Appearance</h3>
-                      <div className={styles.settingsList}>
-                        <div className={styles.settingItem}>
-                          <div>
-                            <h4 className={styles.settingTitle}>Theme</h4>
-                            <p className={styles.settingDesc}>Choose your preferred theme</p>
-                          </div>
-                          <select
-                            className={styles.select}
-                            value={appearance.theme}
-                            onChange={(e) => handleAppearanceChange('theme', e.target.value)}
-                          >
-                            <option value="light">Light Mode</option>
-                            <option value="dark">Dark Mode</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </Zoom>
               )}

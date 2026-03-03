@@ -424,3 +424,50 @@
   width: 1rem;
   height: 1rem;
 }
+
+/* ── Dark mode ──────────────────────────────────────────── */
+/* Navbar itself is already black — only the white search dropdown needs inverting */
+
+:global([data-theme="dark"]) .searchDropdown {
+  background-color: #141414;
+  border-color: #1f1f1f;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+}
+
+:global([data-theme="dark"]) .dropdownSection {
+  border-bottom-color: #1f1f1f;
+}
+
+:global([data-theme="dark"]) .dropdownHeader {
+  color: #888888;
+}
+
+:global([data-theme="dark"]) .dropdownHeader svg {
+  color: #888888;
+}
+
+:global([data-theme="dark"]) .dropdownItem:hover {
+  background-color: #1e1e1e;
+}
+
+:global([data-theme="dark"]) .dropdownName {
+  color: #e8e8e8;
+}
+
+:global([data-theme="dark"]) .dropdownMeta {
+  color: #888888;
+}
+
+:global([data-theme="dark"]) .viewAllBtn {
+  background-color: #161616;
+  color: #e8e8e8;
+  border-top-color: #1f1f1f;
+}
+
+:global([data-theme="dark"]) .viewAllBtn:hover {
+  background-color: #1e1e1e;
+}
+
+:global([data-theme="dark"]) .noResults p {
+  color: #888888;
+}

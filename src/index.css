@@ -16,6 +16,41 @@
   --color-gray-light: #F5F5F5;
   --color-gray-medium: #999999;
   --color-gray-dark: #333333;
+
+  /* Dark mode semantic tokens (light defaults) */
+  --dm-bg-page: #F5F5F5;
+  --dm-bg-surface: #FFFFFF;
+  --dm-bg-input: #FFFFFF;
+  --dm-bg-hover: #e8e8e8;
+  --dm-text-primary: #000000;
+  --dm-text-secondary: #999999;
+  --dm-border: #e4e4e4;
+  --dm-border-input: #e0e0e0;
+  --dm-placeholder: #b8b8b8;
+  --dm-divider: #e4e4e4;
+}
+
+[data-theme="dark"] {
+  --color-gray-light: #0d0d0d;
+  --color-gray-medium: #666666;
+  --color-gray-dark: #bbbbbb;
+
+  /* Dark mode semantic tokens (dark overrides) */
+  --dm-bg-page: #0d0d0d;
+  --dm-bg-surface: #141414;
+  --dm-bg-input: #1a1a1a;
+  --dm-bg-hover: #1e1e1e;
+  --dm-text-primary: #e8e8e8;
+  --dm-text-secondary: #666666;
+  --dm-border: #1f1f1f;
+  --dm-border-input: #252525;
+  --dm-placeholder: #3a3a3a;
+  --dm-divider: #1f1f1f;
+}
+
+[data-theme="dark"] body {
+  background-color: #0d0d0d;
+  color: #e8e8e8;
 }
 
 body {
