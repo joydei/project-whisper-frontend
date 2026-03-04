@@ -1,11 +1,12 @@
 .dashboard {
-  min-height: 100vh;
-  background-color: var(--color-gray-light);
-  padding: 2rem;
+  padding: 0;
 }
 
 .header {
-  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
 }
 
 .pageTitle {
@@ -20,6 +21,16 @@
   color: var(--color-gray-medium);
 }
 
+.regionFilter {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  font-size: 0.85rem;
+  background-color: var(--color-white);
+  cursor: pointer;
+  outline: none;
+}
+
 .container {
   max-width: 1400px;
   margin: 0 auto;
@@ -29,27 +40,31 @@
 .statsGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1.5rem;
-  margin-bottom: 2rem;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .statCard {
   background-color: var(--color-white);
-  padding: 1.5rem;
+  padding: 1.25rem;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   display: flex;
   align-items: center;
   gap: 1rem;
-  transition: transform 0.3s ease;
+  transition: transform 0.2s;
 }
 
 .statCard:hover {
-  transform: translateY(-5px);
+  transform: translateY(-3px);
+}
+
+.statCard.emergency {
+  border-left: 4px solid #d32f2f;
 }
 
 .statIcon {
-  font-size: 2.5rem;
+  font-size: 2rem;
 }
 
 .statContent {
@@ -57,186 +72,141 @@
 }
 
 .statValue {
-  font-size: 2rem;
+  font-size: 1.75rem;
   font-weight: 700;
   color: var(--color-black);
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.15rem;
 }
 
 .statLabel {
-  font-size: 0.9rem;
+  font-size: 0.82rem;
   color: var(--color-gray-medium);
 }
 
-.statCard.emergency {
-  border-left: 4px solid #d32f2f;
-}
-
-.statCard.inProgress {
-  border-left: 4px solid #ff9800;
-}
-
-.statCard.resolved {
-  border-left: 4px solid #4caf50;
-}
-
-/* Services Grid */
-.servicesGrid {
+/* Two-column content grid */
+.contentGrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.serviceCard {
-  background-color: var(--color-white);
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.serviceCard:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-}
-
-.serviceIcon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-}
-
-.serviceTitle {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--color-black);
-  margin-bottom: 1rem;
-}
-
-.serviceStats {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.emergencyCount {
-  font-size: 0.9rem;
-  color: #d32f2f;
-  font-weight: 600;
-}
-
-.totalCount {
-  font-size: 0.9rem;
-  color: var(--color-gray-medium);
-}
-
-.serviceCard.police {
-  border-top: 4px solid #1976d2;
-}
-
-.serviceCard.fire {
-  border-top: 4px solid #d32f2f;
-}
-
-.serviceCard.ambulance {
-  border-top: 4px solid #388e3c;
-}
-
-.serviceCard.disaster {
-  border-top: 4px solid #f57c00;
-}
-
-/* Recent Reports */
-.recentReports {
-  background-color: var(--color-white);
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  margin-bottom: 2rem;
-}
-
-.sectionTitle {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--color-black);
   margin-bottom: 1.5rem;
 }
 
-.reportsList {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+/* Card */
+.card {
+  background-color: var(--color-white);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
 }
 
-.reportItem {
+.cardHeader {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 1rem;
-  padding: 1rem;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  transition: all 0.3s ease;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #e0e0e0;
 }
 
-.reportItem:hover {
-  background-color: var(--color-gray-light);
-  border-color: var(--color-black);
+.cardTitle {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--color-black);
 }
 
-.reportItem.urgent {
-  background-color: #ffebee;
-  border-color: #d32f2f;
+.cardContent {
+  padding: 1rem 1.5rem;
+}
+
+.liveBadge {
+  font-size: 0.75rem;
+  color: #d32f2f;
+  font-weight: 700;
   animation: pulse 2s infinite;
 }
 
 @keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.9;
-  }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }
 
-.reportIcon {
-  font-size: 1.8rem;
+.viewAllBtn {
+  padding: 0.35rem 0.85rem;
+  border-radius: 6px;
+  border: 1px solid var(--color-black);
+  background: transparent;
+  color: var(--color-black);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
-.reportContent {
+.viewAllBtn:hover {
+  background-color: var(--color-black);
+  color: var(--color-white);
+}
+
+/* Incident Items */
+.incidentItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.incidentItem:last-child {
+  border-bottom: none;
+}
+
+.incidentItem.urgent {
+  background-color: #fff5f5;
+  margin: 0 -1.5rem;
+  padding: 0.85rem 1.5rem;
+}
+
+.incidentIcon {
+  font-size: 1.5rem;
+}
+
+.incidentInfo {
   flex: 1;
 }
 
-.reportTitle {
-  font-size: 1rem;
+.incidentTitle {
+  font-size: 0.9rem;
   font-weight: 600;
   color: var(--color-black);
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.15rem;
 }
 
-.reportLocation {
-  font-size: 0.85rem;
+.incidentMeta {
+  font-size: 0.78rem;
   color: var(--color-gray-medium);
-}
-
-.reportTime {
-  font-size: 0.85rem;
-  color: var(--color-gray-medium);
-  margin-right: 1rem;
 }
 
 .badge {
-  padding: 0.4rem 0.8rem;
+  padding: 0.25rem 0.6rem;
   border-radius: 6px;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 600;
   text-transform: uppercase;
+  flex-shrink: 0;
 }
 
 .badgeEmergency {
   background-color: #d32f2f;
-  color: var(--color-white);
+  color: #fff;
+}
+
+.badgeHigh {
+  background-color: #ff9800;
+  color: #fff;
+}
+
+.badgeMedium {
+  background-color: #2196f3;
+  color: #fff;
 }
 
 .badgeNormal {
@@ -244,74 +214,110 @@
   color: var(--color-gray-dark);
 }
 
-/* Quick Actions */
-.quickActions {
-  background-color: var(--color-white);
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+/* Municipality Rows */
+.muniRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid #f0f0f0;
 }
 
-.actionsGrid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+.muniRow:last-child {
+  border-bottom: none;
+}
+
+.muniName {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-black);
+}
+
+.muniStats {
+  display: flex;
   gap: 1rem;
 }
 
-.actionBtn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 1.5rem;
-  background-color: var(--color-gray-light);
-  border: 2px solid transparent;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
+.muniEmergency {
+  font-size: 0.8rem;
+  color: #d32f2f;
+  font-weight: 600;
 }
 
-.actionBtn:hover {
-  background-color: var(--color-black);
-  color: var(--color-white);
-  border-color: var(--color-black);
+.muniTotal {
+  font-size: 0.8rem;
+  color: var(--color-gray-medium);
 }
 
-.actionIcon {
-  font-size: 2rem;
+/* Dark Mode */
+:global([data-theme="dark"]) .statCard,
+:global([data-theme="dark"]) .card {
+  background-color: #141414;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-.actionLabel {
-  font-size: 0.9rem;
-  font-weight: 500;
+:global([data-theme="dark"]) .statValue,
+:global([data-theme="dark"]) .cardTitle,
+:global([data-theme="dark"]) .incidentTitle,
+:global([data-theme="dark"]) .muniName {
+  color: #e8e8e8;
+}
+
+:global([data-theme="dark"]) .cardHeader {
+  border-bottom-color: #1f1f1f;
+}
+
+:global([data-theme="dark"]) .incidentItem {
+  border-bottom-color: #1f1f1f;
+}
+
+:global([data-theme="dark"]) .incidentItem.urgent {
+  background-color: rgba(211, 47, 47, 0.08);
+}
+
+:global([data-theme="dark"]) .muniRow {
+  border-bottom-color: #1f1f1f;
+}
+
+:global([data-theme="dark"]) .regionFilter {
+  background-color: #1a1a1a;
+  border-color: #252525;
+  color: #e8e8e8;
+}
+
+:global([data-theme="dark"]) .viewAllBtn {
+  border-color: #e8e8e8;
+  color: #e8e8e8;
+}
+
+:global([data-theme="dark"]) .viewAllBtn:hover {
+  background-color: #e8e8e8;
+  color: #0d0d0d;
+}
+
+:global([data-theme="dark"]) .badgeNormal {
+  background-color: #252525;
+  color: #aaa;
 }
 
 /* Responsive */
 @media (max-width: 1024px) {
-  .statsGrid,
-  .servicesGrid,
-  .actionsGrid {
+  .statsGrid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .contentGrid {
+    grid-template-columns: 1fr;
   }
 }
 
-@media (max-width: 768px) {
-  .dashboard {
-    padding: 1rem;
-  }
-
-  .statsGrid,
-  .servicesGrid,
-  .actionsGrid {
+@media (max-width: 640px) {
+  .statsGrid {
     grid-template-columns: 1fr;
   }
 
-  .reportItem {
-    flex-wrap: wrap;
-  }
-
-  .badge {
-    width: 100%;
-    text-align: center;
+  .header {
+    flex-direction: column;
+    gap: 1rem;
   }
 }

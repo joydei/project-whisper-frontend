@@ -1,154 +1,173 @@
 import styles from '../../styles/civil/Dashboard.module.css';
 
+// In a real app, the service type would come from auth context
+const SERVICE_NAME = 'Ghana Police Service';
+const SERVICE_EMOJI = '🚓';
+
 const Dashboard = () => {
   return (
     <div className={styles.dashboard}>
       <div className={styles.header}>
-        <h1 className={styles.pageTitle}>Civil Services Dashboard</h1>
-        <p className={styles.pageSubtitle}>Manage emergency reports and civil service requests</p>
+        <div>
+          <h1 className={styles.pageTitle}>{SERVICE_NAME}</h1>
+          <p className={styles.pageSubtitle}>Operations dashboard — nationwide overview</p>
+        </div>
+        <select className={styles.regionFilter}>
+          <option>All Regions</option>
+          <option>Greater Accra</option>
+          <option>Ashanti</option>
+          <option>Western</option>
+          <option>Eastern</option>
+          <option>Northern</option>
+        </select>
       </div>
 
       <div className={styles.container}>
-        {/* Stats Cards */}
+        {/* Stat Cards */}
         <div className={styles.statsGrid}>
-          <div className={`${styles.statCard} ${styles.total}`}>
+          <div className={`${styles.statCard} ${styles.emergency}`}>
             <div className={styles.statIcon}>🚨</div>
             <div className={styles.statContent}>
+              <h3 className={styles.statValue}>12</h3>
+              <p className={styles.statLabel}>Active Emergencies</p>
+            </div>
+          </div>
+          <div className={styles.statCard}>
+            <div className={styles.statIcon}>📋</div>
+            <div className={styles.statContent}>
               <h3 className={styles.statValue}>156</h3>
-              <p className={styles.statLabel}>Total Reports</p>
+              <p className={styles.statLabel}>Open Incidents</p>
             </div>
           </div>
-          <div className={`${styles.statCard} ${styles.emergency}`}>
-            <div className={styles.statIcon}>⚠️</div>
-            <div className={styles.statContent}>
-              <h3 className={styles.statValue}>8</h3>
-              <p className={styles.statLabel}>Emergency</p>
-            </div>
-          </div>
-          <div className={`${styles.statCard} ${styles.inProgress}`}>
-            <div className={styles.statIcon}>⏳</div>
-            <div className={styles.statContent}>
-              <h3 className={styles.statValue}>23</h3>
-              <p className={styles.statLabel}>In Progress</p>
-            </div>
-          </div>
-          <div className={`${styles.statCard} ${styles.resolved}`}>
+          <div className={styles.statCard}>
             <div className={styles.statIcon}>✅</div>
             <div className={styles.statContent}>
-              <h3 className={styles.statValue}>125</h3>
-              <p className={styles.statLabel}>Resolved</p>
+              <h3 className={styles.statValue}>1,847</h3>
+              <p className={styles.statLabel}>Resolved This Month</p>
+            </div>
+          </div>
+          <div className={styles.statCard}>
+            <div className={styles.statIcon}>⏱️</div>
+            <div className={styles.statContent}>
+              <h3 className={styles.statValue}>18 min</h3>
+              <p className={styles.statLabel}>Avg. Response Time</p>
             </div>
           </div>
         </div>
 
-        {/* Service Categories */}
-        <div className={styles.servicesGrid}>
-          <div className={`${styles.serviceCard} ${styles.police}`}>
-            <div className={styles.serviceIcon}>🚓</div>
-            <h3 className={styles.serviceTitle}>Police</h3>
-            <div className={styles.serviceStats}>
-              <span className={styles.emergencyCount}>3 Emergency</span>
-              <span className={styles.totalCount}>45 Total</span>
+        {/* Two-column layout */}
+        <div className={styles.contentGrid}>
+          {/* Active Emergencies */}
+          <div className={styles.card}>
+            <div className={styles.cardHeader}>
+              <h2 className={styles.cardTitle}>Active Emergencies</h2>
+              <span className={styles.liveBadge}>● LIVE</span>
+            </div>
+            <div className={styles.cardContent}>
+              <div className={`${styles.incidentItem} ${styles.urgent}`}>
+                <div className={styles.incidentIcon}>{SERVICE_EMOJI}</div>
+                <div className={styles.incidentInfo}>
+                  <h4 className={styles.incidentTitle}>Armed Robbery in Progress</h4>
+                  <p className={styles.incidentMeta}>Ring Road Central, Accra • Accra Metro</p>
+                </div>
+                <span className={`${styles.badge} ${styles.badgeEmergency}`}>EMERGENCY</span>
+              </div>
+              <div className={`${styles.incidentItem} ${styles.urgent}`}>
+                <div className={styles.incidentIcon}>{SERVICE_EMOJI}</div>
+                <div className={styles.incidentInfo}>
+                  <h4 className={styles.incidentTitle}>Domestic Disturbance</h4>
+                  <p className={styles.incidentMeta}>Osu, Accra • Accra Metro</p>
+                </div>
+                <span className={`${styles.badge} ${styles.badgeEmergency}`}>EMERGENCY</span>
+              </div>
+              <div className={`${styles.incidentItem} ${styles.urgent}`}>
+                <div className={styles.incidentIcon}>{SERVICE_EMOJI}</div>
+                <div className={styles.incidentInfo}>
+                  <h4 className={styles.incidentTitle}>Suspicious Activity Near School</h4>
+                  <p className={styles.incidentMeta}>Kumasi Central • Kumasi Metro</p>
+                </div>
+                <span className={`${styles.badge} ${styles.badgeHigh}`}>HIGH</span>
+              </div>
             </div>
           </div>
-          <div className={`${styles.serviceCard} ${styles.fire}`}>
-            <div className={styles.serviceIcon}>🚒</div>
-            <h3 className={styles.serviceTitle}>Fire Service</h3>
-            <div className={styles.serviceStats}>
-              <span className={styles.emergencyCount}>2 Emergency</span>
-              <span className={styles.totalCount}>28 Total</span>
+
+          {/* Municipality Overview — shows activity per municipality */}
+          <div className={styles.card}>
+            <div className={styles.cardHeader}>
+              <h2 className={styles.cardTitle}>By Municipality</h2>
+              <button className={styles.viewAllBtn}>View All</button>
             </div>
-          </div>
-          <div className={`${styles.serviceCard} ${styles.ambulance}`}>
-            <div className={styles.serviceIcon}>🚑</div>
-            <h3 className={styles.serviceTitle}>Ambulance</h3>
-            <div className={styles.serviceStats}>
-              <span className={styles.emergencyCount}>3 Emergency</span>
-              <span className={styles.totalCount}>52 Total</span>
-            </div>
-          </div>
-          <div className={`${styles.serviceCard} ${styles.disaster}`}>
-            <div className={styles.serviceIcon}>⚠️</div>
-            <h3 className={styles.serviceTitle}>Disaster Management</h3>
-            <div className={styles.serviceStats}>
-              <span className={styles.emergencyCount}>0 Emergency</span>
-              <span className={styles.totalCount}>31 Total</span>
+            <div className={styles.cardContent}>
+              <div className={styles.muniRow}>
+                <span className={styles.muniName}>Accra Metropolitan</span>
+                <div className={styles.muniStats}>
+                  <span className={styles.muniEmergency}>4 active</span>
+                  <span className={styles.muniTotal}>45 open</span>
+                </div>
+              </div>
+              <div className={styles.muniRow}>
+                <span className={styles.muniName}>Kumasi Metropolitan</span>
+                <div className={styles.muniStats}>
+                  <span className={styles.muniEmergency}>2 active</span>
+                  <span className={styles.muniTotal}>28 open</span>
+                </div>
+              </div>
+              <div className={styles.muniRow}>
+                <span className={styles.muniName}>Tema Municipal</span>
+                <div className={styles.muniStats}>
+                  <span className={styles.muniEmergency}>1 active</span>
+                  <span className={styles.muniTotal}>19 open</span>
+                </div>
+              </div>
+              <div className={styles.muniRow}>
+                <span className={styles.muniName}>Tamale Metropolitan</span>
+                <div className={styles.muniStats}>
+                  <span className={styles.muniEmergency}>0 active</span>
+                  <span className={styles.muniTotal}>12 open</span>
+                </div>
+              </div>
+              <div className={styles.muniRow}>
+                <span className={styles.muniName}>Cape Coast Municipal</span>
+                <div className={styles.muniStats}>
+                  <span className={styles.muniEmergency}>1 active</span>
+                  <span className={styles.muniTotal}>8 open</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Recent Emergency Reports */}
-        <div className={styles.recentReports}>
-          <h2 className={styles.sectionTitle}>Recent Emergency Reports</h2>
-          <div className={styles.reportsList}>
-            <div className={`${styles.reportItem} ${styles.urgent}`}>
-              <div className={styles.reportIcon}>🚓</div>
-              <div className={styles.reportContent}>
-                <h4 className={styles.reportTitle}>Armed Robbery in Progress</h4>
-                <p className={styles.reportLocation}>Ring Road Central, Accra</p>
+        {/* Recent Citizen Reports */}
+        <div className={styles.card}>
+          <div className={styles.cardHeader}>
+            <h2 className={styles.cardTitle}>Recent Citizen Reports</h2>
+            <button className={styles.viewAllBtn}>View All Incidents</button>
+          </div>
+          <div className={styles.cardContent}>
+            <div className={styles.incidentItem}>
+              <div className={styles.incidentIcon}>{SERVICE_EMOJI}</div>
+              <div className={styles.incidentInfo}>
+                <h4 className={styles.incidentTitle}>Noise Complaint – Loud Music</h4>
+                <p className={styles.incidentMeta}>East Legon, Accra • Reported by citizen • 30 min ago</p>
               </div>
-              <span className={styles.reportTime}>3 min ago</span>
-              <span className={`${styles.badge} ${styles.badgeEmergency}`}>EMERGENCY</span>
-            </div>
-            <div className={`${styles.reportItem} ${styles.urgent}`}>
-              <div className={styles.reportIcon}>🚒</div>
-              <div className={styles.reportContent}>
-                <h4 className={styles.reportTitle}>Building Fire</h4>
-                <p className={styles.reportLocation}>Osu, Accra</p>
-              </div>
-              <span className={styles.reportTime}>8 min ago</span>
-              <span className={`${styles.badge} ${styles.badgeEmergency}`}>EMERGENCY</span>
-            </div>
-            <div className={`${styles.reportItem} ${styles.urgent}`}>
-              <div className={styles.reportIcon}>🚑</div>
-              <div className={styles.reportContent}>
-                <h4 className={styles.reportTitle}>Medical Emergency</h4>
-                <p className={styles.reportLocation}>East Legon, Accra</p>
-              </div>
-              <span className={styles.reportTime}>12 min ago</span>
-              <span className={`${styles.badge} ${styles.badgeEmergency}`}>EMERGENCY</span>
-            </div>
-            <div className={styles.reportItem}>
-              <div className={styles.reportIcon}>🚓</div>
-              <div className={styles.reportContent}>
-                <h4 className={styles.reportTitle}>Noise Complaint</h4>
-                <p className={styles.reportLocation}>Tema, Accra</p>
-              </div>
-              <span className={styles.reportTime}>45 min ago</span>
               <span className={`${styles.badge} ${styles.badgeNormal}`}>NORMAL</span>
             </div>
-            <div className={styles.reportItem}>
-              <div className={styles.reportIcon}>🚒</div>
-              <div className={styles.reportContent}>
-                <h4 className={styles.reportTitle}>Fire Safety Inspection Request</h4>
-                <p className={styles.reportLocation}>Madina, Accra</p>
+            <div className={styles.incidentItem}>
+              <div className={styles.incidentIcon}>{SERVICE_EMOJI}</div>
+              <div className={styles.incidentInfo}>
+                <h4 className={styles.incidentTitle}>Vandalism at Public Park</h4>
+                <p className={styles.incidentMeta}>Tema, Greater Accra • Reported by citizen • 1 hr ago</p>
               </div>
-              <span className={styles.reportTime}>1 hour ago</span>
               <span className={`${styles.badge} ${styles.badgeNormal}`}>NORMAL</span>
             </div>
-          </div>
-        </div>
-
-        {/* Quick Actions */}
-        <div className={styles.quickActions}>
-          <h2 className={styles.sectionTitle}>Quick Actions</h2>
-          <div className={styles.actionsGrid}>
-            <button className={styles.actionBtn}>
-              <span className={styles.actionIcon}>👁️</span>
-              <span className={styles.actionLabel}>View All Reports</span>
-            </button>
-            <button className={styles.actionBtn}>
-              <span className={styles.actionIcon}>📊</span>
-              <span className={styles.actionLabel}>Generate Report</span>
-            </button>
-            <button className={styles.actionBtn}>
-              <span className={styles.actionIcon}>👥</span>
-              <span className={styles.actionLabel}>Manage Teams</span>
-            </button>
-            <button className={styles.actionBtn}>
-              <span className={styles.actionIcon}>⚙️</span>
-              <span className={styles.actionLabel}>Settings</span>
-            </button>
+            <div className={styles.incidentItem}>
+              <div className={styles.incidentIcon}>{SERVICE_EMOJI}</div>
+              <div className={styles.incidentInfo}>
+                <h4 className={styles.incidentTitle}>Traffic Light Malfunction Causing Accidents</h4>
+                <p className={styles.incidentMeta}>Kaneshie, Accra • Reported by citizen • 2 hrs ago</p>
+              </div>
+              <span className={`${styles.badge} ${styles.badgeMedium}`}>MEDIUM</span>
+            </div>
           </div>
         </div>
       </div>

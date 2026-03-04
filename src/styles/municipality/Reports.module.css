@@ -272,6 +272,69 @@
   cursor: not-allowed;
 }
 
+/* Dark Mode */
+:global([data-theme="dark"]) .summaryCard,
+:global([data-theme="dark"]) .tableCard {
+  background-color: #141414;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+:global([data-theme="dark"]) .summaryValue {
+  color: #e8e8e8;
+}
+
+:global([data-theme="dark"]) .searchInput,
+:global([data-theme="dark"]) .filterSelect {
+  background-color: #1a1a1a;
+  border-color: #252525;
+  color: #e8e8e8;
+}
+
+:global([data-theme="dark"]) .searchInput:focus,
+:global([data-theme="dark"]) .filterSelect:focus {
+  border-color: #444444;
+}
+
+:global([data-theme="dark"]) .table thead {
+  background-color: #1a1a1a;
+}
+
+:global([data-theme="dark"]) .table th {
+  color: #e8e8e8;
+}
+
+:global([data-theme="dark"]) .table td {
+  border-top-color: #1f1f1f;
+  color: #aaaaaa;
+}
+
+:global([data-theme="dark"]) .tableRow:hover {
+  background-color: #1a1a1a;
+}
+
+:global([data-theme="dark"]) .exportBtn {
+  background-color: #e8e8e8;
+  color: #0d0d0d;
+}
+
+:global([data-theme="dark"]) .pageBtn {
+  background-color: #141414;
+  border-color: #252525;
+  color: #aaaaaa;
+}
+
+:global([data-theme="dark"]) .pageBtn:hover:not(:disabled) {
+  background-color: #e8e8e8;
+  color: #0d0d0d;
+  border-color: #e8e8e8;
+}
+
+:global([data-theme="dark"]) .pageBtn.active {
+  background-color: #e8e8e8;
+  color: #0d0d0d;
+  border-color: #e8e8e8;
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
   .tableCard {

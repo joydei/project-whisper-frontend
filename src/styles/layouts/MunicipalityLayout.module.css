@@ -18,6 +18,11 @@
   padding: 2rem;
 }
 
+/* Dark Mode */
+:global([data-theme="dark"]) .municipalityLayout {
+  background-color: #0d0d0d;
+}
+
 @media (max-width: 768px) {
   .mainWrapper {
     margin-left: 70px;

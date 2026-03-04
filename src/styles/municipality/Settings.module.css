@@ -1,0 +1,321 @@
+/* Municipality Settings Page */
+.settingsPage {
+  padding: 0;
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.pageTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-black);
+  margin-bottom: 0.5rem;
+}
+
+.pageSubtitle {
+  font-size: 1rem;
+  color: var(--color-gray-medium);
+}
+
+/* Settings Grid */
+.settingsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.settingsCard {
+  background-color: var(--color-white);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1.5rem;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.cardTitle {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--color-black);
+  margin-bottom: 1.5rem;
+}
+
+.cardHeader .cardTitle {
+  margin-bottom: 0;
+}
+
+/* Toggle Switch */
+.settingRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--color-gray-light);
+}
+
+.settingRow:last-of-type {
+  border-bottom: none;
+}
+
+.settingInfo {
+  flex: 1;
+}
+
+.settingLabel {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-black);
+  display: block;
+}
+
+.settingDescription {
+  font-size: 0.8rem;
+  color: var(--color-gray-medium);
+  margin-top: 0.2rem;
+  display: block;
+}
+
+.toggle {
+  width: 48px;
+  height: 26px;
+  border-radius: 13px;
+  background-color: #d1d5db;
+  border: none;
+  padding: 2px;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.3s ease;
+  flex-shrink: 0;
+}
+
+.toggleOn {
+  background-color: var(--color-black);
+}
+
+.toggleKnob {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background-color: white;
+  display: block;
+  transition: transform 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.toggleOn .toggleKnob {
+  transform: translateX(22px);
+}
+
+/* Form Group */
+.formGroup {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-gray-medium);
+  margin-bottom: 0.4rem;
+}
+
+.textarea {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-family: 'Poppins', sans-serif;
+  color: var(--color-black);
+  resize: vertical;
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: var(--color-black);
+}
+
+.saveBtn {
+  padding: 0.6rem 1.2rem;
+  background-color: var(--color-black);
+  color: var(--color-white);
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+}
+
+.saveBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Staff Table */
+.addStaffBtn {
+  padding: 0.5rem 1rem;
+  background-color: var(--color-black);
+  color: var(--color-white);
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+}
+
+.addStaffBtn:hover {
+  transform: translateY(-1px);
+}
+
+.staffTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.staffTable th {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-gray-medium);
+  border-bottom: 2px solid var(--color-gray-light);
+}
+
+.staffTable td {
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  color: var(--color-gray-dark);
+  border-bottom: 1px solid var(--color-gray-light);
+}
+
+.staffName {
+  font-weight: 500;
+  color: var(--color-black);
+}
+
+.staffEmail {
+  color: var(--color-gray-medium);
+  font-size: 0.85rem;
+}
+
+.statusBadge {
+  padding: 0.25rem 0.7rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.statusBadge.active {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.statusBadge.inactive {
+  background-color: #f5f5f5;
+  color: #666666;
+}
+
+.editStaffBtn {
+  padding: 0.35rem 0.8rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  background: transparent;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.editStaffBtn:hover {
+  border-color: var(--color-black);
+}
+
+/* Dark Mode */
+:global([data-theme="dark"]) .settingsCard {
+  background-color: #141414;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+:global([data-theme="dark"]) .cardTitle {
+  color: #e8e8e8;
+}
+
+:global([data-theme="dark"]) .settingRow {
+  border-bottom-color: #1f1f1f;
+}
+
+:global([data-theme="dark"]) .settingLabel {
+  color: #e8e8e8;
+}
+
+:global([data-theme="dark"]) .toggle {
+  background-color: #333333;
+}
+
+:global([data-theme="dark"]) .toggleOn {
+  background-color: #e8e8e8;
+}
+
+:global([data-theme="dark"]) .toggleOn .toggleKnob {
+  background-color: #0d0d0d;
+}
+
+:global([data-theme="dark"]) .textarea {
+  background-color: #1a1a1a;
+  border-color: #252525;
+  color: #e8e8e8;
+}
+
+:global([data-theme="dark"]) .textarea:focus {
+  border-color: #444444;
+}
+
+:global([data-theme="dark"]) .staffTable th {
+  border-bottom-color: #1f1f1f;
+}
+
+:global([data-theme="dark"]) .staffTable td {
+  border-bottom-color: #1f1f1f;
+  color: #aaaaaa;
+}
+
+:global([data-theme="dark"]) .staffName {
+  color: #e8e8e8;
+}
+
+:global([data-theme="dark"]) .statusBadge.inactive {
+  background-color: #1a1a1a;
+  color: #888888;
+}
+
+:global([data-theme="dark"]) .editStaffBtn {
+  border-color: #252525;
+  color: #aaaaaa;
+}
+
+:global([data-theme="dark"]) .editStaffBtn:hover {
+  border-color: #e8e8e8;
+  color: #e8e8e8;
+}
+
+/* Responsive */
+@media (max-width: 968px) {
+  .settingsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .staffTable {
+    display: block;
+    overflow-x: auto;
+  }
+}

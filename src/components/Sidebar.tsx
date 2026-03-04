@@ -5,25 +5,35 @@ import styles from '../styles/components/Sidebar.module.css';
 import BooksIcon from '../assets/icons/books.svg?react';
 import ClipFileIcon from '../assets/icons/clip-file.svg?react';
 import CircleUserIcon from '../assets/icons/circle-user.svg?react';
-import UtilityIcon from '../assets/icons/utility-pole-double.svg?react';
 import MenuIcon from '../assets/icons/menu-dots.svg?react';
 import GovernmentIcon from '../assets/icons/government-flag.svg?react';
-import PoliceIcon from '../assets/icons/user-police.svg?react';
-import FireIcon from '../assets/icons/fire-station.svg?react';
-import AmbulanceIcon from '../assets/icons/ambulance.svg?react';
-import FloodIcon from '../assets/icons/house-flood.svg?react';
+import MegaphoneIcon from '../assets/icons/megaphone-sound-waves.svg?react';
+import MessagesIcon from '../assets/icons/messages.svg?react';
+import CaseStudyIcon from '../assets/icons/case-study.svg?react';
+import UsersIcon from '../assets/icons/users.svg?react';
+import BuildingIcon from '../assets/icons/building.svg?react';
+import SettingsIcon from '../assets/icons/settings.svg?react';
+import SirenIcon from '../assets/icons/siren-on.svg?react';
+import MarkerIcon from '../assets/icons/marker.svg?react';
+import ShieldIcon from '../assets/icons/shield-check.svg?react';
+import HelicopterIcon from '../assets/icons/helicopter-side.svg?react';
 
 interface SidebarProps {
   role: 'municipality' | 'admin' | 'civil';
+  civilServiceName?: string;
 }
 
-const Sidebar = ({ role }: SidebarProps) => {
+const Sidebar = ({ role, civilServiceName }: SidebarProps) => {
   const municipalityLinks = [
     { path: '/municipality/dashboard', IconComponent: BooksIcon, label: 'Dashboard' },
     { path: '/municipality/reports', IconComponent: ClipFileIcon, label: 'Reports' },
-    { path: '/municipality/users', IconComponent: CircleUserIcon, label: 'Users' },
-    { path: '/municipality/services', IconComponent: UtilityIcon, label: 'Services' },
-    { path: '/municipality/settings', IconComponent: MenuIcon, label: 'Settings' },
+    { path: '/municipality/announcements', IconComponent: MegaphoneIcon, label: 'Announcements' },
+    { path: '/municipality/messages', IconComponent: MessagesIcon, label: 'Messages' },
+    { path: '/municipality/analytics', IconComponent: CaseStudyIcon, label: 'Analytics' },
+    { path: '/municipality/community', IconComponent: UsersIcon, label: 'Community' },
+    { path: '/municipality/civil-services', IconComponent: ShieldIcon, label: 'Civil Services' },
+    { path: '/municipality/profile', IconComponent: BuildingIcon, label: 'Profile' },
+    { path: '/municipality/settings', IconComponent: SettingsIcon, label: 'Settings' },
   ];
 
   const adminLinks = [
@@ -35,13 +45,17 @@ const Sidebar = ({ role }: SidebarProps) => {
     { path: '/admin/settings', IconComponent: MenuIcon, label: 'Settings' },
   ];
 
+  // Civil service sidebar — generic for any service (police, fire, ambulance, etc.)
+  // Each service logs in to their own account and sees their domain-specific reports
   const civilLinks = [
     { path: '/civil/dashboard', IconComponent: BooksIcon, label: 'Dashboard' },
-    { path: '/civil/police', IconComponent: PoliceIcon, label: 'Police' },
-    { path: '/civil/fire', IconComponent: FireIcon, label: 'Fire Service' },
-    { path: '/civil/ambulance', IconComponent: AmbulanceIcon, label: 'Ambulance' },
-    { path: '/civil/disaster', IconComponent: FloodIcon, label: 'Disaster Management' },
-    { path: '/civil/settings', IconComponent: MenuIcon, label: 'Settings' },
+    { path: '/civil/incidents', IconComponent: SirenIcon, label: 'Incidents' },
+    { path: '/civil/dispatch', IconComponent: HelicopterIcon, label: 'Dispatch' },
+    { path: '/civil/municipalities', IconComponent: MarkerIcon, label: 'Municipalities' },
+    { path: '/civil/messages', IconComponent: MessagesIcon, label: 'Messages' },
+    { path: '/civil/analytics', IconComponent: CaseStudyIcon, label: 'Analytics' },
+    { path: '/civil/profile', IconComponent: ShieldIcon, label: 'Profile' },
+    { path: '/civil/settings', IconComponent: SettingsIcon, label: 'Settings' },
   ];
 
   const links = role === 'municipality' ? municipalityLinks : role === 'admin' ? adminLinks : civilLinks;
@@ -51,7 +65,7 @@ const Sidebar = ({ role }: SidebarProps) => {
       <div className={styles.logo}>
         <h2>Aircho</h2>
         <span className={styles.role}>
-          {role === 'municipality' ? 'Municipality' : role === 'admin' ? 'Admin' : 'Civil Services'}
+          {role === 'municipality' ? 'Municipality' : role === 'admin' ? 'Admin' : civilServiceName || 'Civil Services'}
         </span>
       </div>
       <nav className={styles.nav}>

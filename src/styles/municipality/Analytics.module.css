@@ -1,0 +1,350 @@
+/* Analytics Page */
+.analyticsPage {
+  padding: 0;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.pageTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-black);
+  margin-bottom: 0.5rem;
+}
+
+.pageSubtitle {
+  font-size: 1rem;
+  color: var(--color-gray-medium);
+}
+
+.periodSelect {
+  padding: 0.6rem 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  background-color: var(--color-white);
+}
+
+/* KPI Grid */
+.kpiGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.kpiCard {
+  background-color: var(--color-white);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+}
+
+.kpiCard:hover {
+  transform: translateY(-3px);
+}
+
+.kpiLabel {
+  font-size: 0.85rem;
+  color: var(--color-gray-medium);
+  margin-bottom: 0.5rem;
+}
+
+.kpiValue {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-black);
+  margin-bottom: 0.25rem;
+}
+
+.kpiChange {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.kpiChange.positive {
+  color: #16a34a;
+}
+
+.kpiChange.negative {
+  color: #dc2626;
+}
+
+/* Charts Grid */
+.chartsGrid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.chartCard {
+  background-color: var(--color-white);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1.5rem;
+}
+
+.chartTitle {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--color-black);
+  margin-bottom: 1.5rem;
+}
+
+/* Bar Chart */
+.barChart {
+  display: flex;
+  align-items: flex-end;
+  gap: 1.5rem;
+  height: 200px;
+  padding: 0 0.5rem;
+}
+
+.barGroup {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+.bars {
+  flex: 1;
+  display: flex;
+  gap: 4px;
+  align-items: flex-end;
+  width: 100%;
+}
+
+.barReports {
+  flex: 1;
+  background-color: var(--color-black);
+  border-radius: 4px 4px 0 0;
+  min-height: 4px;
+  transition: height 0.5s ease;
+}
+
+.barResolved {
+  flex: 1;
+  background-color: #16a34a;
+  border-radius: 4px 4px 0 0;
+  min-height: 4px;
+  transition: height 0.5s ease;
+}
+
+.barLabel {
+  font-size: 0.75rem;
+  color: var(--color-gray-medium);
+  margin-top: 0.5rem;
+}
+
+.legend {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-gray-light);
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--color-gray-medium);
+}
+
+.legendDotReports {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background-color: var(--color-black);
+}
+
+.legendDotResolved {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background-color: #16a34a;
+}
+
+/* Category Breakdown */
+.categoryList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.categoryItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.categoryInfo {
+  display: flex;
+  justify-content: space-between;
+}
+
+.categoryName {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-black);
+}
+
+.categoryCount {
+  font-size: 0.85rem;
+  color: var(--color-gray-medium);
+}
+
+.progressBar {
+  height: 8px;
+  background-color: var(--color-gray-light);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background-color: var(--color-black);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+/* Zone Table */
+.zoneTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.zoneTable th {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-gray-medium);
+  border-bottom: 2px solid var(--color-gray-light);
+}
+
+.zoneTable td {
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  color: var(--color-gray-dark);
+  border-bottom: 1px solid var(--color-gray-light);
+}
+
+.zoneCount {
+  font-weight: 600;
+  color: var(--color-black);
+}
+
+.activityBadge {
+  padding: 0.3rem 0.7rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.activityBadge.highactivity {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.activityBadge.moderate {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.activityBadge.low {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+/* Dark Mode */
+:global([data-theme="dark"]) .kpiCard,
+:global([data-theme="dark"]) .chartCard {
+  background-color: #141414;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+:global([data-theme="dark"]) .kpiValue,
+:global([data-theme="dark"]) .chartTitle,
+:global([data-theme="dark"]) .categoryName {
+  color: #e8e8e8;
+}
+
+:global([data-theme="dark"]) .periodSelect {
+  background-color: #1a1a1a;
+  border-color: #252525;
+  color: #e8e8e8;
+}
+
+:global([data-theme="dark"]) .barReports {
+  background-color: #e8e8e8;
+}
+
+:global([data-theme="dark"]) .legendDotReports {
+  background-color: #e8e8e8;
+}
+
+:global([data-theme="dark"]) .progressBar {
+  background-color: #1a1a1a;
+}
+
+:global([data-theme="dark"]) .progressFill {
+  background-color: #e8e8e8;
+}
+
+:global([data-theme="dark"]) .legend {
+  border-top-color: #1f1f1f;
+}
+
+:global([data-theme="dark"]) .zoneTable th {
+  border-bottom-color: #1f1f1f;
+}
+
+:global([data-theme="dark"]) .zoneTable td {
+  border-bottom-color: #1f1f1f;
+  color: #aaaaaa;
+}
+
+:global([data-theme="dark"]) .zoneCount {
+  color: #e8e8e8;
+}
+
+/* Responsive */
+@media (max-width: 968px) {
+  .chartsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .kpiGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .kpiGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .barChart {
+    gap: 0.75rem;
+  }
+}

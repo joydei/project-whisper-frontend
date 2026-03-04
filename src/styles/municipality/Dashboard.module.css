@@ -281,6 +281,56 @@
   color: var(--color-gray-medium);
 }
 
+/* Dark Mode */
+:global([data-theme="dark"]) .statCard,
+:global([data-theme="dark"]) .card {
+  background-color: #141414;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+:global([data-theme="dark"]) .statValue,
+:global([data-theme="dark"]) .cardTitle,
+:global([data-theme="dark"]) .reportTitle,
+:global([data-theme="dark"]) .notificationTitle {
+  color: #e8e8e8;
+}
+
+:global([data-theme="dark"]) .reportItem:hover {
+  background-color: #1a1a1a;
+}
+
+:global([data-theme="dark"]) .cardHeader {
+  border-bottom-color: #1f1f1f;
+}
+
+:global([data-theme="dark"]) .actionBtn {
+  background-color: #1a1a1a;
+  color: #aaaaaa;
+}
+
+:global([data-theme="dark"]) .actionBtn:hover {
+  background-color: #e8e8e8;
+  color: #0d0d0d;
+}
+
+:global([data-theme="dark"]) .notification {
+  background-color: #1a1a1a;
+}
+
+:global([data-theme="dark"]) .notificationSection {
+  border-top-color: #1f1f1f;
+}
+
+:global([data-theme="dark"]) .filterSelect {
+  background-color: #1a1a1a;
+  border-color: #252525;
+  color: #e8e8e8;
+}
+
+:global([data-theme="dark"]) .chartPlaceholder {
+  background-color: #1a1a1a;
+}
+
 /* Responsive Design */
 @media (max-width: 968px) {
   .contentGrid {

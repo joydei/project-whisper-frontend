@@ -1,0 +1,251 @@
+.civilServicesPage {
+  padding: 0;
+}
+
+.header {
+  margin-bottom: 1.5rem;
+}
+
+.pageTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-black);
+  margin-bottom: 0.5rem;
+}
+
+.pageSubtitle {
+  font-size: 1rem;
+  color: var(--color-gray-medium);
+}
+
+/* Summary Bar */
+.summaryBar {
+  display: flex;
+  gap: 2rem;
+  background-color: var(--color-white);
+  padding: 1.25rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1.5rem;
+}
+
+.summaryItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.summaryValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-black);
+}
+
+.summaryValue.emergencyText {
+  color: #d32f2f;
+}
+
+.summaryLabel {
+  font-size: 0.8rem;
+  color: var(--color-gray-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Services Grid */
+.servicesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.serviceCard {
+  background-color: var(--color-white);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.serviceCard:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.serviceHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.serviceEmoji {
+  font-size: 2rem;
+}
+
+.serviceName {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-black);
+  margin-bottom: 0.2rem;
+}
+
+.serviceStatus {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.serviceStatus.operational {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.serviceStatus.elevated {
+  background-color: #fff3e0;
+  color: #e65100;
+}
+
+.serviceStatus.critical {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.serviceStats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.serviceStat {
+  text-align: center;
+}
+
+.serviceStatValue {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-black);
+}
+
+.serviceStatLabel {
+  font-size: 0.7rem;
+  color: var(--color-gray-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+/* Card */
+.card {
+  background-color: var(--color-white);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.cardTitle {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--color-black);
+  margin-bottom: 1.25rem;
+}
+
+/* Coordination List */
+.coordList {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.coordItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.coordItem:last-child {
+  border-bottom: none;
+}
+
+.coordService {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-black);
+  min-width: 100px;
+}
+
+.coordEvent {
+  flex: 1;
+  font-size: 0.88rem;
+  color: var(--color-black);
+}
+
+.coordTime {
+  font-size: 0.8rem;
+  color: var(--color-gray-medium);
+  flex-shrink: 0;
+}
+
+/* Dark Mode */
+:global([data-theme="dark"]) .summaryBar,
+:global([data-theme="dark"]) .serviceCard,
+:global([data-theme="dark"]) .card {
+  background-color: #141414;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+:global([data-theme="dark"]) .summaryValue,
+:global([data-theme="dark"]) .serviceName,
+:global([data-theme="dark"]) .serviceStatValue,
+:global([data-theme="dark"]) .cardTitle,
+:global([data-theme="dark"]) .coordService,
+:global([data-theme="dark"]) .coordEvent {
+  color: #e8e8e8;
+}
+
+:global([data-theme="dark"]) .serviceStats {
+  border-top-color: #1f1f1f;
+}
+
+:global([data-theme="dark"]) .coordItem {
+  border-bottom-color: #1f1f1f;
+}
+
+:global([data-theme="dark"]) .serviceStatus.operational {
+  background-color: rgba(46, 125, 50, 0.15);
+}
+
+:global([data-theme="dark"]) .serviceStatus.elevated {
+  background-color: rgba(230, 81, 0, 0.15);
+}
+
+:global([data-theme="dark"]) .serviceStatus.critical {
+  background-color: rgba(198, 40, 40, 0.15);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .summaryBar {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 640px) {
+  .servicesGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .coordItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+}

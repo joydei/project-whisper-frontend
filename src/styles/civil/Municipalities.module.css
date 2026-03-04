@@ -1,0 +1,206 @@
+.municipalitiesPage {
+  padding: 0;
+}
+
+.header {
+  margin-bottom: 1.5rem;
+}
+
+.pageTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-black);
+  margin-bottom: 0.5rem;
+}
+
+.pageSubtitle {
+  font-size: 1rem;
+  color: var(--color-gray-medium);
+}
+
+/* Summary Bar */
+.summaryBar {
+  display: flex;
+  gap: 2rem;
+  background-color: var(--color-white);
+  padding: 1.25rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1.5rem;
+}
+
+.summaryItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.summaryValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-black);
+}
+
+.summaryValue.emergencyText {
+  color: #d32f2f;
+}
+
+.summaryLabel {
+  font-size: 0.8rem;
+  color: var(--color-gray-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Municipality Grid */
+.muniGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.25rem;
+}
+
+.muniCard {
+  background-color: var(--color-white);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.muniCard:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.muniHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.25rem;
+}
+
+.muniName {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-black);
+  margin-bottom: 0.2rem;
+}
+
+.muniRegion {
+  font-size: 0.82rem;
+  color: var(--color-gray-medium);
+}
+
+.emergencyBadge {
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  background-color: #d32f2f;
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 600;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.75; }
+}
+
+/* Municipality Stats */
+.muniStats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  padding: 1rem 0;
+  border-top: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 1rem;
+}
+
+.muniStat {
+  text-align: center;
+}
+
+.muniStatValue {
+  display: block;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--color-black);
+}
+
+.muniStatLabel {
+  font-size: 0.75rem;
+  color: var(--color-gray-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+/* Footer */
+.muniFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.liaisonLabel {
+  font-size: 0.82rem;
+  color: var(--color-gray-medium);
+}
+
+.viewBtn {
+  padding: 0.4rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--color-black);
+  background: transparent;
+  color: var(--color-black);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.viewBtn:hover {
+  background-color: var(--color-black);
+  color: var(--color-white);
+}
+
+/* Dark Mode */
+:global([data-theme="dark"]) .summaryBar,
+:global([data-theme="dark"]) .muniCard {
+  background-color: #141414;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+:global([data-theme="dark"]) .summaryValue,
+:global([data-theme="dark"]) .muniName,
+:global([data-theme="dark"]) .muniStatValue {
+  color: #e8e8e8;
+}
+
+:global([data-theme="dark"]) .muniStats {
+  border-color: #1f1f1f;
+}
+
+:global([data-theme="dark"]) .viewBtn {
+  border-color: #e8e8e8;
+  color: #e8e8e8;
+}
+
+:global([data-theme="dark"]) .viewBtn:hover {
+  background-color: #e8e8e8;
+  color: #0d0d0d;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .summaryBar {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .muniGrid {
+    grid-template-columns: 1fr;
+  }
+}

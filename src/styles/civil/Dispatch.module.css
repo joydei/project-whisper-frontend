@@ -1,0 +1,272 @@
+.dispatchPage {
+  padding: 0;
+}
+
+.header {
+  margin-bottom: 1.5rem;
+}
+
+.pageTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-black);
+  margin-bottom: 0.5rem;
+}
+
+.pageSubtitle {
+  font-size: 1rem;
+  color: var(--color-gray-medium);
+}
+
+/* Status Overview Grid */
+.statusGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.statusCard {
+  padding: 1.25rem;
+  border-radius: 12px;
+  background-color: var(--color-white);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.statusCard.available {
+  border-left: 4px solid #4caf50;
+}
+
+.statusCard.enroute {
+  border-left: 4px solid #ff9800;
+}
+
+.statusCard.onscene {
+  border-left: 4px solid #d32f2f;
+}
+
+.statusCard.returning {
+  border-left: 4px solid #2196f3;
+}
+
+.statusValue {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-black);
+  margin-bottom: 0.25rem;
+}
+
+.statusLabel {
+  font-size: 0.85rem;
+  color: var(--color-gray-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Card */
+.card {
+  background-color: var(--color-white);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.cardTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--color-black);
+}
+
+.filterSelect {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  font-size: 0.85rem;
+  background-color: var(--color-white);
+  cursor: pointer;
+  outline: none;
+}
+
+/* Units Grid */
+.unitsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+.unitCard {
+  padding: 1.25rem;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  background-color: var(--color-white);
+  transition: box-shadow 0.2s;
+}
+
+.unitCard:hover {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.unitHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.callSign {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-black);
+}
+
+.unitStatusBadge {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.unitStatusBadge.available {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.unitStatusBadge.enroute {
+  background-color: #fff3e0;
+  color: #e65100;
+}
+
+.unitStatusBadge.onscene {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.unitStatusBadge.returning {
+  background-color: #e3f2fd;
+  color: #1565c0;
+}
+
+.unitType {
+  font-size: 0.85rem;
+  color: var(--color-gray-medium);
+  margin-bottom: 0.5rem;
+}
+
+.unitLocation {
+  font-size: 0.85rem;
+  color: var(--color-gray-medium);
+  margin-bottom: 0.35rem;
+}
+
+.unitAssignment {
+  font-size: 0.82rem;
+  color: var(--color-black);
+  font-weight: 500;
+  margin-bottom: 0.35rem;
+}
+
+.unitEta {
+  font-size: 0.82rem;
+  color: #ff9800;
+  font-weight: 500;
+}
+
+.assignBtn {
+  margin-top: 0.75rem;
+  width: 100%;
+  padding: 0.55rem;
+  border-radius: 8px;
+  border: 2px solid var(--color-black);
+  background: transparent;
+  color: var(--color-black);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.assignBtn:hover {
+  background-color: var(--color-black);
+  color: var(--color-white);
+}
+
+/* Dark Mode */
+:global([data-theme="dark"]) .statusCard,
+:global([data-theme="dark"]) .card,
+:global([data-theme="dark"]) .unitCard {
+  background-color: #141414;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  border-color: #252525;
+}
+
+:global([data-theme="dark"]) .statusValue,
+:global([data-theme="dark"]) .cardTitle,
+:global([data-theme="dark"]) .callSign,
+:global([data-theme="dark"]) .unitAssignment {
+  color: #e8e8e8;
+}
+
+:global([data-theme="dark"]) .cardHeader {
+  border-bottom-color: #1f1f1f;
+}
+
+:global([data-theme="dark"]) .filterSelect {
+  background-color: #1a1a1a;
+  border-color: #252525;
+  color: #e8e8e8;
+}
+
+:global([data-theme="dark"]) .assignBtn {
+  border-color: #e8e8e8;
+  color: #e8e8e8;
+}
+
+:global([data-theme="dark"]) .assignBtn:hover {
+  background-color: #e8e8e8;
+  color: #0d0d0d;
+}
+
+:global([data-theme="dark"]) .unitStatusBadge.available {
+  background-color: rgba(46, 125, 50, 0.15);
+}
+
+:global([data-theme="dark"]) .unitStatusBadge.enroute {
+  background-color: rgba(230, 81, 0, 0.15);
+}
+
+:global([data-theme="dark"]) .unitStatusBadge.onscene {
+  background-color: rgba(198, 40, 40, 0.15);
+}
+
+:global([data-theme="dark"]) .unitStatusBadge.returning {
+  background-color: rgba(21, 101, 192, 0.15);
+}
+
+:global([data-theme="dark"]) .unitsGrid {
+  background-color: transparent;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .statusGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .statusGrid {
+    grid-template-columns: 1fr;
+  }
+}

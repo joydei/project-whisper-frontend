@@ -25,9 +25,23 @@ import Search from '../views/user/Search';
 // Municipality Views
 import Dashboard from '../views/municipality/Dashboard';
 import Reports from '../views/municipality/Reports';
+import Announcements from '../views/municipality/Announcements';
+import MunicipalityMessages from '../views/municipality/Messages';
+import Analytics from '../views/municipality/Analytics';
+import Community from '../views/municipality/Community';
+import MunicipalityProfileEdit from '../views/municipality/Profile';
+import MunicipalitySettings from '../views/municipality/Settings';
+import MunicipalityCivilServices from '../views/municipality/CivilServices';
 
 // Civil Views
 import CivilDashboard from '../views/civil/Dashboard';
+import CivilIncidents from '../views/civil/Incidents';
+import CivilDispatch from '../views/civil/Dispatch';
+import CivilMunicipalities from '../views/civil/Municipalities';
+import CivilMessages from '../views/civil/Messages';
+import CivilAnalytics from '../views/civil/Analytics';
+import CivilProfile from '../views/civil/Profile';
+import CivilSettings from '../views/civil/Settings';
 
 const AppRoutes = () => {
   return (
@@ -59,6 +73,13 @@ const AppRoutes = () => {
         <Route index element={<Dashboard />} />
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="reports" element={<Reports />} />
+        <Route path="announcements" element={<Announcements />} />
+        <Route path="messages" element={<MunicipalityMessages />} />
+        <Route path="analytics" element={<Analytics />} />
+        <Route path="community" element={<Community />} />
+        <Route path="profile" element={<MunicipalityProfileEdit />} />
+        <Route path="settings" element={<MunicipalitySettings />} />
+        <Route path="civil-services" element={<MunicipalityCivilServices />} />
       </Route>
 
       {/* Admin Routes */}
@@ -71,6 +92,13 @@ const AppRoutes = () => {
       <Route path="/civil" element={<CivilLayout />}>
         <Route index element={<CivilDashboard />} />
         <Route path="dashboard" element={<CivilDashboard />} />
+        <Route path="incidents" element={<CivilIncidents />} />
+        <Route path="dispatch" element={<CivilDispatch />} />
+        <Route path="municipalities" element={<CivilMunicipalities />} />
+        <Route path="messages" element={<CivilMessages />} />
+        <Route path="analytics" element={<CivilAnalytics />} />
+        <Route path="profile" element={<CivilProfile />} />
+        <Route path="settings" element={<CivilSettings />} />
       </Route>
     </Routes>
   );

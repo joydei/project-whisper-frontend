@@ -11,11 +11,19 @@
 }
 
 .main {
-  padding: 0;
+  padding: 2rem;
+}
+
+:global([data-theme="dark"]) .mainWrapper {
+  background-color: #0d0d0d;
 }
 
 @media (max-width: 768px) {
   .mainWrapper {
     margin-left: 0;
+  }
+
+  .main {
+    padding: 1rem;
   }
 }

@@ -1,0 +1,342 @@
+.settingsPage {
+  padding: 0;
+}
+
+.header {
+  margin-bottom: 1.5rem;
+}
+
+.pageTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-black);
+  margin-bottom: 0.5rem;
+}
+
+.pageSubtitle {
+  font-size: 1rem;
+  color: var(--color-gray-medium);
+}
+
+/* Grid */
+.settingsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Card */
+.card {
+  background-color: var(--color-white);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1.5rem;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.cardTitle {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--color-black);
+  margin-bottom: 1.25rem;
+}
+
+.cardHeader .cardTitle {
+  margin-bottom: 0;
+}
+
+/* Setting Rows */
+.settingRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.settingRow:last-of-type {
+  border-bottom: none;
+}
+
+.settingInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.settingLabel {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-black);
+}
+
+.settingDescription {
+  font-size: 0.8rem;
+  color: var(--color-gray-medium);
+}
+
+/* Toggle */
+.toggle {
+  width: 44px;
+  height: 24px;
+  background-color: #ccc;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.2s;
+  flex-shrink: 0;
+}
+
+.toggle.toggleOn {
+  background-color: var(--color-black);
+}
+
+.toggleKnob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background-color: var(--color-white);
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+
+.toggle.toggleOn .toggleKnob {
+  transform: translateX(20px);
+}
+
+/* Form */
+.formGroup {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-black);
+  margin-bottom: 0.5rem;
+}
+
+.textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  font-size: 0.9rem;
+  resize: vertical;
+  outline: none;
+  font-family: inherit;
+  line-height: 1.5;
+  transition: border-color 0.2s;
+}
+
+.textarea:focus {
+  border-color: var(--color-black);
+}
+
+.saveBtn {
+  padding: 0.6rem 1.25rem;
+  border-radius: 8px;
+  border: none;
+  background-color: var(--color-black);
+  color: var(--color-white);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.saveBtn:hover {
+  opacity: 0.85;
+}
+
+.addBtn {
+  padding: 0.45rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--color-black);
+  background: transparent;
+  color: var(--color-black);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.addBtn:hover {
+  background-color: var(--color-black);
+  color: var(--color-white);
+}
+
+/* Table */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-gray-medium);
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.table td {
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  color: var(--color-black);
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.table tr:hover td {
+  background-color: var(--color-gray-light);
+}
+
+.memberName {
+  font-weight: 600;
+}
+
+.memberEmail {
+  font-size: 0.85rem;
+  color: var(--color-gray-medium);
+}
+
+/* Status Badge */
+.statusBadge {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.statusBadge.active {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.statusBadge.inactive {
+  background-color: #f5f5f5;
+  color: #757575;
+}
+
+.editBtn {
+  padding: 0.3rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  background: transparent;
+  font-size: 0.8rem;
+  color: var(--color-black);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.editBtn:hover {
+  border-color: var(--color-black);
+}
+
+/* Dark Mode */
+:global([data-theme="dark"]) .card {
+  background-color: #141414;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+:global([data-theme="dark"]) .cardTitle,
+:global([data-theme="dark"]) .settingLabel,
+:global([data-theme="dark"]) .label,
+:global([data-theme="dark"]) .memberName {
+  color: #e8e8e8;
+}
+
+:global([data-theme="dark"]) .settingRow {
+  border-bottom-color: #1f1f1f;
+}
+
+:global([data-theme="dark"]) .toggle {
+  background-color: #333;
+}
+
+:global([data-theme="dark"]) .toggle.toggleOn {
+  background-color: #e8e8e8;
+}
+
+:global([data-theme="dark"]) .toggle.toggleOn .toggleKnob {
+  background-color: #0d0d0d;
+}
+
+:global([data-theme="dark"]) .textarea {
+  background-color: #1a1a1a;
+  border-color: #252525;
+  color: #e8e8e8;
+}
+
+:global([data-theme="dark"]) .saveBtn {
+  background-color: #e8e8e8;
+  color: #0d0d0d;
+}
+
+:global([data-theme="dark"]) .addBtn {
+  border-color: #e8e8e8;
+  color: #e8e8e8;
+}
+
+:global([data-theme="dark"]) .addBtn:hover {
+  background-color: #e8e8e8;
+  color: #0d0d0d;
+}
+
+:global([data-theme="dark"]) .table th {
+  border-bottom-color: #252525;
+}
+
+:global([data-theme="dark"]) .table td {
+  color: #ccc;
+  border-bottom-color: #1f1f1f;
+}
+
+:global([data-theme="dark"]) .table tr:hover td {
+  background-color: #1a1a1a;
+}
+
+:global([data-theme="dark"]) .editBtn {
+  border-color: #333;
+  color: #ccc;
+}
+
+:global([data-theme="dark"]) .editBtn:hover {
+  border-color: #e8e8e8;
+}
+
+:global([data-theme="dark"]) .statusBadge.active {
+  background-color: rgba(46, 125, 50, 0.15);
+}
+
+:global([data-theme="dark"]) .statusBadge.inactive {
+  background-color: rgba(117, 117, 117, 0.15);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .settingsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .table {
+    display: block;
+    overflow-x: auto;
+  }
+}
