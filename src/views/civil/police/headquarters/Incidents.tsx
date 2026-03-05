@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import styles from '../../styles/civil/Incidents.module.css';
+import styles from '../../../../styles/civil/Incidents.module.css';
 
 type Priority = 'emergency' | 'high' | 'medium' | 'low';
 type Status = 'open' | 'dispatched' | 'in-progress' | 'resolved' | 'closed';

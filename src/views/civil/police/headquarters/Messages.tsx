@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import styles from '../../styles/civil/Messages.module.css';
+import styles from '../../../../styles/civil/Messages.module.css';
 
 interface Conversation {
   id: number;

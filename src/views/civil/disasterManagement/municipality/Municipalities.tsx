@@ -1,0 +1,5 @@
+const Municipalities = () => {
+  return <h1>This is the Municipalities page for the National Disaster Management Organization — Municipality</h1>;
+};
+
+export default Municipalities;

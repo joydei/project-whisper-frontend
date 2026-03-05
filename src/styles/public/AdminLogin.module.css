@@ -1,18 +1,18 @@
-/* Signup Page — mirrors Login.module.css design system */
+/* AdminLogin Page — mirrors Login.module.css styling */
 
 /* ─── Page Shell ─────────────────────────────────────────── */
-.signupPage {
+.loginPage {
   min-height: 100vh;
   display: flex;
   background-color: var(--color-gray-light);
 }
 
-/* ─── Left Panel ─────────────────────────────────────────── */
+/* Left panel — brand side */
 .leftPanel {
   display: none;
   flex-direction: column;
   justify-content: space-between;
-  width: 40%;
+  width: 45%;
   background-color: var(--color-black);
   color: var(--color-white);
   padding: 3rem;
@@ -25,7 +25,7 @@
   position: absolute;
   inset: 0;
   background: radial-gradient(
-    ellipse at top left,
+    ellipse at top right,
     rgba(255, 255, 255, 0.04) 0%,
     transparent 60%
   );
@@ -58,7 +58,9 @@
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  justify-content: center;
+  gap: 2rem;
+  flex: 1;
   position: relative;
   z-index: 1;
 }
@@ -111,10 +113,9 @@
   overflow-y: auto;
 }
 
-/* ─── Signup Card ────────────────────────────────────────── */
-.signupCard {
+/* ─── Login Card ─────────────────────────────────────────── */
+.loginCard {
   width: 100%;
-  max-width: 100%;
   background-color: var(--color-white);
   border: 1px solid #e4e4e4;
   border-radius: 2px;
@@ -124,7 +125,7 @@
 /* Mobile brand — hidden on desktop */
 .mobileBrand {
   text-align: center;
-  margin-bottom: 1.75rem;
+  margin-bottom: 2rem;
 }
 
 .mobileBrand h1 {
@@ -156,17 +157,10 @@
 }
 
 /* ─── Form ───────────────────────────────────────────────── */
-.signupForm {
+.loginForm {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-}
-
-/* Two-column row for first/last name */
-.formRow {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
 }
 
 .formGroup {
@@ -175,7 +169,6 @@
   gap: 0.375rem;
 }
 
-/* ─── Label ──────────────────────────────────────────────── */
 .label {
   font-size: 0.6875rem;
   font-weight: 700;
@@ -188,18 +181,12 @@
   margin: 0;
 }
 
-.labelDisabled {
-  color: var(--color-gray-medium);
-  opacity: 0.6;
-}
-
 .labelIcon {
   width: 12px;
   height: 12px;
   color: var(--color-gray-dark);
 }
 
-/* ─── Input ──────────────────────────────────────────────── */
 .input {
   padding: 0.75rem 1rem;
   border: 1.5px solid #e0e0e0;
@@ -210,7 +197,6 @@
   background-color: var(--color-white);
   transition: border-color 0.15s ease;
   width: 100%;
-  box-sizing: border-box;
 }
 
 .input::placeholder {
@@ -223,73 +209,6 @@
   border-color: var(--color-black);
 }
 
-.inputError {
-  border-color: #d94f4f !important;
-}
-
-.errorText {
-  font-size: 0.6875rem;
-  color: #d94f4f;
-  margin: 0;
-}
-
-/* ─── Date input ─────────────────────────────────────────── */
-input[type='date'].input {
-  cursor: pointer;
-}
-
-input[type='date'].input::-webkit-calendar-picker-indicator {
-  opacity: 0.5;
-  cursor: pointer;
-}
-
-input[type='date'].input::-webkit-calendar-picker-indicator:hover {
-  opacity: 1;
-}
-
-/* ─── Select wrapper & select ────────────────────────────── */
-.selectWrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.select {
-  padding: 0.75rem 2.25rem 0.75rem 1rem;
-  border: 1.5px solid #e0e0e0;
-  border-radius: 2px;
-  font-size: 0.8125rem;
-  font-family: 'Poppins', sans-serif;
-  color: var(--color-black);
-  background-color: var(--color-white);
-  appearance: none;
-  -webkit-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 0.75rem center;
-  transition: border-color 0.15s ease;
-  width: 100%;
-  cursor: pointer;
-  box-sizing: border-box;
-}
-
-.select:focus {
-  outline: none;
-  border-color: var(--color-black);
-}
-
-.select:disabled {
-  background-color: var(--color-gray-light);
-  color: var(--color-gray-medium);
-  cursor: not-allowed;
-  opacity: 0.7;
-}
-
-.select option {
-  font-family: 'Poppins', sans-serif;
-}
-
-/* ─── Password wrapper ───────────────────────────────────── */
 .passwordWrapper {
   position: relative;
   display: flex;
@@ -323,15 +242,46 @@ input[type='date'].input::-webkit-calendar-picker-indicator:hover {
   height: 17px;
 }
 
-/* ─── Divider ────────────────────────────────────────────── */
-.divider {
-  height: 1px;
-  background-color: #e4e4e4;
-  margin: 0.25rem 0;
+/* ─── Options row ────────────────────────────────────────── */
+.formOptions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.125rem;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.8125rem;
+  color: var(--color-gray-dark);
+  font-weight: 500;
+}
+
+.checkboxLabel input[type='checkbox'] {
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+  accent-color: var(--color-black);
+}
+
+.forgotPassword {
+  font-size: 0.8125rem;
+  color: var(--color-gray-dark);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.15s ease;
+}
+
+.forgotPassword:hover {
+  color: var(--color-black);
+  text-decoration: underline;
 }
 
 /* ─── Submit button ──────────────────────────────────────── */
-.submitBtn {
+.loginBtn {
   margin-top: 0.5rem;
   padding: 0.875rem 1.5rem;
   background-color: var(--color-black);
@@ -350,16 +300,16 @@ input[type='date'].input::-webkit-calendar-picker-indicator:hover {
   width: 100%;
 }
 
-.submitBtn:hover:not(:disabled) {
+.loginBtn:hover:not(:disabled) {
   opacity: 0.85;
   transform: translateY(-1px);
 }
 
-.submitBtn:active:not(:disabled) {
+.loginBtn:active:not(:disabled) {
   transform: translateY(0);
 }
 
-.submitBtn:disabled {
+.loginBtn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
@@ -371,7 +321,7 @@ input[type='date'].input::-webkit-calendar-picker-indicator:hover {
   transition: transform 0.15s ease;
 }
 
-.submitBtn:hover:not(:disabled) .btnIcon {
+.loginBtn:hover:not(:disabled) .btnIcon {
   transform: translateX(3px);
 }
 
@@ -398,30 +348,28 @@ input[type='date'].input::-webkit-calendar-picker-indicator:hover {
   40%           { transform: scale(1);   opacity: 1;   }
 }
 
-/* ─── Log-in prompt ──────────────────────────────────────── */
-.loginPrompt {
+/* ─── Back prompt ────────────────────────────────────────── */
+.backPrompt {
   text-align: center;
   margin-top: 1.5rem;
   padding-top: 1.5rem;
   border-top: 1px solid #e4e4e4;
 }
 
-.loginPrompt p {
+.backPrompt p {
   font-size: 0.8125rem;
   color: var(--color-gray-dark);
   margin: 0;
 }
 
-.loginLink {
+.backLink {
   color: var(--color-black);
   font-weight: 700;
   text-decoration: none;
-  border-bottom: 1.5px solid var(--color-black);
-  padding-bottom: 1px;
   transition: opacity 0.15s ease;
 }
 
-.loginLink:hover {
+.backLink:hover {
   opacity: 0.6;
 }
 
@@ -435,33 +383,33 @@ input[type='date'].input::-webkit-calendar-picker-indicator:hover {
     display: none;
   }
 
-  .signupCard {
+  .loginCard {
     border: none;
     background-color: transparent;
     padding: 0;
-    max-width: 100%;
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 600px) {
   .rightPanel {
     padding: 2rem 1.25rem;
     justify-content: flex-start;
     padding-top: 3rem;
   }
 
-  .signupCard {
+  .loginCard {
     padding: 2rem 1.25rem;
-    max-width: 100%;
   }
 
-  .formRow {
-    grid-template-columns: 1fr;
+  .formOptions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
   }
 }
 
 /* ─── Dark Mode ───────────────────────────────────────────── */
-:global([data-theme="dark"]) .signupPage {
+:global([data-theme="dark"]) .loginPage {
   background-color: var(--dm-bg-page);
 }
 
@@ -469,12 +417,11 @@ input[type='date'].input::-webkit-calendar-picker-indicator:hover {
   background-color: var(--dm-bg-page);
 }
 
-:global([data-theme="dark"]) .signupCard {
+:global([data-theme="dark"]) .loginCard {
   background-color: var(--dm-bg-surface);
   border-color: var(--dm-border);
 }
 
-/* Mobile brand */
 :global([data-theme="dark"]) .mobileBrand h1 {
   color: var(--dm-text-primary);
 }
@@ -483,7 +430,6 @@ input[type='date'].input::-webkit-calendar-picker-indicator:hover {
   color: var(--dm-text-secondary);
 }
 
-/* Form heading */
 :global([data-theme="dark"]) .formHeading {
   color: var(--dm-text-primary);
 }
@@ -492,7 +438,6 @@ input[type='date'].input::-webkit-calendar-picker-indicator:hover {
   color: var(--dm-text-secondary);
 }
 
-/* Labels */
 :global([data-theme="dark"]) .label {
   color: var(--dm-text-primary);
 }
@@ -501,7 +446,6 @@ input[type='date'].input::-webkit-calendar-picker-indicator:hover {
   color: var(--dm-text-secondary);
 }
 
-/* Inputs */
 :global([data-theme="dark"]) .input {
   background-color: var(--dm-bg-input);
   color: var(--dm-text-primary);
@@ -516,34 +460,6 @@ input[type='date'].input::-webkit-calendar-picker-indicator:hover {
   border-color: var(--dm-text-primary);
 }
 
-:global([data-theme="dark"]) .input:disabled {
-  background-color: var(--dm-bg-hover);
-  color: var(--dm-text-secondary);
-}
-
-/* Date picker indicator */
-:global([data-theme="dark"]) input[type='date'].input::-webkit-calendar-picker-indicator {
-  filter: invert(1);
-}
-
-/* Select */
-:global([data-theme="dark"]) .select {
-  background-color: var(--dm-bg-input);
-  color: var(--dm-text-primary);
-  border-color: var(--dm-border-input);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23aaa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-}
-
-:global([data-theme="dark"]) .select:focus {
-  border-color: var(--dm-text-primary);
-}
-
-:global([data-theme="dark"]) .select:disabled {
-  background-color: var(--dm-bg-hover);
-  color: var(--dm-text-secondary);
-}
-
-/* Password toggle */
 :global([data-theme="dark"]) .togglePassword {
   color: var(--dm-text-secondary);
 }
@@ -552,29 +468,32 @@ input[type='date'].input::-webkit-calendar-picker-indicator:hover {
   color: var(--dm-text-primary);
 }
 
-/* Error text stays red */
-
-/* Divider */
-:global([data-theme="dark"]) .divider {
-  background-color: var(--dm-divider);
-}
-
-/* Log-in prompt */
-:global([data-theme="dark"]) .loginPrompt {
-  border-top-color: var(--dm-divider);
-}
-
-:global([data-theme="dark"]) .loginPrompt p {
+:global([data-theme="dark"]) .checkboxLabel {
   color: var(--dm-text-secondary);
 }
 
-:global([data-theme="dark"]) .loginLink {
+:global([data-theme="dark"]) .forgotPassword {
+  color: var(--dm-text-secondary);
+}
+
+:global([data-theme="dark"]) .forgotPassword:hover {
   color: var(--dm-text-primary);
-  border-bottom-color: var(--dm-text-primary);
+}
+
+:global([data-theme="dark"]) .backPrompt {
+  border-top-color: var(--dm-divider);
+}
+
+:global([data-theme="dark"]) .backPrompt p {
+  color: var(--dm-text-secondary);
+}
+
+:global([data-theme="dark"]) .backLink {
+  color: var(--dm-text-primary);
 }
 
 @media (min-width: 1024px) {
-  :global([data-theme="dark"]) .signupCard {
+  :global([data-theme="dark"]) .loginCard {
     background-color: transparent;
     border-color: transparent;
   }

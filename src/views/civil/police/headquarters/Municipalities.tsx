@@ -1,4 +1,4 @@
-import styles from '../../styles/civil/Municipalities.module.css';
+import styles from '../../../../styles/civil/Municipalities.module.css';
 
 interface MunicipalityBreakdown {
   name: string;

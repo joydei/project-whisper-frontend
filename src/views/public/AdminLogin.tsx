@@ -1,17 +1,15 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Fade } from 'react-awesome-reveal';
-import styles from '../../styles/public/Login.module.css';
+import styles from '../../styles/public/AdminLogin.module.css';
 
 // Import SVG icons
 import EnvelopeIcon from '../../assets/icons/envelope.svg?react';
 import KeyIcon from '../../assets/icons/key.svg?react';
 import EyeIcon from '../../assets/icons/eye.svg?react';
 import AngleRightIcon from '../../assets/icons/angle-small-right.svg?react';
-import SirenIcon from '../../assets/icons/siren-on.svg?react';
-import GovernmentIcon from '../../assets/icons/government-flag.svg?react';
 
-const Login = () => {
+const AdminLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -23,42 +21,31 @@ const Login = () => {
     e.preventDefault();
     setIsLoading(true);
     await new Promise(resolve => setTimeout(resolve, 1500));
-    navigate('/');
+    navigate('/admin/dashboard');
     setIsLoading(false);
   };
 
   return (
     <div className={styles.loginPage}>
-      {/* ── Left branding panel (desktop only) ── */}
+      {/* ── Left branding panel ── */}
       <div className={styles.leftPanel}>
         <div className={styles.brandBlock}>
           <h1 className={styles.brandName}>Aircho</h1>
-          <p className={styles.brandTagline}>Connecting Communities with Services</p>
-
-          <div className={styles.portalButtons}>
-            <Link to="/civil-login" className={styles.portalBtn}>
-              <SirenIcon className={styles.portalBtnIcon} />
-              <span>Civil Services Portal</span>
-            </Link>
-            <Link to="/municipality-login" className={styles.portalBtn}>
-              <GovernmentIcon className={styles.portalBtnIcon} />
-              <span>Municipality Portal</span>
-            </Link>
-          </div>
+          <p className={styles.brandTagline}>Admin Portal</p>
         </div>
 
         <ul className={styles.featureList}>
           <li className={styles.featureItem}>
             <span className={styles.featureDot} />
-            <p><strong>Report Issues</strong>Submit infrastructure, safety, and service concerns directly to your municipality.</p>
+            <p><strong>System Management</strong>Manage users, municipalities, and civil services across the platform.</p>
           </li>
           <li className={styles.featureItem}>
             <span className={styles.featureDot} />
-            <p><strong>Track Progress</strong>Follow your reports in real time and get notified when they are resolved.</p>
+            <p><strong>Platform Analytics</strong>Monitor platform-wide metrics, usage statistics, and system health.</p>
           </li>
           <li className={styles.featureItem}>
             <span className={styles.featureDot} />
-            <p><strong>Engage Locally</strong>Read updates from civil services and government entities in your area.</p>
+            <p><strong>Configuration</strong>Control platform settings, permissions, and deployment configurations.</p>
           </li>
         </ul>
 
@@ -72,24 +59,24 @@ const Login = () => {
             {/* Mobile-only brand */}
             <div className={styles.mobileBrand}>
               <h1>Aircho</h1>
-              <p>Connecting Communities with Services</p>
+              <p>Admin Portal</p>
             </div>
 
-            {/* Form */}
-            <p className={styles.formHeading}>Log in</p>
-            <p className={styles.formSubheading}>Welcome back — sign in to your account</p>
+            {/* Login Form */}
+            <p className={styles.formHeading}>Admin Login</p>
+            <p className={styles.formSubheading}>Sign in to the administration panel</p>
 
             <form className={styles.loginForm} onSubmit={handleLogin}>
               <div className={styles.formGroup}>
-                <label htmlFor="email" className={styles.label}>
+                <label htmlFor="admin-email" className={styles.label}>
                   <EnvelopeIcon className={styles.labelIcon} />
                   Email Address
                 </label>
                 <input
                   type="email"
-                  id="email"
+                  id="admin-email"
                   className={styles.input}
-                  placeholder="you@example.com"
+                  placeholder="admin@aircho.com"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   required
@@ -97,14 +84,14 @@ const Login = () => {
               </div>
 
               <div className={styles.formGroup}>
-                <label htmlFor="password" className={styles.label}>
+                <label htmlFor="admin-password" className={styles.label}>
                   <KeyIcon className={styles.labelIcon} />
                   Password
                 </label>
                 <div className={styles.passwordWrapper}>
                   <input
                     type={showPassword ? 'text' : 'password'}
-                    id="password"
+                    id="admin-password"
                     className={styles.input}
                     placeholder="Enter your password"
                     value={password}
@@ -148,20 +135,8 @@ const Login = () => {
               </button>
             </form>
 
-            {/* Mobile-only portal links */}
-            <div className={styles.mobilePortalLinks}>
-              <Link to="/civil-login" className={styles.mobilePortalBtn}>
-                <SirenIcon className={styles.portalBtnIcon} />
-                <span>Civil Services Portal</span>
-              </Link>
-              <Link to="/municipality-login" className={styles.mobilePortalBtn}>
-                <GovernmentIcon className={styles.portalBtnIcon} />
-                <span>Municipality Portal</span>
-              </Link>
-            </div>
-
-            <div className={styles.signupPrompt}>
-              <p>Don't have an account? <a href="/signup" className={styles.signupLink}>Sign Up</a></p>
+            <div className={styles.backPrompt}>
+              <p><a href="/login" className={styles.backLink}>← Back to main login</a></p>
             </div>
           </div>
         </Fade>
@@ -170,4 +145,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default AdminLogin;

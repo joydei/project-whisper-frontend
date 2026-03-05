@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import styles from '../../styles/civil/Dispatch.module.css';
+import styles from '../../../../styles/civil/Dispatch.module.css';
 
 type UnitStatus = 'available' | 'en-route' | 'on-scene' | 'returning';
 

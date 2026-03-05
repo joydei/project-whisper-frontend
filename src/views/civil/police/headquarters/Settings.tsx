@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import styles from '../../styles/civil/Settings.module.css';
+import styles from '../../../../styles/civil/Settings.module.css';
 
 const Settings = () => {
   const [notifications, setNotifications] = useState({

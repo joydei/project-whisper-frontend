@@ -52,13 +52,92 @@
   font-weight: 400;
 }
 
+/* ─── Portal Buttons (left panel) ────────────────────────── */
+.portalButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  margin-top: 1.5rem;
+}
+
+.portalBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.625rem 1rem;
+  border-radius: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background-color: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  cursor: pointer;
+}
+
+.portalBtn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: var(--color-white);
+}
+
+.portalBtnIcon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  filter: brightness(0) invert(0.7);
+  transition: filter 0.15s ease;
+}
+
+.portalBtn:hover .portalBtnIcon {
+  filter: brightness(0) invert(1);
+}
+
+/* ─── Mobile portal links (inside card) ──────────────────── */
+.mobilePortalLinks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid #e4e4e4;
+}
+
+.mobilePortalBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem;
+  border-radius: 2px;
+  border: 1px solid #e4e4e4;
+  background-color: transparent;
+  color: var(--color-gray-dark);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.mobilePortalBtn:hover {
+  background-color: var(--color-gray-light);
+  border-color: #ccc;
+}
+
+.mobilePortalBtn .portalBtnIcon {
+  filter: brightness(0) invert(0.4);
+}
+
 .featureList {
   list-style: none;
   padding: 0;
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  justify-content: center;
+  gap: 2rem;
+  flex: 1;
   position: relative;
   z-index: 1;
 }
@@ -106,15 +185,14 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  padding: 3rem 2rem;
+  align-items: stretch;
+  padding: 3rem 6%;
   overflow-y: auto;
 }
 
 /* ─── Login Card ─────────────────────────────────────────── */
 .loginCard {
   width: 100%;
-  max-width: 580px;
   background-color: var(--color-white);
   border: 1px solid #e4e4e4;
   border-radius: 2px;
@@ -486,11 +564,14 @@
     display: none;
   }
 
+  .mobilePortalLinks {
+    display: none;
+  }
+
   .loginCard {
     border: none;
     background-color: transparent;
     padding: 0;
-    max-width: 800px;
   }
 }
 
@@ -637,6 +718,30 @@
 }
 
 /* Submit button stays black for contrast */
+
+/* Mobile portal links */
+:global([data-theme="dark"]) .mobilePortalLinks {
+  border-top-color: var(--dm-divider);
+}
+
+:global([data-theme="dark"]) .mobilePortalBtn {
+  color: var(--dm-text-secondary);
+  border-color: var(--dm-border);
+}
+
+:global([data-theme="dark"]) .mobilePortalBtn:hover {
+  background-color: var(--dm-bg-hover);
+  border-color: var(--dm-border-input);
+  color: var(--dm-text-primary);
+}
+
+:global([data-theme="dark"]) .mobilePortalBtn .portalBtnIcon {
+  filter: brightness(0) invert(0.6);
+}
+
+:global([data-theme="dark"]) .mobilePortalBtn:hover .portalBtnIcon {
+  filter: brightness(0) invert(0.85);
+}
 
 /* Sign-up prompt */
 :global([data-theme="dark"]) .signupPrompt {

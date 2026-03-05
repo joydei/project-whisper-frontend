@@ -1,4 +1,4 @@
-import styles from '../../styles/civil/Dashboard.module.css';
+import styles from '../../../../styles/civil/Dashboard.module.css';
 
 // In a real app, the service type would come from auth context
 const SERVICE_NAME = 'Ghana Police Service';

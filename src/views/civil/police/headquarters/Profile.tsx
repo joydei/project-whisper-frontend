@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import styles from '../../styles/civil/Profile.module.css';
+import styles from '../../../../styles/civil/Profile.module.css';
 
 const SERVICE_NAME = 'Ghana Police Service';
 

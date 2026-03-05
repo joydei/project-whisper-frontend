@@ -21,9 +21,10 @@ import HelicopterIcon from '../assets/icons/helicopter-side.svg?react';
 interface SidebarProps {
   role: 'municipality' | 'admin' | 'civil';
   civilServiceName?: string;
+  civilBasePath?: string;
 }
 
-const Sidebar = ({ role, civilServiceName }: SidebarProps) => {
+const Sidebar = ({ role, civilServiceName, civilBasePath }: SidebarProps) => {
   const municipalityLinks = [
     { path: '/municipality/dashboard', IconComponent: BooksIcon, label: 'Dashboard' },
     { path: '/municipality/reports', IconComponent: ClipFileIcon, label: 'Reports' },
@@ -47,15 +48,16 @@ const Sidebar = ({ role, civilServiceName }: SidebarProps) => {
 
   // Civil service sidebar — generic for any service (police, fire, ambulance, etc.)
   // Each service logs in to their own account and sees their domain-specific reports
+  const base = civilBasePath || '/civil';
   const civilLinks = [
-    { path: '/civil/dashboard', IconComponent: BooksIcon, label: 'Dashboard' },
-    { path: '/civil/incidents', IconComponent: SirenIcon, label: 'Incidents' },
-    { path: '/civil/dispatch', IconComponent: HelicopterIcon, label: 'Dispatch' },
-    { path: '/civil/municipalities', IconComponent: MarkerIcon, label: 'Municipalities' },
-    { path: '/civil/messages', IconComponent: MessagesIcon, label: 'Messages' },
-    { path: '/civil/analytics', IconComponent: CaseStudyIcon, label: 'Analytics' },
-    { path: '/civil/profile', IconComponent: ShieldIcon, label: 'Profile' },
-    { path: '/civil/settings', IconComponent: SettingsIcon, label: 'Settings' },
+    { path: `${base}/dashboard`, IconComponent: BooksIcon, label: 'Dashboard' },
+    { path: `${base}/incidents`, IconComponent: SirenIcon, label: 'Incidents' },
+    { path: `${base}/dispatch`, IconComponent: HelicopterIcon, label: 'Dispatch' },
+    { path: `${base}/municipalities`, IconComponent: MarkerIcon, label: 'Municipalities' },
+    { path: `${base}/messages`, IconComponent: MessagesIcon, label: 'Messages' },
+    { path: `${base}/analytics`, IconComponent: CaseStudyIcon, label: 'Analytics' },
+    { path: `${base}/profile`, IconComponent: ShieldIcon, label: 'Profile' },
+    { path: `${base}/settings`, IconComponent: SettingsIcon, label: 'Settings' },
   ];
 
   const links = role === 'municipality' ? municipalityLinks : role === 'admin' ? adminLinks : civilLinks;

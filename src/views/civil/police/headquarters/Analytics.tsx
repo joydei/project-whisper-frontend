@@ -1,4 +1,4 @@
-import styles from '../../styles/civil/Analytics.module.css';
+import styles from '../../../../styles/civil/Analytics.module.css';
 
 const Analytics = () => {
   const regionStats = [
