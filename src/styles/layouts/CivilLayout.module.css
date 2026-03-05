@@ -5,7 +5,7 @@
 }
 
 .mainWrapper {
-  margin-left: 250px;
+  margin-left: 220px;
   min-height: calc(100vh - 2.125rem);
   background-color: var(--color-gray-light);
 }
@@ -20,7 +20,7 @@
 
 @media (max-width: 768px) {
   .mainWrapper {
-    margin-left: 0;
+    margin-left: 60px;
   }
 
   .main {

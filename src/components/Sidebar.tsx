@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import styles from '../styles/components/Sidebar.module.css';
 
 // Import SVG icons
@@ -24,7 +24,7 @@ interface SidebarProps {
   civilBasePath?: string;
 }
 
-const Sidebar = ({ role, civilServiceName, civilBasePath }: SidebarProps) => {
+const Sidebar = ({ role, civilBasePath }: SidebarProps) => {
   const municipalityLinks = [
     { path: '/municipality/dashboard', IconComponent: BooksIcon, label: 'Dashboard' },
     { path: '/municipality/reports', IconComponent: ClipFileIcon, label: 'Reports' },
@@ -67,17 +67,23 @@ const Sidebar = ({ role, civilServiceName, civilBasePath }: SidebarProps) => {
       <div className={styles.logo}>
         <h2>Aircho</h2>
         <span className={styles.role}>
-          {role === 'municipality' ? 'Municipality' : role === 'admin' ? 'Admin' : civilServiceName || 'Civil Services'}
+          {role === 'municipality' ? 'Municipality' : role === 'admin' ? 'Admin' : 'Civil Services'}
         </span>
       </div>
       <nav className={styles.nav}>
         {links.map((link) => {
           const IconComponent = link.IconComponent;
           return (
-            <Link key={link.path} to={link.path} className={styles.navLink}>
+            <NavLink
+              key={link.path}
+              to={link.path}
+              className={({ isActive }) =>
+                `${styles.navLink}${isActive ? ` ${styles.active}` : ''}`
+              }
+            >
               <IconComponent className={styles.icon} />
               <span className={styles.label}>{link.label}</span>
-            </Link>
+            </NavLink>
           );
         })}
       </nav>

@@ -1,16 +1,39 @@
 import { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import styles from "../styles/components/Topbar.module.css";
 import logo from "../assets/imaginary-station.png";
 import { useTheme } from "../context/ThemeContext";
 import LightbulbIcon from "../assets/icons/lightbulb-on.svg?react";
 import MoonStarsIcon from "../assets/icons/moon-stars.svg?react";
 
+const SERVICE_NAMES: Record<string, string> = {
+  police: 'Ghana Police Service',
+  'fire-service': 'Ghana National Fire Service',
+  'medical-emergency': 'National Ambulance Service',
+  'disaster-management': 'National Disaster Management Organization',
+  'rescue-operations': 'National Rescue Operations',
+};
+
 const TopBar = () => {
   const { theme, toggleTheme } = useTheme();
+  const location = useLocation();
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState('English');
   const dropdownRef = useRef<HTMLLIElement>(null);
+
+  // Derive civil service label from URL if on a civil route
+  const segments = location.pathname.split('/').filter(Boolean);
+  const isCivilRoute = segments[0] === 'civil';
+  const isMunicipalityRoute = segments[0] === 'municipality';
+  const serviceSlug = segments[1] || '';
+  const accountType = segments[2] || '';
+
+  let centerLabel: string | null = null;
+  if (isCivilRoute) {
+    centerLabel = `${SERVICE_NAMES[serviceSlug] ?? 'Civil Service'}${accountType ? ` — ${accountType === 'municipality' ? 'Municipality' : 'HQ'}` : ''}`;
+  } else if (isMunicipalityRoute) {
+    centerLabel = 'Accra Metropolitan Assembly';
+  }
 
   const languages = [
     'English',
@@ -53,6 +76,10 @@ const TopBar = () => {
         <span>Powered by</span>
         <img src={logo} alt="Imaginary Station" className={styles.logo} />
       </div>
+
+      {centerLabel && (
+        <div className={styles.civilLabel}>{centerLabel}</div>
+      )}
       <ul className={styles.right}>
         <li>
           <Link to="/help" className={styles.topBarLink}>

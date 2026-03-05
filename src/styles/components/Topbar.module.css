@@ -15,6 +15,18 @@
   font-family: "Poppins", sans-serif;
 }
 
+/* Civil service role — centered absolutely so it doesn't shift left/right items */
+.civilLabel {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-black);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
 .left {
   display: flex;
   align-items: center;
@@ -118,6 +130,10 @@
   font-weight: 600;
 }
 
+:global([data-theme="dark"]) .civilLabel {
+  color: #e8e8e8;
+}
+
 /* ── Theme toggle ──────────────────────────────────────── */
 .themeToggle {
   background: none;
@@ -200,6 +216,10 @@
     height: auto;
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
+  }
+
+  .civilLabel {
+    display: none;
   }
 
   .right {

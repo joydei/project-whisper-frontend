@@ -8,7 +8,7 @@
 
 .mainWrapper {
   flex: 1;
-  margin-left: 260px;
+  margin-left: 220px;
   display: flex;
   flex-direction: column;
 }
@@ -20,6 +20,6 @@
 
 @media (max-width: 768px) {
   .mainWrapper {
-    margin-left: 70px;
+    margin-left: 60px;
   }
 }
