@@ -7,7 +7,6 @@ import styles from '../../styles/public/Login.module.css';
 import EnvelopeIcon from '../../assets/icons/envelope.svg?react';
 import KeyIcon from '../../assets/icons/key.svg?react';
 import EyeIcon from '../../assets/icons/eye.svg?react';
-import AngleRightIcon from '../../assets/icons/angle-small-right.svg?react';
 import SirenIcon from '../../assets/icons/siren-on.svg?react';
 import GovernmentIcon from '../../assets/icons/government-flag.svg?react';
 
@@ -77,7 +76,7 @@ const Login = () => {
 
             {/* Form */}
             <p className={styles.formHeading}>Log in</p>
-            <p className={styles.formSubheading}>Welcome back — sign in to your account</p>
+            <p className={styles.formSubheading}>Welcome back — Log in to your account</p>
 
             <form className={styles.loginForm} onSubmit={handleLogin}>
               <div className={styles.formGroup}>
@@ -141,8 +140,7 @@ const Login = () => {
                   </span>
                 ) : (
                   <>
-                    <span>Sign In</span>
-                    <AngleRightIcon className={styles.btnIcon} />
+                    <span>Login</span>
                   </>
                 )}
               </button>
